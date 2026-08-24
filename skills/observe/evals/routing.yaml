@@ -1,0 +1,9 @@
+id: skill.observe.routing-positive
+kind: routing
+skill: observe
+description: "Questions about what users actually see require observation."
+input:
+  prompt: "What do users see when they submit the invite form?"
+expected:
+  skills:
+    required: [observe]

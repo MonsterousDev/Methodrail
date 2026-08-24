@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/eval-fixture.json",
+  "title": "MethodrailEvalFixture",
+  "description": "Structural or routing expectation used by the Methodrail eval runner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "description", "input", "expected"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["routing", "behavior", "pressure", "completion", "workflow"]
+    },
+    "skill": { "type": "string" },
+    "workflow": { "type": "string" },
+    "description": { "type": "string", "minLength": 8 },
+    "requires_llm": { "type": "boolean" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt"],
+      "properties": {
+        "prompt": { "type": "string", "minLength": 1 },
+        "task": { "type": "object" }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "workflow": { "type": "string" },
+        "rigor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "equals": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "min": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "max": { "type": "integer", "minimum": 0, "maximum": 5 }
+          }
+        },
+        "skills": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "forbidden": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exploreBeforeChange": { "type": "boolean" },
+            "requireFreshEvidence": { "type": "boolean" },
+            "refuseUnsupportedCompletion": { "type": "boolean" },
+            "inspectEnvironmentFirst": { "type": "boolean" },
+            "requireRootCauseBeforeFix": { "type": "boolean" },
+            "allowCodeModification": { "type": "boolean" }
+          }
+        },
+        "humanInputRequired": { "type": "boolean" },
+        "allow_code_modification": { "type": "boolean" }
+      }
+    }
+  }
+}

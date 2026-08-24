@@ -1,0 +1,44 @@
+id: how
+version: 0.1.0
+summary: Understand how a current system or subsystem works.
+kind: investigation
+capabilities:
+  provides:
+    - codebase-understanding
+    - control-flow-tracing
+    - data-flow-tracing
+invocation:
+  modes:
+    - implicit
+    - explicit
+rigor:
+  minimum: 1
+knowledge:
+  reads:
+    - source
+    - domain-vocabulary
+    - architecture-decisions
+  produces:
+    - subsystem-model
+    - evidence
+    - unknowns
+side_effects:
+  filesystem: read
+  git: read
+  runtime: none
+  network: none
+parallelism:
+  strategy: partition
+  max_workers: 4
+principles:
+  - explore-before-change
+  - environment-is-source
+  - explicit-unknowns
+completion:
+  requires:
+    - relevant-entrypoints-identified
+    - important-flow-explained
+    - claims-linked-to-evidence
+cost:
+  tokens: medium
+  latency: medium

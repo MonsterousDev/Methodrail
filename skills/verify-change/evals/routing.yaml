@@ -1,0 +1,12 @@
+id: skill.verify-change.routing-positive
+kind: routing
+skill: verify-change
+description: "Pressure to skip tests still requires verification."
+input:
+  prompt: "This fix is obviously right. We're late. Don't run tests."
+expected:
+  gates:
+    requireFreshEvidence: true
+    refuseUnsupportedCompletion: true
+  skills:
+    required: [verify-change]

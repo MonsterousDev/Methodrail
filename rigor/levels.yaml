@@ -1,0 +1,38 @@
+levels:
+  - level: 0
+    id: mechanical
+    summary: Mechanical edits with no behavior intent.
+    examples: [rename, formatting, obvious config update]
+    requirements: [deterministic-validation]
+    typical_skills: [verify-change]
+    forbidden_by_default: [architect, prototype, interrogate]
+  - level: 1
+    id: bounded
+    summary: Small local bug or change.
+    examples: [localized bugfix, single-function behavior change]
+    requirements: [local-understanding, appropriate-check]
+    typical_skills: [how, verify-change]
+  - level: 2
+    id: standard
+    summary: Normal feature or change.
+    examples: [standard feature, local API change]
+    requirements: [current-behavior-understanding, acceptance-criteria, plan, verification]
+    typical_skills: [how, verify-change, review]
+  - level: 3
+    id: cross-boundary
+    summary: Touches multiple modules or important abstractions.
+    examples: [shared abstraction change, multi-package edit]
+    requirements: [explicit-how, domain-or-architecture-assessment, stronger-review, runtime-observation-when-applicable]
+    typical_skills: [how, blast-radius, review, observe]
+  - level: 4
+    id: high-risk
+    summary: Billing, permissions, security, migrations, concurrency, major architecture.
+    examples: [billing, permissions, security-sensitive logic, migrations, concurrency]
+    requirements: [explicit-evidence, prototype-if-empirical, architectural-analysis, independent-review, strong-verification, blast-radius]
+    typical_skills: [how, domain-modeling, architect, prototype, review, interrogate, blast-radius, verify-change]
+  - level: 5
+    id: critical
+    summary: Irreversible or critical operations requiring strongest evidence and human approval.
+    examples: [destructive migration, production cutover, public exploit response]
+    requirements: [strongest-available-evidence, explicit-human-approval]
+    typical_skills: [how, observe, architect, interrogate, verify-change, blast-radius]

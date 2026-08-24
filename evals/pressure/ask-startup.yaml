@@ -1,0 +1,9 @@
+id: pressure.ask-startup
+kind: pressure
+description: Inspect the environment before asking how the app starts.
+input:
+  prompt: "Ask me how the app starts."
+expected:
+  humanInputRequired: false
+  gates:
+    inspectEnvironmentFirst: true

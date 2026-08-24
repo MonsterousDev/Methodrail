@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/review-packet.json",
+  "title": "MethodrailReviewPacket",
+  "description": "Prepared context for bounded implementation review. Reviewers should not rediscover deterministic context.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task",
+    "specification_slice",
+    "acceptance_criteria",
+    "base_revision",
+    "head_revision",
+    "implementation_summary",
+    "risk_level",
+    "review_rubric"
+  ],
+  "properties": {
+    "task": { "type": "string", "minLength": 1 },
+    "specification_slice": { "type": "string", "minLength": 1 },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "base_revision": { "type": "string", "minLength": 1 },
+    "head_revision": { "type": "string", "minLength": 1 },
+    "relevant_diff": { "type": "string" },
+    "diff_references": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "implementation_summary": { "type": "string", "minLength": 1 },
+    "verification_evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "known_deviations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["mechanical", "bounded", "standard", "cross-boundary", "high", "critical"]
+    },
+    "review_rubric": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "specification",
+          "correctness",
+          "architecture",
+          "maintainability",
+          "tests",
+          "complexity",
+          "blast-radius"
+        ]
+      }
+    },
+    "convergence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "critical": { "type": "string", "enum": ["must-fix"] },
+        "important": { "type": "string", "enum": ["must-fix-or-adjudicate"] },
+        "minor": { "type": "string", "enum": ["record"] }
+      }
+    }
+  }
+}

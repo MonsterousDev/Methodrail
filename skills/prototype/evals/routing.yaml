@@ -1,0 +1,9 @@
+id: skill.prototype.routing-positive
+kind: routing
+skill: prototype
+description: "Empirical feasibility questions activate prototype."
+input:
+  prompt: "Can we prove whether an in-memory queue would survive 10k messages per second?"
+expected:
+  skills:
+    required: [prototype]

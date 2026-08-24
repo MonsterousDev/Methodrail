@@ -1,0 +1,39 @@
+id: systematic-debugging
+version: 0.1.0
+summary: Prevent symptom-to-fix guessing.
+kind: debugging
+capabilities:
+  provides:
+    - root-cause-analysis
+invocation:
+  modes:
+    - implicit
+    - explicit
+rigor:
+  minimum: 2
+knowledge:
+  reads:
+    - source
+  produces:
+    - known-failure
+    - evidence
+side_effects:
+  filesystem: read
+  git: read
+  runtime: observe
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - observe-dont-assume
+  - evidence-before-claims
+  - explore-before-change
+completion:
+  requires:
+    - reproduced-or-blocked
+    - hypotheses-falsified
+    - root-cause-or-unknown
+cost:
+  tokens: medium
+  latency: medium

@@ -1,0 +1,39 @@
+id: prototype
+version: 0.1.0
+summary: Answer an empirical question with a disposable experiment.
+kind: experiment
+capabilities:
+  provides:
+    - empirical-evidence
+invocation:
+  modes:
+    - explicit
+    - workflow-only
+rigor:
+  minimum: 2
+knowledge:
+  reads:
+    - source
+  produces:
+    - observation
+    - evidence
+    - verdict
+side_effects:
+  filesystem: write
+  git: read
+  runtime: mutate
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - observe-dont-assume
+  - evidence-before-claims
+completion:
+  requires:
+    - question-stated
+    - experiment-run
+    - verdict-with-limitations
+cost:
+  tokens: high
+  latency: high

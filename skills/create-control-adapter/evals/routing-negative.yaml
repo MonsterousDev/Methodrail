@@ -1,0 +1,11 @@
+id: skill.create-control-adapter.routing-negative
+kind: routing
+skill: create-control-adapter
+description: "Mechanical rename does not require a control adapter."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [create-control-adapter]

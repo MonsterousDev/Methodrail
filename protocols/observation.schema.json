@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/observation.json",
+  "title": "MethodrailObservation",
+  "description": "Record of what a running system actually did under a controlled exercise.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "question",
+    "baseline",
+    "exercise",
+    "result",
+    "confidence",
+    "captured_at"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "question": { "type": "string", "minLength": 1 },
+    "hypothesis": { "type": "string" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description"],
+      "properties": {
+        "description": { "type": "string" },
+        "revision": { "type": "string" },
+        "command": { "type": "string" },
+        "readiness": { "type": "string" }
+      }
+    },
+    "exercise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description"],
+      "properties": {
+        "description": { "type": "string" },
+        "path_exercised": { "type": "string" },
+        "command": { "type": "string" },
+        "reproduction": { "type": "string" }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "type": "string" },
+        "state_inspected": { "type": "string" },
+        "artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "matched_expectation": { "type": "boolean" }
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "inferred",
+        "test-confirmed",
+        "observed",
+        "traced",
+        "historically-confirmed",
+        "unknown"
+      ]
+    },
+    "captured_at": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  }
+}

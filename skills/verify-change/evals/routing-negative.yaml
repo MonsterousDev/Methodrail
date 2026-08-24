@@ -1,0 +1,11 @@
+id: skill.verify-change.routing-negative
+kind: routing
+skill: verify-change
+description: "Verify-change may still be recommended on mechanical work; architect must not activate."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [architect, prototype, interrogate]

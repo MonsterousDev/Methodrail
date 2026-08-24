@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+*.log
+.env
+.env.*
+.DS_Store
+.ai/state/
+.ai/artifacts/
+*.tsbuildinfo
+.idea/
+.vscode/
+!adapters/**/*

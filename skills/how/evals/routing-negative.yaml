@@ -1,0 +1,11 @@
+id: skill.how.routing-negative
+kind: routing
+skill: how
+description: "Mechanical rename must not invoke architecture ceremony."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [architect, prototype, interrogate]

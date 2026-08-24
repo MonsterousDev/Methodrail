@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/knowledge.json",
+  "title": "MethodrailKnowledge",
+  "description": "Validated understanding worth persisting. Not a cache of inspectable repository state.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "claim", "status"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "decision",
+        "rationale",
+        "observation",
+        "invariant",
+        "convention",
+        "known-failure",
+        "hypothesis"
+      ]
+    },
+    "claim": { "type": "string", "minLength": 1 },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "inferred",
+        "test-confirmed",
+        "observed",
+        "traced",
+        "historically-confirmed",
+        "unknown"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subsystem": { "type": "string" },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "domain": { "type": "string" }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Evidence ids or locators supporting the claim."
+    },
+    "validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repository_revision": { "type": "string" },
+        "source_fingerprints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "expires_at": { "type": "string" },
+        "fresh_until_paths_change": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["candidate", "validated", "rejected", "stale", "superseded"]
+    },
+    "supersedes": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}

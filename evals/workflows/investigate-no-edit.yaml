@@ -1,0 +1,9 @@
+id: workflow.investigate-no-edit
+kind: workflow
+workflow: investigate
+description: Investigate must not allow code modification.
+input:
+  prompt: "How does session refresh work?"
+expected:
+  workflow: investigate
+  allow_code_modification: false

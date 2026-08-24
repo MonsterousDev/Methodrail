@@ -1,0 +1,10 @@
+id: skill.why.routing-positive
+kind: routing
+skill: why
+description: "Historical why-questions activate why."
+input:
+  prompt: "Why was Redis introduced here?"
+expected:
+  workflow: investigate
+  skills:
+    required: [why]

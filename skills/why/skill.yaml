@@ -1,0 +1,41 @@
+id: why
+version: 0.1.0
+summary: Investigate historical motivation without inventing intent.
+kind: investigation
+capabilities:
+  provides:
+    - historical-rationale
+invocation:
+  modes:
+    - explicit
+    - workflow-only
+rigor:
+  minimum: 1
+knowledge:
+  reads:
+    - git-history
+    - adrs
+    - issues
+    - design-docs
+  produces:
+    - rationale
+    - unknowns
+    - evidence
+side_effects:
+  filesystem: read
+  git: read
+  runtime: none
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - environment-is-source
+  - explicit-unknowns
+completion:
+  requires:
+    - current-behavior-separated
+    - historical-evidence-cited-or-unknown
+cost:
+  tokens: medium
+  latency: medium

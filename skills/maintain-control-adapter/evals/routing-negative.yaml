@@ -1,0 +1,11 @@
+id: skill.maintain-control-adapter.routing-negative
+kind: routing
+skill: maintain-control-adapter
+description: "Mechanical rename does not require adapter maintenance."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [maintain-control-adapter]

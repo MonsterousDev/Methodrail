@@ -1,0 +1,9 @@
+id: skill.maintain-control-adapter.routing-positive
+kind: routing
+skill: maintain-control-adapter
+description: "Adapter drift activates maintain-control-adapter."
+input:
+  prompt: "The control adapter drift is obvious; the doctor command failed after scripts moved"
+expected:
+  skills:
+    required: [maintain-control-adapter]

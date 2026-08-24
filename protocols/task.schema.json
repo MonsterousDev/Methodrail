@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/task.json",
+  "title": "MethodrailTask",
+  "description": "Normalized task object consumed by the router and context compiler.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "intent", "type", "rigor"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "intent": { "type": "string", "minLength": 1 },
+    "prompt": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "investigate",
+        "develop",
+        "debug",
+        "refactor",
+        "review",
+        "adapt",
+        "unknown"
+      ]
+    },
+    "rigor": { "type": "integer", "minimum": 0, "maximum": 5 },
+    "question_kind": {
+      "type": "string",
+      "enum": [
+        "how",
+        "why",
+        "observe",
+        "prototype",
+        "blast-radius",
+        "debug",
+        "develop",
+        "refactor",
+        "review",
+        "domain",
+        "unknown"
+      ]
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["mechanical", "bounded", "standard", "cross-boundary", "high", "critical"]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repository": { "type": "string" },
+        "revision": { "type": "string" },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

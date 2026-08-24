@@ -1,0 +1,11 @@
+id: skill.systematic-debugging.routing-negative
+kind: routing
+skill: systematic-debugging
+description: "Mechanical rename does not require systematic debugging."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [systematic-debugging]

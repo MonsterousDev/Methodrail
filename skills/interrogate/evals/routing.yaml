@@ -1,0 +1,11 @@
+id: skill.interrogate.routing-positive
+kind: routing
+skill: interrogate
+description: "High-risk payment review may invoke interrogate."
+input:
+  prompt: "Review this payment change"
+expected:
+  rigor:
+    min: 4
+  skills:
+    required: [interrogate]

@@ -1,0 +1,37 @@
+id: verify-change
+version: 0.1.0
+summary: Block unsupported completion claims.
+kind: verification
+capabilities:
+  provides:
+    - verification
+invocation:
+  modes:
+    - implicit
+    - explicit
+    - workflow-only
+rigor:
+  minimum: 0
+knowledge:
+  reads:
+    - source
+  produces:
+    - evidence
+side_effects:
+  filesystem: read
+  git: read
+  runtime: observe
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - evidence-before-claims
+completion:
+  requires:
+    - claim-stated
+    - fresh-evidence-obtained
+    - pass-vs-executed-distinguished
+cost:
+  tokens: medium
+  latency: medium

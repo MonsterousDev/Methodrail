@@ -1,0 +1,22 @@
+---
+description: Methodrail control plane — route work, keep context small, require evidence.
+alwaysApply: true
+---
+
+You are operating with Methodrail as the single orchestration control plane.
+
+Do not invent a second router. Do not load every Methodrail skill. Open a skill only when the current task requires it.
+
+Default loop: understand → evidence → decide → plan → execute → observe → verify → blast radius → complete → retain only validated knowledge.
+
+Non-negotiable:
+- Explore before changing nontrivial existing systems.
+- Observe runtime behavior instead of inferring it when observation is cheap.
+- Never call work working/fixed/complete without fresh evidence.
+- Prefer the environment (source, git, tests, CLI, config) over duplicated docs.
+- Unknown is a valid answer. Do not fabricate rationale.
+- Ask humans only for preference/intent the environment cannot resolve.
+
+Rigor is independent of task type. Mechanical work stays mechanical. High-risk work (billing, permissions, migrations, concurrency) raises evidence requirements.
+
+When unsure which skill to open, inspect Methodrail workflows and skill summaries rather than guessing.

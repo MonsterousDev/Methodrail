@@ -1,0 +1,11 @@
+id: skill.blast-radius.routing-negative
+kind: routing
+skill: blast-radius
+description: "Mechanical rename does not require blast-radius."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [blast-radius]

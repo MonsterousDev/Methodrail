@@ -1,0 +1,12 @@
+id: routing.org-billing
+kind: routing
+description: Organization-level billing is high-rigor development with domain and architecture.
+input:
+  prompt: "Design organization-level billing"
+expected:
+  workflow: develop
+  rigor:
+    min: 4
+  skills:
+    required: [how]
+    forbidden: []

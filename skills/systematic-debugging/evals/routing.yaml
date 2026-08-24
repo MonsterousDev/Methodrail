@@ -1,0 +1,10 @@
+id: skill.systematic-debugging.routing-positive
+kind: routing
+skill: systematic-debugging
+description: "Runtime failure after idle activates systematic debugging."
+input:
+  prompt: "CPU spikes after the app is idle for twenty minutes"
+expected:
+  workflow: debug
+  skills:
+    required: [systematic-debugging]

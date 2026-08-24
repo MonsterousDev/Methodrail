@@ -1,0 +1,14 @@
+id: routing.payment-review
+kind: routing
+description: Payment review is high rigor with strong verification.
+input:
+  prompt: "Review this payment change"
+expected:
+  workflow: review
+  rigor:
+    min: 4
+  skills:
+    required: [review]
+  gates:
+    requireFreshEvidence: true
+    refuseUnsupportedCompletion: true

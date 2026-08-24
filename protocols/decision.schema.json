@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/decision.json",
+  "title": "MethodrailDecision",
+  "description": "A single decision node on the decision frontier.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "question", "type", "status", "resolution_method"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "question": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": [
+        "human-preference",
+        "domain",
+        "implementation",
+        "runtime",
+        "historical",
+        "empirical",
+        "deterministic"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["fog", "frontier", "known", "blocked", "deferred"]
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "resolution_method": {
+      "type": "string",
+      "enum": ["human", "source", "observe", "history", "prototype", "deterministic"]
+    },
+    "owner": { "type": "string" },
+    "blocks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "decision": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "reversibility": {
+      "type": "string",
+      "enum": ["cheap", "moderate", "expensive", "irreversible"]
+    }
+  }
+}

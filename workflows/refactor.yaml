@@ -1,0 +1,62 @@
+id: refactor
+version: 0.1.0
+summary: Improve internal structure without accidentally changing external behavior.
+kind: refactor
+entry: identify-friction
+rigor:
+  minimum: 1
+  default: 2
+constraints:
+  allow_code_modification: true
+  require_evidence: true
+principles:
+  - explore-before-change
+  - evidence-before-claims
+completion:
+  requires:
+    - behavioral-baseline
+    - continuous-validation
+    - no-unintended-behavior-change
+states:
+  identify-friction:
+    description: Name the friction that makes the refactor worth doing.
+    kind: classify
+    on_complete: [baseline]
+  baseline:
+    description: Establish a behavioral baseline before changing structure.
+    kind: verify
+    on_complete: [understand-boundaries]
+  understand-boundaries:
+    description: Understand module boundaries and ownership.
+    kind: skill
+    skills: [how]
+    on_complete: [value-check]
+  value-check:
+    description: Stop if the code is quiet, unused, or unrelated to current work.
+    kind: gate
+    on_complete: [characterization]
+  characterization:
+    description: Add characterization tests or equivalent verification if missing.
+    kind: skill
+    skills: [verify-change]
+    on_complete: [incremental-change]
+  incremental-change:
+    description: Change structure incrementally with continuous validation.
+    kind: execute
+    on_complete: [validate]
+  validate:
+    description: Re-run the baseline after each increment.
+    kind: skill
+    skills: [verify-change]
+    on_complete: [blast-radius]
+  blast-radius:
+    description: Check callers and contracts.
+    kind: skill
+    skills: [blast-radius]
+    on_complete: [review]
+  review:
+    description: Bounded review for accidental behavior change and extra complexity.
+    kind: skill
+    skills: [review]
+    optional: true
+    terminal: true

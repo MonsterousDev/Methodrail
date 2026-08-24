@@ -1,0 +1,13 @@
+id: routing.cpu-idle-spike
+kind: routing
+description: Runtime performance after idle routes to debug with observe and how.
+input:
+  prompt: "CPU spikes after the app is idle for twenty minutes"
+expected:
+  workflow: debug
+  rigor:
+    min: 3
+  skills:
+    required: [systematic-debugging, how, observe]
+  gates:
+    requireRootCauseBeforeFix: true

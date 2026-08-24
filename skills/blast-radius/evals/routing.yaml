@@ -1,0 +1,9 @@
+id: skill.blast-radius.routing-positive
+kind: routing
+skill: blast-radius
+description: "Impact questions activate blast-radius."
+input:
+  prompt: "What else is affected by this payment schema change?"
+expected:
+  skills:
+    required: [blast-radius]

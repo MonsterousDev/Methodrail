@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/result-packet.json",
+  "title": "MethodrailResultPacket",
+  "description": "Structured return value from a skill or workflow phase.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "summary"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["complete", "partial", "blocked"]
+    },
+    "summary": { "type": "string", "minLength": 1 },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statement", "kind"],
+        "properties": {
+          "statement": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["observation", "inference", "decision", "unknown"]
+          },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "knowledge_candidates": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "followups": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "context_return": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "must_preserve": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "can_discard": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

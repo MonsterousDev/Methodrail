@@ -1,0 +1,36 @@
+id: interrogate
+version: 0.1.0
+summary: High-rigor adversarial review when cost and risk justify it.
+kind: review
+capabilities:
+  provides:
+    - adversarial-review
+invocation:
+  modes:
+    - explicit
+rigor:
+  minimum: 4
+knowledge:
+  reads:
+    - source
+  produces:
+    - review-findings
+side_effects:
+  filesystem: read
+  git: read
+  runtime: none
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - evidence-before-claims
+  - explicit-unknowns
+completion:
+  requires:
+    - independent-analysis
+    - disagreements-listed
+    - synthesis
+cost:
+  tokens: high
+  latency: high

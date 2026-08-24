@@ -1,0 +1,45 @@
+id: review
+version: 0.1.0
+summary: Review a prepared change using a ReviewPacket and a convergence policy.
+kind: review
+entry: assemble-packet
+rigor:
+  minimum: 2
+  default: 3
+constraints:
+  allow_code_modification: false
+  require_evidence: true
+principles:
+  - evidence-before-claims
+  - context-is-budget
+completion:
+  requires:
+    - packet-complete
+    - axes-covered
+    - blocking-findings-explicit
+states:
+  assemble-packet:
+    description: Assemble deterministic review context so reviewers do not rediscover it.
+    kind: classify
+    on_complete: [check-verification]
+  check-verification:
+    description: Confirm verification evidence exists before reviewing implementation taste.
+    kind: skill
+    skills: [verify-change]
+    optional: true
+    on_complete: [bounded-review]
+  bounded-review:
+    description: Review against the rubric in the packet.
+    kind: skill
+    skills: [review]
+    on_complete: [interrogate-if-needed]
+  interrogate-if-needed:
+    description: Independent adversarial review when risk and cost justify it.
+    kind: skill
+    skills: [interrogate]
+    optional: true
+    on_complete: [converge]
+  converge:
+    description: Apply critical/important/minor convergence; escalate deadlock.
+    kind: gate
+    terminal: true

@@ -1,0 +1,11 @@
+id: skill.prototype.routing-negative
+kind: routing
+skill: prototype
+description: "Mechanical rename forbids prototype."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [prototype]

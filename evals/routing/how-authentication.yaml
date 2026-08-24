@@ -1,0 +1,10 @@
+id: routing.how-authentication
+kind: routing
+description: How-questions route to investigate and how.
+input:
+  prompt: "How does authentication work?"
+expected:
+  workflow: investigate
+  skills:
+    required: [how]
+  allow_code_modification: false

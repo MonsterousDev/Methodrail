@@ -1,0 +1,11 @@
+concepts:
+  - id: evidence
+    definition: A locator plus metadata supporting a claim. Not the claim itself.
+  - id: knowledge
+    definition: Validated understanding worth persisting because it is expensive, ambiguous, historical, or impossible to rediscover cheaply.
+  - id: decision
+    definition: A resolved question on the decision map, with method and evidence.
+  - id: frontier
+    definition: Questions whose prerequisites are known and which may be asked or resolved now.
+  - id: fog
+    definition: Questions whose prerequisites are unresolved. Do not ask these yet.

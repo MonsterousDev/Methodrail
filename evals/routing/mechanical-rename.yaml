@@ -1,0 +1,13 @@
+id: routing.mechanical-rename
+kind: routing
+description: Mechanical rename stays at rigor 0 without architecture ceremony.
+input:
+  prompt: "Rename getUserById to findUserById across the user service. No behavior change."
+expected:
+  workflow: develop
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [architect, prototype, interrogate]
+  gates:
+    requireFreshEvidence: true

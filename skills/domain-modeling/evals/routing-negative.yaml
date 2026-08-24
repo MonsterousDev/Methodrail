@@ -1,0 +1,11 @@
+id: skill.domain-modeling.routing-negative
+kind: routing
+skill: domain-modeling
+description: "Mechanical rename does not require domain modeling."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [domain-modeling]

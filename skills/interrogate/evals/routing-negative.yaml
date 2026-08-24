@@ -1,0 +1,11 @@
+id: skill.interrogate.routing-negative
+kind: routing
+skill: interrogate
+description: "Mechanical rename forbids interrogate."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [interrogate]

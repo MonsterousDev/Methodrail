@@ -1,0 +1,11 @@
+id: skill.review.routing-negative
+kind: routing
+skill: review
+description: "Mechanical rename does not require review."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  rigor:
+    equals: 0
+  skills:
+    forbidden: [review]

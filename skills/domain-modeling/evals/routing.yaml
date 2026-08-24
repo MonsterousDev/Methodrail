@@ -1,0 +1,9 @@
+id: skill.domain-modeling.routing-positive
+kind: routing
+skill: domain-modeling
+description: "Ambiguous domain terms activate domain modeling."
+input:
+  prompt: "What does customer mean in this billing domain, and who owns a subscription?"
+expected:
+  skills:
+    required: [domain-modeling]

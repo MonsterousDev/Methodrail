@@ -1,0 +1,37 @@
+id: review
+version: 0.1.0
+summary: Perform bounded implementation review against a prepared packet.
+kind: review
+capabilities:
+  provides:
+    - implementation-review
+invocation:
+  modes:
+    - explicit
+    - workflow-only
+rigor:
+  minimum: 2
+knowledge:
+  reads:
+    - source
+  produces:
+    - review-findings
+side_effects:
+  filesystem: read
+  git: read
+  runtime: none
+  network: none
+parallelism:
+  strategy: none
+  max_workers: 1
+principles:
+  - evidence-before-claims
+  - structural-enforcement
+completion:
+  requires:
+    - axes-covered
+    - findings-severitized
+    - convergence-applied
+cost:
+  tokens: medium
+  latency: medium

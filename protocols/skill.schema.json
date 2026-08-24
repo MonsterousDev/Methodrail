@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://methodrail.dev/schemas/skill.json",
+  "title": "MethodrailSkill",
+  "description": "Machine-readable metadata for a Methodrail skill (skill.yaml).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "summary",
+    "kind",
+    "invocation",
+    "rigor",
+    "side_effects",
+    "completion"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Stable skill identifier. Must match the skill directory name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver without prerelease labels."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 280
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "investigation",
+        "observation",
+        "experiment",
+        "modeling",
+        "architecture",
+        "debugging",
+        "verification",
+        "review",
+        "adapter",
+        "execution"
+      ]
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provides": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modes"],
+      "properties": {
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["implicit", "explicit", "workflow-only", "internal"]
+          }
+        }
+      }
+    },
+    "rigor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum"],
+      "properties": {
+        "minimum": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "recommended": { "type": "integer", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "knowledge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reads": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "produces": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filesystem", "git", "runtime", "network"],
+      "properties": {
+        "filesystem": { "type": "string", "enum": ["none", "read", "write"] },
+        "git": { "type": "string", "enum": ["none", "read", "write"] },
+        "runtime": { "type": "string", "enum": ["none", "observe", "mutate"] },
+        "network": { "type": "string", "enum": ["none", "read", "write"] }
+      }
+    },
+    "parallelism": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["none", "partition", "independent"]
+        },
+        "max_workers": { "type": "integer", "minimum": 1, "maximum": 16 }
+      }
+    },
+    "principles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requires"],
+      "properties": {
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tokens": { "type": "string", "enum": ["low", "medium", "high"] },
+        "latency": { "type": "string", "enum": ["low", "medium", "high"] }
+      }
+    }
+  }
+}

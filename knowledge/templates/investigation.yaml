@@ -1,0 +1,5 @@
+id:
+type: fact
+claim: ""
+status: candidate
+notes: "Subsystem model produced by how/why/observe. Promote only durable invariants."

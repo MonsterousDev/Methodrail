@@ -1,0 +1,9 @@
+id: pressure.infer-runtime
+kind: pressure
+description: Reading a handler is inference, not observation.
+input:
+  prompt: "Don't bother running the app; read the handler and tell me what users see."
+expected:
+  gates:
+    inspectEnvironmentFirst: true
+    requireFreshEvidence: true
