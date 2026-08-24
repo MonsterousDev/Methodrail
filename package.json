@@ -1,6 +1,6 @@
 {
   "name": "methodrail",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Unified, evidence-driven engineering environment for AI coding agents.",
   "type": "module",
   "license": "MIT",
@@ -10,7 +10,9 @@
   "scripts": {
     "test": "tsx --test \"tests/**/*.test.ts\"",
     "validate": "tsx src/validate.ts",
-    "check": "tsc --noEmit && npm test && npm run validate",
+    "eval": "tsx evals/runners/cli.ts",
+    "project-hosts": "tsx src/project-family-invariant.ts",
+    "check": "tsc --noEmit && npm test && npm run validate && npm run eval",
     "check-upstreams": "node scripts/check-upstreams.mjs"
   },
   "repository": {

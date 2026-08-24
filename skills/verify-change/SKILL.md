@@ -33,7 +33,22 @@ BEFORE claiming any status or expressing satisfaction:
 
 Skip any step = lying, not verifying.
 
-Prefer the project's verify skill or `.methodrail/control/CONTROL.md` when present. Interview the repository for commands; do not invent a test pyramid essay instead of running the relevant check.
+## Reuse project verification
+
+Before inventing verification steps, check the project:
+
+```text
+project verification skill?
+control documentation?
+runtime / start / drive guidance?
+existing test, lint, or build workflow?
+```
+
+If `.methodrail/PROJECT.md` exists, read it. Follow pointers to a project-local verify skill, `.methodrail/control/CONTROL.md`, runtime notes, and documented commands.
+
+If any of those exist, reuse them. Do not rediscover launch, readiness, drive, reset, or the local test workflow. Do not write a generic test-pyramid essay instead of running the check this repository already has.
+
+Then apply the iron law to that reused path. Fresh evidence is still required. Reuse does not weaken the gate.
 
 ## What counts as evidence
 
@@ -95,9 +110,16 @@ Always before any variation of success/completion claims, satisfaction, commit/P
 ## Neighbors
 
 ```text
+Usually follows:              develop, debug, refactor, tdd
+Often produces:               fresh evidence record; pass/fail status
+Escalate to:                  observe, project verify skill, performance, visual-parity
+Avoid combining automatically with: how, architect, wayfinder
+```
+
+```text
 Behavioral claim              → observe / project verify skill
 Performance claim             → performance
 Visual claim                  → visual-parity
 ```
 
-Prefer the project-local verify skill when present. Do not weaken this gate to save tokens. Evidence method should be proportional to the claim.
+This skill is a leaf gate, not a workflow. Prefer the project-local verify skill when present. Do not weaken this gate to save tokens. Evidence method should be proportional to the claim.

@@ -2,6 +2,9 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parse } from "yaml";
+import { REQUIRED_COMPOSITION_FIXTURES } from "./eval/load.js";
+import { hostProjections, readCanonicalInvariant } from "./family-invariant.js";
+import { evaluateProjectMd } from "./project-md.js";
 
 export interface ValidationIssue {
   path: string;
@@ -110,6 +113,7 @@ const REQUIRED_REFERENCES = [
   "references/methodrail-skill-substrate.md",
   "references/context-economics.md",
   "references/skill-composition.md",
+  "references/methodrail-family-invariant.md",
 ];
 const REQUIRED_BEHAVIORAL_SKILLS = [
   "verify-change",
@@ -130,7 +134,14 @@ const REQUIRED_BEHAVIORAL_SKILLS = [
   "handoff",
   "methodrail-init",
 ];
-const REQUIRED_EVAL_KINDS = ["routing", "behavioral", "pressure", "complexity"] as const;
+const REQUIRED_EVAL_KINDS = [
+  "routing",
+  "behavioral",
+  "pressure",
+  "complexity",
+  "composition",
+  "fidelity",
+] as const;
 const VALID_FIDELITY = new Set([
   "upstream-preserved",
   "upstream-preserved-with-extensions",
@@ -440,6 +451,10 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
 
   issues.push(...validateMaintainerEvals(root));
   issues.push(...validateUpstreamFidelity(root, skillPaths));
+  issues.push(...validateFamilyInvariant(root));
+  issues.push(...validateObsoleteTerms(root));
+  issues.push(...validateProjectMdQuality(root));
+  issues.push(...validateEvalHarness(root));
 
   const obsoleteSkill = join(root, "skills", "writing-great-skills");
   if (existsSync(obsoleteSkill)) {
@@ -600,6 +615,86 @@ function validateUpstreamFidelity(root: string, skillPaths: string[]): Validatio
     }
   }
 
+  return issues;
+}
+
+function validateFamilyInvariant(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const canonicalPath = join(root, "references", "methodrail-family-invariant.md");
+  if (!existsSync(canonicalPath)) {
+    return [issue(canonicalPath, "Missing canonical Methodrail family invariant")];
+  }
+  try {
+    const body = readCanonicalInvariant(root);
+    const projections = hostProjections(body);
+    for (const [relativePath, expected] of Object.entries(projections)) {
+      const path = join(root, relativePath);
+      if (!existsSync(path)) {
+        issues.push(issue(path, `Missing host projection of the family invariant: ${relativePath}`));
+        continue;
+      }
+      const actual = readFileSync(path, "utf8");
+      if (actual !== expected) {
+        issues.push(
+          issue(path, "Host projection is out of date; run tsx src/project-family-invariant.ts"),
+        );
+      }
+    }
+  } catch (error) {
+    issues.push(issue(canonicalPath, (error as Error).message));
+  }
+  return issues;
+}
+
+function validateObsoleteTerms(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const banned = ["control adapter", "result packet", "runtime adapter"];
+  const roots = ["skills", "references", "adapters", "rules", "docs"].map((dir) => join(root, dir));
+  for (const base of roots) {
+    for (const path of walk(base, (file) => file.endsWith(".md") || file.endsWith(".mdc"))) {
+      const relativePath = relative(root, path).split(sep).join("/");
+      if (relativePath.startsWith("docs/internal/") || relativePath === "CHANGELOG.md") continue;
+      const source = readFileSync(path, "utf8").toLowerCase();
+      for (const term of banned) {
+        if (source.includes(term)) {
+          issues.push(issue(path, `Obsolete architecture term must not appear: ${term}`));
+        }
+      }
+    }
+  }
+  return issues;
+}
+
+function validateProjectMdQuality(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  for (const path of walk(root, (file) => basename(file) === "PROJECT.md")) {
+    const normalized = relative(root, path).split(sep).join("/");
+    if (!normalized.includes(".methodrail/") && !normalized.includes(".methodrail/")) continue;
+    if (!normalized.endsWith("PROJECT.md")) continue;
+    const quality = evaluateProjectMd(readFileSync(path, "utf8"));
+    for (const message of quality.issues) {
+      issues.push(issue(path, message));
+    }
+  }
+  return issues;
+}
+
+function validateEvalHarness(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const runner = join(root, "evals", "runners", "cli.ts");
+  const reports = join(root, "evals", "reports", "README.md");
+  if (!existsSync(runner)) issues.push(issue(runner, "Missing maintainer eval runner"));
+  if (!existsSync(reports)) issues.push(issue(reports, "Missing eval reports README"));
+  for (const name of REQUIRED_COMPOSITION_FIXTURES) {
+    const dir = join(root, "evals", "fixtures", name);
+    const task = join(dir, "task.md");
+    const expected = join(dir, "expected.yaml");
+    if (!existsSync(dir)) issues.push(issue(dir, `Missing composition fixture: ${name}`));
+    if (!existsSync(task)) issues.push(issue(task, `Missing task.md for fixture ${name}`));
+    if (!existsSync(expected)) {
+      issues.push(issue(expected, `Missing expected.yaml for fixture ${name}`));
+    }
+  }
   return issues;
 }
 

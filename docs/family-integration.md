@@ -14,7 +14,9 @@ Use this checklist when adopting or modifying a Methodrail skill. Do not copy it
 [ ] invocation proportional/conservative
 [ ] context load reviewed
 [ ] permanent context unchanged unless justified
+[ ] family invariant unchanged unless a host projection was regenerated
 [ ] behavioral eval
+[ ] composition or fidelity eval when the change is about skill interaction or upstream behavior
 [ ] pressure eval if discipline-enforcing
 [ ] provenance updated
 ```

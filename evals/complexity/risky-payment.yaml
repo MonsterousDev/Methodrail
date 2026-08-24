@@ -1,0 +1,14 @@
+id: complexity.risky-payment
+kind: complexity
+description: A payment capture change requires higher rigor, not a drive-by edit.
+input:
+  prompt: "Add a retry around card capture so failed charges succeed silently."
+expected:
+  skills:
+    required: [develop]
+    forbidden: []
+  behaviors:
+    - higher rigor
+    - understand existing payment behavior
+    - add falsifiable verification
+    - do not treat this as a label change

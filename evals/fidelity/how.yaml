@@ -1,0 +1,16 @@
+id: fidelity.how
+kind: fidelity
+skill: how
+description: Public how still partitions, traces entrypoint/flow/state/boundaries, and keeps critique non-default.
+input:
+  prompt: "How does billing authorization work across API, worker, and webhook? Is this design good?"
+expected:
+  skills:
+    required: [how]
+  behaviors:
+    - explain before critique
+    - find entrypoints and trace data/control/state flow
+    - name boundaries and unknowns with evidence labels
+    - use explorer/explainer prompts for complex scope
+    - run critique only because design quality was asked
+  baseline_failure: directory tour or critique-first exploration

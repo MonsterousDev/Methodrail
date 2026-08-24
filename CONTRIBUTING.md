@@ -77,7 +77,11 @@ Shared methodology belongs in `references/`. Skills should stay short and link t
 
 ## Evals
 
-Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/`, `evals/complexity/`, and `skills/<name>/evals/`. They are not required in consuming projects. Prefer mixed-intent prompts over textbook phrases. Behavioral evals compare a baseline agent with the Methodrail skill loaded; recorded/manual runs are acceptable. Complexity evals guard over-orchestration of simple work.
+Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/`, `evals/complexity/`, `evals/composition/`, `evals/fidelity/`, and `skills/<name>/evals/`. They are not required in consuming projects. Prefer mixed-intent prompts over textbook phrases.
+
+Behavioral, composition, and fidelity evals compare a baseline agent with Methodrail; recorded or live native-harness runs are acceptable. `npm run eval` validates fixtures and scores recorded example runs. It does not ship an agent runtime. Complexity evals guard over-orchestration of simple work. After a failed eval, use `reflect` to classify knowledge / skill / verification / tooling / structural-enforcement problems before adding instructions.
+
+Host guidance must be projected from `references/methodrail-family-invariant.md`. Do not hand-edit Cursor, Claude, or Codex copies of that contract. Run `npm run project-hosts` after changing the invariant.
 
 ## Repo commands
 
@@ -85,6 +89,7 @@ Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/
 npm install
 npm test
 npm run validate
+npm run eval
 npm run check-upstreams
 ```
 

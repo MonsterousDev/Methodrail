@@ -1,0 +1,13 @@
+id: fidelity.code-review
+kind: fidelity
+skill: code-review
+description: Code review still separates standards and spec and consumes a review packet.
+input:
+  prompt: "Review the payment retry diff against repo standards and the spec."
+expected:
+  skills:
+    required: [code-review]
+  behaviors:
+    - pin the range
+    - run standards and spec as separate axes
+    - consume supplied evidence rather than rediscovering it

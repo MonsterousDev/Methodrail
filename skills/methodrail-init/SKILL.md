@@ -56,6 +56,7 @@ determine whether the project has a meaningful executable surface
 ## Output constraints
 
 - `.methodrail/PROJECT.md` is a concise index, not the entire knowledge base.
+- Keep PROJECT.md pointer-oriented: links, durable facts, and paths. Do not clone the README or generate a giant summary.
 - Record commands the repository already supports; do not invent infrastructure.
 - Preserve existing `AGENTS.md`, `CLAUDE.md`, Cursor rules, copilot instructions, and local skills. Repository-specific instructions outrank generic Methodrail assumptions.
 - Do not copy generic Methodrail doctrine into the project.

@@ -99,6 +99,13 @@ For every Methodrail rule, skill, and reference: does this sentence change likel
 
 ## Neighbors
 
+```text
+Usually follows:              methodrail-init, create-verification-skill, skill edits
+Often produces:               pointer-oriented agent docs
+Escalate to:                  skill-mechanics, evals
+Avoid combining automatically with: wayfinder, architect, arena
+```
+
 - Used by: `methodrail-init`, skill maintenance, verification-skill generation, agent-facing docs, handoff artifacts
 - Do not combine automatically with: `wayfinder`, `architect`, `arena`
 - After a skill change: add or update evals before considering the work done

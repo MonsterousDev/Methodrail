@@ -45,6 +45,9 @@ A brief file/directory map. Just the ones someone would need to start working he
 ### Gotchas
 Non-obvious things, surprising behavior, historical context, sharp edges. Skip this section if there's nothing worth calling out.
 
+### Unknowns
+Gaps the explorers could not fully trace. Label inference as inferred, not observed. Do not paper over missing evidence.
+
 ## Communication Style
 
 - Use concrete language, not abstractions-about-abstractions

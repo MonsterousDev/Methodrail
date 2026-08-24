@@ -40,6 +40,18 @@ Use [synthesizer.md](references/synthesizer.md). Produce Accepted / Rejected / B
 
 Move anything a mechanical check would enforce more reliably than a skill onto the structural-enforcement list.
 
+After evaluation failures, classify the miss before writing more instructions:
+
+```text
+knowledge problem
+skill problem
+verification problem
+tooling problem
+structural-enforcement problem
+```
+
+Prefer a stronger check, test, type, or fixture over another paragraph. Do not auto-add standing rules.
+
 ### 5. Present and wait
 
 Show the full Accepted / Rejected / Backlog list. Wait for explicit approval before writing any knowledge note or skill edit. Skill changes affect future agents; do not auto-apply.

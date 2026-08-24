@@ -1,0 +1,9 @@
+id: fixture.simple-change
+required_skills: []
+forbidden_skills: [wayfinder, architect, arena, swarm, interrogate]
+expected_behaviors:
+  - inspect the current label
+  - edit locally
+  - run a cheap check if one exists
+max_subagents: 0
+max_expensive_skills: 0

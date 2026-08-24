@@ -68,3 +68,12 @@ Do not call source reading observed behavior.
 ## Done when
 
 The original question has a direct evidence-backed answer, or the blocker and remaining uncertainty are explicit.
+
+## Neighbors
+
+```text
+Usually follows:              user question about the existing system
+Often produces:               how / observe / why / research answer
+Escalate to:                  how, observe, why, research, prototype, blast-radius
+Avoid combining automatically with: develop, architect
+```

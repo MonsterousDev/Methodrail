@@ -1,0 +1,15 @@
+id: composition.runtime-bug
+kind: composition
+description: Runtime/source mismatch should compose debug, diagnosis, observation, and verification.
+fixture: evals/fixtures/runtime-bug
+input:
+  prompt: "Expired sessions still open the dashboard. Fix it."
+expected:
+  skills:
+    required: [debug, diagnosing-bugs, verify-change]
+    forbidden: [wayfinder, architect, arena, swarm, interrogate]
+  behaviors:
+    - reuse project verification
+    - observe or otherwise obtain runtime evidence if source is insufficient
+    - add regression evidence
+    - verify the fix

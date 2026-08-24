@@ -3,6 +3,8 @@
 - Repository and existing AI guidance were inspected before questions.
 - Project type, boundaries, and commands came from evidence.
 - `.methodrail/PROJECT.md` is a useful index, not a dump of the tree.
+- PROJECT.md is pointer-oriented: links, small durable facts, and paths to verification/control/runtime docs.
+- PROJECT.md is not a cloned README and not a generated repository summary.
 - Optional knowledge, control, and project-local skills have a stated recurring use.
 - Control/verification questions were investigated when the project has a runnable surface.
 - `create-verification-skill` ran when the surface is meaningful; static verification was documented when it is not.

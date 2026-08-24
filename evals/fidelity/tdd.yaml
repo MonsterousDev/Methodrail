@@ -1,0 +1,13 @@
+id: fidelity.tdd
+kind: fidelity
+skill: tdd
+description: TDD still requires red before green and does not skip verify-change.
+input:
+  prompt: "Add a failing test, then implement the greeting flag."
+expected:
+  skills:
+    required: [tdd]
+  behaviors:
+    - write a failing test first
+    - implement only enough to pass
+    - finish through verify-change

@@ -1,0 +1,16 @@
+id: composition.architecture-decision
+kind: composition
+description: Ownership redesign should explain current system, then decide, without swarming.
+fixture: evals/fixtures/architecture-decision
+input:
+  prompt: "Should subscription ownership live on User or Organization? Decide and sketch the first slice."
+expected:
+  skills:
+    required: [how, architect]
+    optional: [domain-modeling, prototype]
+    forbidden: [arena, swarm, interrogate]
+  behaviors:
+    - understand current billing implementation
+    - consider domain ownership
+    - record a decision
+    - prototype only for empirical uncertainty

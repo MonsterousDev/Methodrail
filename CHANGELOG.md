@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0 — 2026-08-24
+
+Demonstrated Composition: one family invariant, restored upstream `how` behavior, project-verification reuse, and a maintainer eval harness that can compare baseline vs Methodrail.
+
+- Restored public `how` explorer/critique obligations while keeping host-optional subagents and evidence labels
+- Made `verify-change` reuse project verification, control, runtime, and test workflows before inventing steps
+- Extracted `references/methodrail-family-invariant.md` and projected it to Cursor, Claude, and Codex
+- Added executable composition/fidelity/complexity evaluation with recorded baseline comparison
+- Tightened `methodrail-init` PROJECT.md quality: index and pointers, not a copied README
+- Extended `reflect` to classify eval failures toward enforcement rather than more prose
+- Dogfooded a pointer-oriented `.methodrail/PROJECT.md` in this repository
+
 ## 0.5.0 — 2026-08-24
 
 Unified Skill Substrate, Context Economics, upstream fidelity, `writing-for-agents`, `handoff`, family-wide project-harness integration, and proportional complexity.

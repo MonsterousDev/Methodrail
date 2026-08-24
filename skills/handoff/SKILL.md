@@ -49,6 +49,13 @@ A fresh agent can continue from the document plus the referenced artifacts, with
 
 ## Neighbors
 
+```text
+Usually follows:              develop, debug, investigate, prototype
+Often produces:               continuity artifact for a fresh agent
+Escalate to:                  reflect when lessons are in scope
+Avoid combining automatically with: compact-as-substitute
+```
+
 - Often follows: long `develop` / `debug` / `investigate` sessions, `prototype` round-trips
 - May produce input for: the next session's workflow skill
 - Do not combine automatically with: `compact` as a substitute, or `reflect` unless learning candidates are in scope

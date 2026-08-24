@@ -1,0 +1,14 @@
+id: composition.medium-feature
+kind: composition
+description: A small CLI feature should stay in develop, not architecture theater.
+fixture: evals/fixtures/medium-feature
+input:
+  prompt: "Add a --greet flag that prints hello, <name>."
+expected:
+  skills:
+    required: [develop]
+    forbidden: [wayfinder, architect, arena, swarm, interrogate]
+  behaviors:
+    - inspect existing CLI
+    - implement a focused change
+    - verify with tests

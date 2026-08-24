@@ -47,3 +47,12 @@ blast-radius/review proportional to risk
 ## Done when
 
 The friction is reduced, relevant observable behavior is preserved with fresh evidence, and any intentional behavior change is explicit.
+
+## Neighbors
+
+```text
+Usually follows:              develop or a named structural problem
+Often produces:               structural change; verify-change
+Escalate to:                  how, codebase-design, blast-radius, code-review
+Avoid combining automatically with: architect, prototype, develop-as-feature
+```

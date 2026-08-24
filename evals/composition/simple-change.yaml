@@ -1,0 +1,14 @@
+id: composition.simple-change
+kind: composition
+description: A label change stays inspect-edit-check.
+fixture: evals/fixtures/simple-change
+input:
+  prompt: "Change the button label from Save to Create."
+expected:
+  skills:
+    forbidden: [wayfinder, architect, arena, swarm, interrogate]
+  behaviors:
+    - inspect
+    - edit
+    - cheap verification
+  baseline_failure: starting architecture or multi-agent review

@@ -1,0 +1,9 @@
+id: fixture.medium-feature
+required_skills: [develop]
+forbidden_skills: [wayfinder, architect, arena, swarm, interrogate]
+expected_behaviors:
+  - inspect existing CLI behavior
+  - add a focused change
+  - verify with tests
+max_subagents: 1
+max_expensive_skills: 0

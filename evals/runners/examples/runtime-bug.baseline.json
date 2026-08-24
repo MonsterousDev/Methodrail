@@ -1,0 +1,14 @@
+{
+  "fixture_id": "runtime-bug",
+  "condition": "baseline",
+  "host": "recorded-example",
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read", "edit"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [],
+  "outcome": "Patched landingPath from reading the source comment.",
+  "failure_modes": ["source-as-runtime"],
+  "behaviors_observed": ["inferred runtime from source"]
+}

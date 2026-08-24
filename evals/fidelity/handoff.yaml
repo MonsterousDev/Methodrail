@@ -1,0 +1,13 @@
+id: fidelity.handoff
+kind: fidelity
+skill: handoff
+description: Handoff still carries live thread plus pointers, not duplicated durable state.
+input:
+  prompt: "Write a handoff for the next agent to continue billing ownership."
+expected:
+  skills:
+    required: [handoff]
+  behaviors:
+    - capture intent, decisions, and next action
+    - point at existing artifacts
+    - omit secrets and copied specs

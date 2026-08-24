@@ -18,3 +18,5 @@ Prefer a mature upstream skill over a weaker Methodrail reimplementation when be
 Write or edit skills with [writing-for-agents](../skills/writing-for-agents/SKILL.md). Use [SKILL-MECHANICS.md](../skills/writing-for-agents/SKILL-MECHANICS.md) for invocation and router questions. Do not ship a duplicate `writing-great-skills`.
 
 Do not add Methodrail-specific metadata when native skill metadata expresses the same intent. Expensive or explicit-only skills set `disable-model-invocation: true`.
+
+Where composition is non-obvious, a short neighbor block may name `Usually follows`, `Often produces`, `Escalate to`, and `Avoid combining automatically with`. Do not add that block as boilerplate.

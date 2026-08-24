@@ -1,0 +1,10 @@
+id: fixture.runtime-bug
+required_skills: [debug, diagnosing-bugs, verify-change]
+forbidden_skills: [wayfinder, architect, arena, swarm, interrogate]
+expected_behaviors:
+  - use project verification for reproduction
+  - distinguish source inference from runtime evidence
+  - add regression evidence
+  - verify the fix
+max_subagents: 2
+max_expensive_skills: 0

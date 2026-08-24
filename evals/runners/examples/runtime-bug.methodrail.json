@@ -1,0 +1,19 @@
+{
+  "fixture_id": "runtime-bug",
+  "condition": "methodrail",
+  "host": "recorded-example",
+  "skills_invoked": ["debug", "diagnosing-bugs", "observe", "verify-change"],
+  "references_loaded": [".methodrail/PROJECT.md"],
+  "tools_used": ["read", "edit", "test"],
+  "subagents_used": 0,
+  "verification_steps": ["verify-project expired session path", "unit regression"],
+  "evidence": ["expired session landed on /login"],
+  "outcome": "Root cause named, regression added, expired sessions redirect.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "use project verification for reproduction",
+    "distinguish source inference from runtime evidence",
+    "add regression evidence",
+    "verify the fix"
+  ]
+}

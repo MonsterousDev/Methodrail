@@ -1,0 +1,9 @@
+id: fixture.project-init
+required_skills: [methodrail-init]
+forbidden_skills: [wayfinder, architect, arena, swarm]
+expected_behaviors:
+  - inspect existing AGENTS.md and README
+  - create a pointer-oriented PROJECT.md
+  - discover npm test as verification
+  - do not copy README into PROJECT.md
+max_expensive_skills: 0

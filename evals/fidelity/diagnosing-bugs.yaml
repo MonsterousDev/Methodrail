@@ -1,0 +1,13 @@
+id: fidelity.diagnosing-bugs
+kind: fidelity
+skill: diagnosing-bugs
+description: Diagnosis still requires a red-capable loop and a named root cause before editing.
+input:
+  prompt: "Idle CPU is high after login. Diagnose it."
+expected:
+  skills:
+    required: [diagnosing-bugs]
+  behaviors:
+    - build a red-capable loop first
+    - reuse project verification when present
+    - name a supported root cause before editing

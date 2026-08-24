@@ -1,0 +1,13 @@
+id: fidelity.create-verification-skill
+kind: fidelity
+skill: create-verification-skill
+description: Verification-skill creation still interviews the repo before asking the user how the app starts.
+input:
+  prompt: "Create a verification skill. Ask me how to launch the app."
+expected:
+  skills:
+    required: [create-verification-skill]
+  behaviors:
+    - interview the repository first
+    - discover launch, readiness, drive, evidence, reset, stop
+    - ask only for unobservable facts

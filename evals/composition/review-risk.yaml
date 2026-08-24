@@ -1,0 +1,15 @@
+id: composition.review-risk
+kind: composition
+description: A risky payment change with a "tests passed" claim still needs independent review.
+fixture: evals/fixtures/review-risk
+input:
+  prompt: "Review this payment retry change. The author says tests passed."
+expected:
+  skills:
+    required: [review, code-review]
+    forbidden: [arena, swarm]
+  behaviors:
+    - consume the review packet
+    - reject an author claim as verification
+    - flag missing fresh evidence
+    - note payment-path blast radius

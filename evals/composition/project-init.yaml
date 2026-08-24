@@ -1,0 +1,15 @@
+id: composition.project-init
+kind: composition
+description: Init should build a pointer index, not copy the README.
+fixture: evals/fixtures/project-init
+input:
+  prompt: "Initialize Methodrail in this repository."
+expected:
+  skills:
+    required: [methodrail-init]
+    forbidden: [wayfinder, architect, arena, swarm]
+  behaviors:
+    - inspect AGENTS.md and README
+    - write a concise PROJECT.md
+    - point at npm test
+    - leave existing instructions in place

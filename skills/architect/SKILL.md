@@ -61,6 +61,13 @@ Caller's usage written first, type sketch derived from it. Rationale shaped per 
 ## Neighbors
 
 ```text
+Usually follows:              how, domain-modeling, develop (uncertain design)
+Often produces:               decision; rationale
+Escalate to:                  prototype, arena, interrogate
+Avoid combining automatically with: develop restart, tdd
+```
+
+```text
 Current implementation        → how
 Historical rationale          → why
 Domain vocabulary             → domain-modeling / existing glossary

@@ -1,0 +1,14 @@
+{
+  "fixture_id": "simple-change",
+  "condition": "baseline",
+  "host": "recorded-example",
+  "skills_invoked": ["architect", "wayfinder", "interrogate"],
+  "references_loaded": ["references/rigor.md"],
+  "tools_used": ["grep"],
+  "subagents_used": 3,
+  "verification_steps": [],
+  "evidence": [],
+  "outcome": "Changed the label after an architecture review.",
+  "failure_modes": ["unnecessary-escalation"],
+  "behaviors_observed": ["started architecture process"]
+}

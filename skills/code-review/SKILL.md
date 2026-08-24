@@ -65,6 +65,13 @@ A change can pass one axis and fail the other. That is the point of the split.
 ## Neighbors
 
 ```text
+Usually follows:              review, develop
+Often produces:               standards report; spec report
+Escalate to:                  blast-radius, verify-change
+Avoid combining automatically with: interrogate, arena
+```
+
+```text
 Consume                       → review packet, project constraints, verification evidence
 Need impact beyond the diff   → blast-radius
 Do not auto-invoke            → interrogate

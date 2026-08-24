@@ -7,6 +7,7 @@ Methodrail changes:
 - project knowledge lookup and freshness check before expensive exploration
 - host-specific model slugs isolated; subagents optional
 - Methodrail inference/unknown labeling
+- public skill restored to require entrypoint, data/control/state flow, boundaries, structured explorer output, and non-default critique
 - added Methodrail behavioral evals
 
 Fidelity: upstream-preserved-with-extensions

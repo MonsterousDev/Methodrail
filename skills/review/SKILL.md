@@ -45,3 +45,12 @@ Do not run multiple expensive reviewers for trivial changes. Give the reviewer a
 ## Done when
 
 The requested change range was inspected in context, findings are evidence-backed and prioritized, and verification gaps are explicit.
+
+## Neighbors
+
+```text
+Usually follows:              develop, debug, refactor
+Often produces:               findings; verification gaps
+Escalate to:                  code-review, blast-radius, verify-change, interrogate
+Avoid combining automatically with: arena, swarm
+```

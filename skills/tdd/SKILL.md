@@ -51,6 +51,13 @@ Write a failing test that reproduces the bug, then follow the loop. The test pro
 ## Neighbors
 
 ```text
+Usually follows:              develop, debug
+Often produces:               failing test; passing implementation; verify-change
+Escalate to:                  codebase-design, verify-change, diagnosing-bugs
+Avoid combining automatically with: prototype, architect
+```
+
+```text
 Design vocabulary             → codebase-design
 After green                   → verify-change
 Diagnosis loop                → diagnosing-bugs

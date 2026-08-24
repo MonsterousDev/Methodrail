@@ -54,3 +54,12 @@ Do not automatically profile or trace every bug.
 ## Done when
 
 The failure is reproduced or bounded, its cause is supported by evidence, and the fix is verified against the reproduction plus proportionate regression checks.
+
+## Neighbors
+
+```text
+Usually follows:              investigate
+Often produces:               reproduction; root cause; verify-change
+Escalate to:                  diagnosing-bugs, observe, runtime-forensics
+Avoid combining automatically with: architect, wayfinder, arena
+```

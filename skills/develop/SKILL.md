@@ -71,3 +71,12 @@ Matt's `implement` skill is not a public Methodrail skill. `/develop` owns the l
 ## Done when
 
 Acceptance criteria are met, the diff is scoped, and each completion claim has fresh relevant evidence or a clearly reported verification gap.
+
+## Neighbors
+
+```text
+Usually follows:              investigate
+Often produces:               implementation; tdd cycle; verify-change
+Escalate to:                  how, architect, prototype, wayfinder
+Avoid combining automatically with: arena, swarm, interrogate
+```

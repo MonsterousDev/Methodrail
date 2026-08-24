@@ -1,0 +1,9 @@
+id: fixture.architecture-decision
+required_skills: [how, architect]
+forbidden_skills: [arena, swarm, interrogate]
+expected_behaviors:
+  - understand the current implementation
+  - consider domain ownership
+  - record a decision
+  - prototype only if empirical uncertainty remains
+max_expensive_skills: 2

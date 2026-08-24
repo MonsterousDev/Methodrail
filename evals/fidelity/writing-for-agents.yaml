@@ -1,0 +1,13 @@
+id: fidelity.writing-for-agents
+kind: fidelity
+skill: writing-for-agents
+description: Agent-facing writing still prefers pointers over copied methodology.
+input:
+  prompt: "Rewrite PROJECT.md for agents."
+expected:
+  skills:
+    required: [writing-for-agents]
+  behaviors:
+    - keep the file an index
+    - put trigger conditions in pointers
+    - do not copy the README

@@ -1,0 +1,18 @@
+{
+  "fixture_id": "simple-change",
+  "condition": "methodrail",
+  "host": "recorded-example",
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read", "edit", "test"],
+  "subagents_used": 0,
+  "verification_steps": ["node --test src/button.test.js"],
+  "evidence": ["test output: 1 passed"],
+  "outcome": "Label changed and unit test passed.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "inspect the current label",
+    "edit locally",
+    "run a cheap check if one exists"
+  ]
+}

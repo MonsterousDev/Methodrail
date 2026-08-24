@@ -127,13 +127,14 @@ The TypeScript in this repository validates Methodrail itself; it is not a consu
 npm install
 npm test
 npm run validate
+npm run eval
 npm run check-upstreams
 ```
 
-Validation checks plugin metadata, native skill frontmatter, methodology references, maintainer evals, permanent-context size, provenance files, and the realistic initialized-project fixture.
+Validation checks plugin metadata, native skill frontmatter, methodology references, maintainer evals, permanent-context size, provenance files, host invariant projections, and the realistic initialized-project fixture.
 
-See `references/` for the methodology and `adapters/` for thin host-specific installation guidance. Maintainer evals live in `evals/` and beside each skill. Upstream update procedure: [docs/upstream-maintenance.md](docs/upstream-maintenance.md).
+See `references/` for the methodology and `adapters/` for thin host-specific installation guidance. Maintainer evals live in `evals/` and beside each skill. The eval runner scores recorded baseline vs Methodrail runs; it is not an agent runtime. Upstream update procedure: [docs/upstream-maintenance.md](docs/upstream-maintenance.md).
 
 ## Status
 
-v0.5.0 unifies those operators into one Methodrail family: shared skill substrate, context economics, family-wide project-harness integration, proportional complexity, `writing-for-agents`, and `handoff`. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups. Cross-host behavioral parity is not claimed beyond Cursor.
+v0.6.0 is Demonstrated Composition. The skill family shares one invariant across Cursor, Claude, and Codex. Maintainer evals can compare baseline agent behavior with Methodrail. Simple work is still required to stay cheap; harder work may cost more when that cost prevents an expensive miss. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
