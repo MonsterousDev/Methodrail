@@ -17,3 +17,10 @@ Follow [playbook.md](references/playbook.md):
 3. Migrate one component at a time.
 4. Verify via image diff. A nonzero diff is a fail; investigate the pixel delta.
 5. Report components migrated, the diff result for each, the baseline harness location, and what's left.
+
+## Neighbors
+
+```text
+Must finish with              → verify-change
+Do not use for                → non-visual behavior
+```

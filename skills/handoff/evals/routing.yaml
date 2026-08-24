@@ -1,0 +1,9 @@
+id: skill.handoff.routing-positive
+kind: routing
+skill: handoff
+description: Explicit handoff requests should load handoff.
+input:
+  prompt: "Write a handoff so another agent can continue this work tomorrow."
+expected:
+  skills:
+    required: [handoff]

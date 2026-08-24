@@ -1,0 +1,9 @@
+id: skill.handoff.routing-negative
+kind: routing
+skill: handoff
+description: Ordinary local edits are not a handoff.
+input:
+  prompt: "Change the button text from Save to Create."
+expected:
+  skills:
+    forbidden: [handoff]

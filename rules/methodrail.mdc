@@ -10,5 +10,7 @@ If `.methodrail/PROJECT.md` exists, read it before substantive work.
 - Use fresh evidence before claiming success.
 - Prefer deterministic tools for deterministic facts.
 - Resolve uncertainty using source, runtime, history, experiment, domain modeling, or human judgment as appropriate.
-- Use Methodrail skills when relevant.
+- Use Methodrail skills proportionally.
+- Escalate rigor only when uncertainty or risk warrants it.
+- Preserve useful learning without duplicating discoverable state.
 - Keep permanent context small.

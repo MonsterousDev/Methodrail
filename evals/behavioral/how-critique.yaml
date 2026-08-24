@@ -1,0 +1,14 @@
+id: behavioral.how.critique-mode
+kind: behavioral
+skill: how
+description: Critique mode explains first, then independently critiques.
+input:
+  prompt: "How does the rate limiter work, and what architectural problems does it have?"
+expected:
+  skills:
+    required: [how]
+  behaviors:
+    - explain before critiquing
+    - use independent critics when the host can
+    - present explanation first, then critique
+  baseline_failure: mixing critique into an ungrounded directory tour

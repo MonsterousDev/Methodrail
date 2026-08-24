@@ -63,3 +63,10 @@ Only offer to create an ADR when all three are true:
 If any of the three is missing, skip the ADR. Use [ADR-FORMAT.md](references/ADR-FORMAT.md). Write the ADR next to the project's existing decision records, or `.methodrail/knowledge/decisions/` if that is the home. See the [decision frontier](../../references/decision-frontier.md).
 
 Ask humans only for preference or intent the environment cannot resolve.
+
+## Neighbors
+
+```text
+Use existing project vocabulary rather than inventing a parallel glossary
+May feed                      → grill-with-docs, wayfinder, architect
+```

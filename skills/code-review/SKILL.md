@@ -61,3 +61,13 @@ If the spec is missing, skip Spec and note it.
 Present the two reports under `## Standards` and `## Spec`. Do **not** merge or rerank findings across axes. End with a one-line summary: total findings per axis, and the worst issue *within each axis*.
 
 A change can pass one axis and fail the other. That is the point of the split.
+
+## Neighbors
+
+```text
+Consume                       → review packet, project constraints, verification evidence
+Need impact beyond the diff   → blast-radius
+Do not auto-invoke            → interrogate
+```
+
+Do not rerun unrelated exploration when verification evidence is already supplied.

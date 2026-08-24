@@ -127,3 +127,17 @@ If this `why` is a precursor to changing the code, convert findings into Preserv
 - Skipping the gaps section
 - Skipping categories by anticipation
 - Inventing historical rationale
+
+## Neighbors
+
+```text
+Need current implementation   → how
+Need external sources         → research
+Need decision records         → .methodrail pointers, then primary history
+```
+
+Use `.methodrail` decision/rationale pointers, but verify against primary history when needed.
+
+## Done when
+
+Claims about intent are cited, competing evidence is shown, and gaps are explicit. Unknown is a valid result.

@@ -45,3 +45,10 @@ What a good test is here, which modules will be tested, prior art in the codebas
 ## Out of Scope
 
 ## Further Notes
+
+## Neighbors
+
+```text
+Unresolved questions          → grill-with-docs
+Implementation                → /develop after spec exists
+```

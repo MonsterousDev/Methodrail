@@ -6,43 +6,65 @@ disable-model-invocation: true
 
 # Investigate
 
-Answer the question without changing product code.
+Answer the question without changing product code. Do not run every investigation skill.
+
+```text
+question
+↓
+check project knowledge
+↓
+fresh?
+↓
+cheapest reliable acquisition path
+↓
+how / observe / why / research / prototype / blast-radius
+↓
+evidence-backed answer
+↓
+optional durable learning
+```
 
 ## Workflow
 
 1. Restate the question and define what evidence would answer it.
-2. Read `.methodrail/PROJECT.md` if present. Check whether relevant project knowledge is still [fresh](../../references/knowledge/freshness.md) before relying on it.
+2. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Check [freshness](../../references/knowledge/freshness.md) before relying on stored notes.
 3. Choose the cheapest reliable evidence source, then the matching leaf skill:
 
 ```text
-how          = current implementation
-why          = historical motivation
-observe      = live behavior
-research     = external/reference sources
-prototype    = empirical experiment
-blast-radius = what else a change could affect
+deterministic fact     → git / compiler / package manager / test runner
+current implementation → how
+historical motivation  → why
+live behavior          → observe
+external/reference     → research
+empirical experiment   → prototype
+change consequences    → blast-radius
 ```
 
-4. Gather primary evidence. Label every important claim as one of:
+A narrow "where is this symbol defined?" question is local source lookup, not a full `how` exploration.
+
+4. Gather primary evidence. Label every important claim:
 
 ```text
-Observed
-Source-supported
-Historically supported
-Inferred
-Unknown
+inferred
+test-confirmed
+observed
+traced
+historically-confirmed
+unknown
 ```
 
+Do not call source reading observed behavior.
+
 5. Stop when the question is answered at the requested confidence. Do not produce an unrelated repository tour.
-6. Report the answer first, then evidence, limits, and any useful next step. Propose knowledge updates when a discovery is expensive to rediscover; do not persist them without evidence.
+6. Report the answer first, then evidence, limits, and any useful next step. Propose knowledge updates only when rediscovery is expensive.
 
 ## Constraints
 
 - Read-only unless the user explicitly authorizes a disposable prototype.
 - Ask only for information unavailable from the repository or environment.
 - Do not turn an investigation into implementation.
-- Use [observation confidence labels](../../references/protocols/observation-record.md) consistently.
+- See [observation record](../../references/protocols/observation-record.md) and [skill composition](../../references/skill-composition.md).
 
-## Completion
+## Done when
 
 The original question has a direct evidence-backed answer, or the blocker and remaining uncertainty are explicit.

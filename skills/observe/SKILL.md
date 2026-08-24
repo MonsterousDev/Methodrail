@@ -68,3 +68,15 @@ Reproduction steps, observed outcomes, confidence labels. Discard raw logs unles
 ## Evaluation
 
 Positive routing for 'what do users see' and runtime symptoms. Negative: pure how-questions can stay on how. Pressure: refuse to relabel inference as observation.
+
+## Neighbors
+
+```text
+Need current implementation   → how
+Need project drive/repro      → project verify skill
+Need live instrumentation     → runtime-forensics
+```
+
+Reuse documented start/drive/reset procedures. Do not relaunch the app independently when the project harness already knows how.
+
+May produce a behavior-knowledge candidate when a surprising durable contract is observed.

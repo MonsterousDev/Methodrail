@@ -1,0 +1,15 @@
+id: behavioral.how.reuse-fresh-knowledge
+kind: behavioral
+skill: how
+description: Fresh project knowledge for one subsystem should be reused, not rediscovered.
+input:
+  prompt: "How does checkout tax calculation work?"
+fixture: evals/fixtures/fresh-knowledge
+expected:
+  skills:
+    required: [how]
+  behaviors:
+    - read PROJECT.md and the linked tax note
+    - validate freshness against recorded revision and paths
+    - reuse still-valid knowledge
+    - avoid rediscovering unaffected areas

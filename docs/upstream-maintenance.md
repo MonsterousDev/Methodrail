@@ -47,3 +47,5 @@ The script reads recorded repositories and commits, queries current upstream HEA
 5. Preserve invocation semantics (`disable-model-invocation` for expensive/explicit skills).
 6. Isolate host-specific model slugs and tracker assumptions.
 7. Do not import competing global routers (`poteto-mode`, `ask-matt`, `using-superpowers`).
+8. Record `Fidelity:` on `UPSTREAM.md`.
+9. Run the [family integration](family-integration.md) checklist.

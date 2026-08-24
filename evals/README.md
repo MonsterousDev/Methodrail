@@ -18,6 +18,7 @@ compare behavior
 - `evals/routing/` — mixed-intent skill selection
 - `evals/behavioral/` — whether loading a skill improves behavior
 - `evals/pressure/` — discipline under schedule, shotgun, inference, and environment pressure
+- `evals/complexity/` — simple work must not activate expensive operators
 - `evals/fixtures/` — shared notes and pointers
 - `skills/<name>/evals/` — per-skill positive and negative routing
 

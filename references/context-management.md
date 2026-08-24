@@ -24,7 +24,9 @@ Use a fresh child context for bounded work. Give the child a [task packet](proto
 
 ## Handoff
 
-Use explicit durable state when work moves between sessions or agents. Write what the next agent must know: intent, known facts, open frontier, evidence, and next action.
+Use explicit durable state when work moves between sessions or agents. The operational skill is `handoff`. Write what the next agent must know: intent, known facts, open frontier, evidence, and next action. Reference specs, ADRs, issues, commits, and diffs. Do not duplicate them. Redact secrets.
+
+`handoff` is explicit-only.
 
 ## Compact
 

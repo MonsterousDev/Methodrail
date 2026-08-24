@@ -91,3 +91,13 @@ Distinguish **passed** verification from **merely executed** verification.
 ## When to apply
 
 Always before any variation of success/completion claims, satisfaction, commit/PR, moving to the next task, or delegating "done" to another agent. The rule applies to exact phrases, paraphrases, and implications of success.
+
+## Neighbors
+
+```text
+Behavioral claim              → observe / project verify skill
+Performance claim             → performance
+Visual claim                  → visual-parity
+```
+
+Prefer the project-local verify skill when present. Do not weaken this gate to save tokens. Evidence method should be proportional to the claim.

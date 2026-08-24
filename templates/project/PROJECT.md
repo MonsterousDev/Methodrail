@@ -23,6 +23,7 @@ One or two sentences describing what this repository builds.
 
 - Smallest useful checks by change type
 - Environment limits or required services
+- Link to the project-local verify skill when one exists
 
 ## Domain vocabulary
 
@@ -35,6 +36,10 @@ One or two sentences describing what this repository builds.
 ## Runtime and control
 
 - Link to `control/CONTROL.md` when non-obvious runtime procedures justify it
+
+## Decision records
+
+- Links to ADRs or `.methodrail/knowledge/decisions/` when consequential choices exist
 
 ## Important constraints
 

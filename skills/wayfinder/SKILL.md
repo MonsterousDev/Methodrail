@@ -10,6 +10,8 @@ A loose idea has arrived, too big for one agent session, and wrapped in fog. Way
 
 This is Methodrail's operational implementation of the [decision frontier](../../references/decision-frontier.md). Do not replace it with a simplified summary. Do not force foggy large work into a premature full implementation plan.
 
+Read `.methodrail/PROJECT.md` for destination constraints and existing decisions when present.
+
 ## Plan, don't do
 
 Each ticket resolves a decision. The map is done when the way is clear. The pull to just do the work is usually the signal you've reached the edge of the map. Absent an explicit Notes override, produce decisions, not deliverables.
@@ -100,3 +102,18 @@ Never resolve more than one ticket per session, except research tickets which ma
 3. Resolve it. Call skills named in Notes; default `grill-with-docs` if in doubt.
 4. Record the answer, close the ticket, append a gist to Decisions so far.
 5. Add newly surfaced tickets; graduate fog that is now specifiable; rule out-of-scope work out of the route.
+
+## Neighbors
+
+```text
+Ambiguous destination         → grill-with-docs
+External facts                → research
+Empirical claims              → prototype
+Consequential shape           → architect after the map is clear
+```
+
+Do not restart `/develop`. One non-research ticket per session.
+
+## Done when
+
+The map names the destination, the current frontier is ticketed, and this session resolved at most one non-research ticket.

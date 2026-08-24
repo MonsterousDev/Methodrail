@@ -45,3 +45,12 @@ Move anything a mechanical check would enforce more reliably than a skill onto t
 Show the full Accepted / Rejected / Backlog list. Wait for explicit approval before writing any knowledge note or skill edit. Skill changes affect future agents; do not auto-apply.
 
 Do not file tracker issues unless the user asks. Do not treat Methodrail global skills as an org-wide dump for project-local lessons.
+
+## Neighbors
+
+```text
+Existing decision trail       → show-me-your-work
+Continuity artifact           → handoff
+```
+
+Do not auto-promote candidates.

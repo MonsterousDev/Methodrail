@@ -42,3 +42,13 @@ If the question is genuinely ambiguous and the user isn't reachable, default fro
 6. **Capture it when done.** Fold any validated decision into real code deliberately. Keep the prototype off main unless the user asks to keep it. The verdict survives; the scaffolding does not, unless promoted.
 
 Do not ship the prototype as the implementation.
+
+## Neighbors
+
+```text
+Consumes                      → explicit empirical question
+May inform                    → architect, wayfinder, decision record
+Must not                      → silently become production code
+```
+
+Use the project verification/control surface when the experiment needs a running app. Specialized live-process probes belong in `runtime-forensics` / `performance`.

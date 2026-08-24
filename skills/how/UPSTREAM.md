@@ -8,3 +8,5 @@ Methodrail changes:
 - host-specific model slugs isolated; subagents optional
 - Methodrail inference/unknown labeling
 - added Methodrail behavioral evals
+
+Fidelity: upstream-preserved-with-extensions

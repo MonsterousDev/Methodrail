@@ -1,0 +1,20 @@
+id: behavioral.handoff.live-thread-only
+kind: behavioral
+skill: handoff
+description: Handoff should reference durable artifacts and carry only the live thread.
+input:
+  prompt: "Write a handoff so a fresh agent can continue this work."
+fixture: evals/fixtures/handoff-thread
+conditions:
+  baseline: native agent without handoff
+  treatment: native agent with handoff loaded
+expected:
+  skills:
+    required: [handoff]
+  behaviors:
+    - reference existing spec, ADR, commits, and diffs
+    - carry only the live thread
+    - include next steps and relevant skills
+    - do not duplicate durable artifacts
+    - do not leak secrets
+  baseline_failure: pasting the whole conversation and copying specs into a new file

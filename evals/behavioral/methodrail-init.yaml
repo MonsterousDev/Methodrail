@@ -1,0 +1,17 @@
+id: behavioral.methodrail-init.pointer-harness
+kind: behavioral
+skill: methodrail-init
+description: Init should generate a small index and pointers, not a copied methodology dump.
+input:
+  prompt: "Initialize Methodrail in this repository."
+fixture: tests/fixtures/repository/input
+expected:
+  skills:
+    required: [methodrail-init]
+  behaviors:
+    - inspect the repository before asking routine questions
+    - create a concise PROJECT.md index
+    - preserve existing AGENTS.md and CLAUDE.md
+    - write pointer-oriented agent-facing files
+    - generate a project verify skill when the executable surface warrants it
+  baseline_failure: copying Methodrail doctrine and global skills into the project

@@ -1,0 +1,12 @@
+id: complexity.runtime-expiry-ux
+kind: complexity
+description: Runtime UX questions require observation, not source-as-observation.
+input:
+  prompt: "What does the user see when their access token expires?"
+expected:
+  skills:
+    required: [observe]
+    forbidden: [wayfinder, architect, arena, swarm, interrogate]
+  behaviors:
+    - use observe or project verification
+    - do not label source reading as observed behavior

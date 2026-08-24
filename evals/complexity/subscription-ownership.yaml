@@ -1,0 +1,15 @@
+id: complexity.subscription-ownership
+kind: complexity
+description: Consequential ownership moves deserve higher rigor, not automatic prototypes.
+input:
+  prompt: "Move subscription ownership from User to Organization."
+expected:
+  skills:
+    required: [architect]
+    forbidden: []
+  behaviors:
+    - higher rigor
+    - understand the existing system
+    - consider domain implications
+    - make an architecture decision
+    - prototype only for empirical uncertainty

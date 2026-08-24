@@ -27,7 +27,9 @@ Inspected revisions: [matt-pocock.yaml](../upstreams/matt-pocock.yaml), [pstack.
 | triage | Issue-tracker state machine | SKIP | — | Tracker-specific, not central | issue-tracker |
 | resolving-merge-conflicts | Intent-traced merge | SKIP | — | Useful but not core Methodrail | git |
 | wizard | HITL bash wizard | SKIP | — | Personal/ops helper, not core | runtime-tool |
-| grill-me / productivity/* | Personal productivity | SKIP | — | Not central | — |
+| writing-for-agents | Agent-facing document design | ADAPT | `writing-for-agents` | Current canonical skill; subsumes writing-great-skills | portable |
+| handoff | Cross-session continuity document | ADAPT | `handoff` | Operational Methodrail handoff transition; explicit-only | portable |
+| grill-me / remaining productivity/* | Personal productivity | SKIP | — | Not central | — |
 | in-progress/* / misc/* | Unstable or personal | SKIP | — | Do not import incomplete skills | — |
 
 ## pstack (cursor/plugins)

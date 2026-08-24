@@ -1,0 +1,9 @@
+id: skill.writing-for-agents.routing-positive
+kind: routing
+skill: writing-for-agents
+description: Agent-facing document edits should load writing-for-agents.
+input:
+  prompt: "Add a section to AGENTS.md telling agents how testing works in this repo."
+expected:
+  skills:
+    required: [writing-for-agents]

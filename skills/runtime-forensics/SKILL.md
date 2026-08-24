@@ -19,3 +19,12 @@ Follow [playbook.md](references/playbook.md):
 3. Prove the mechanism before believing it. Inject cheap instrumentation on the running process when safe.
 4. Map the finding back to source: file, symbol, the line that allocates or schedules.
 5. Hand back the signal, the reduced finding, how you proved it, the source location, artifact paths. No fix unless asked.
+
+## Neighbors
+
+```text
+Ordinary diagnosis            → diagnosing-bugs
+Capture already exists        → trace-forensics
+User-path observation         → observe
+Must not                      → silently become a fix
+```

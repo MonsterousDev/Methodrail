@@ -17,3 +17,12 @@ Follow [playbook.md](references/playbook.md). Summary:
 5. Cite the measurement: baseline, post-fix, delta, artifact path.
 
 For sustained improvement against a metric rather than a one-off fix, use `hillclimb`.
+
+## Neighbors
+
+```text
+Need a diagnosis loop         → diagnosing-bugs
+Iterative optimization        → hillclimb
+Architecture bound            → architect
+Must finish with              → verify-change
+```

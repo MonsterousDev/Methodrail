@@ -45,3 +45,11 @@ Do not propose interfaces yet. Ask which candidate to explore.
 ### 3. Grilling loop
 
 Once the user picks a candidate, use `grill-with-docs` to walk constraints, the deepened module, the seam, and which tests survive. Use `domain-modeling` as terms crystallise. Use `codebase-design` / design-it-twice to explore alternative interfaces.
+
+## Neighbors
+
+```text
+Vocabulary                    → codebase-design
+Chosen candidate              → grill-with-docs
+Workflow owner                → /refactor
+```

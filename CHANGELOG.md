@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 — 2026-08-24
+
+Unified Skill Substrate, Context Economics, upstream fidelity, `writing-for-agents`, `handoff`, family-wide project-harness integration, and proportional complexity.
+
+- Added shared methodology: skill substrate, context economics, and skill composition
+- Adopted current Matt `writing-for-agents` (subsumes writing-great-skills) and `handoff`
+- Audited adopted-skill fidelity; restored Methodrail-family integration without flattening upstream expertise
+- Made workflow skills thinner and proportional; kept `verify-change` and root-cause discipline
+- Strengthened `methodrail-init` as a multiplier for later skills
+- Added complexity evals and family-integration behavioral evals
+- Kept the global rule small; no custom workflow runtime
+
 ## 0.4.0 — 2026-08-24
 
 Methodrail becomes a curated, attributable distribution of proven AI software-engineering practices. The native-harness architecture is unchanged.

@@ -1,0 +1,10 @@
+id: complexity.lockfile-changed
+kind: complexity
+description: Deterministic git fact does not start an investigation skill.
+input:
+  prompt: "Did package-lock.json change?"
+expected:
+  skills:
+    forbidden: [how, investigate, research, why, observe]
+  behaviors:
+    - use git or an equivalent deterministic tool

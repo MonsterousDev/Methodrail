@@ -1,0 +1,1 @@
+# ADRs and domain fixture

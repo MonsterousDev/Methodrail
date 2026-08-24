@@ -16,3 +16,10 @@ Follow [playbook.md](references/playbook.md):
 4. Attribute to source. A frame with no source mapping is not yet a diagnosis.
 5. Confirm against a paired capture when you have one. Without one, mark the finding as the strongest hypothesis the artifact supports.
 6. Cited diagnosis, no fix unless asked. Route back to `diagnosing-bugs` / `performance` once the cause is known.
+
+## Neighbors
+
+```text
+Need a live capture           → runtime-forensics
+Metric iteration              → performance / hillclimb
+```

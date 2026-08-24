@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Create a verification skill
 
-Every serious runnable project needs a scripted way to drive the real app and prove behavior. This skill generates that as a **project-local** skill tailored to the repo. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.
+Every serious runnable project needs a scripted way to drive the real app and prove behavior. This skill generates that as a **project-local** skill tailored to the repo. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app. Write it with `writing-for-agents`.
 
 Do not copy global Methodrail skills into the project. This generates only project-specific verification.
 
@@ -57,3 +57,11 @@ Run its own instructions end to end once: launch, doctor, drive ONE mapped featu
 ## 5. Offer the maintenance loop
 
 Point at `maintain-verification-skill` for keeping the map honest as the app changes.
+
+## Neighbors
+
+```text
+Init                          → methodrail-init
+Later upkeep                  → maintain-verification-skill
+Agent-facing prose            → writing-for-agents
+```

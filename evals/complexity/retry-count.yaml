@@ -1,0 +1,11 @@
+id: complexity.symbol-definition
+kind: complexity
+description: Narrow symbol lookup stays local unless repository complexity requires more.
+input:
+  prompt: "Where is retryCount defined?"
+expected:
+  skills:
+    forbidden: [wayfinder, architect, prototype, arena, swarm, interrogate]
+  behaviors:
+    - local source lookup
+    - do not spawn a full how exploration unless the repository actually requires it

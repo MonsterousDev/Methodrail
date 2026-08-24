@@ -1,5 +1,6 @@
 Origin: mattpocock/skills / skills/engineering/diagnosing-bugs
 Import mode: adapted
+Fidelity: methodrail-composed
 Upstream revision: 5b15a47f2d7150f545fbcacbfe381787fc0230dc
 License: MIT (Copyright (c) 2026 Matt Pocock)
 

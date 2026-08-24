@@ -57,3 +57,18 @@ When you scrap: re-run `how` over what's been built, redesign from the new const
 ## Outputs
 
 Caller's usage written first, type sketch derived from it. Rationale shaped per [rationale-template.md](references/rationale-template.md), including the synthesis decision.
+
+## Neighbors
+
+```text
+Current implementation        → how
+Historical rationale          → why
+Domain vocabulary             → domain-modeling / existing glossary
+Empirical claim               → prototype
+Competing sketches            → arena
+Adversarial pressure          → interrogate (explicit)
+```
+
+Use existing ADRs, domain vocabulary, and current implementation. Do not invent architecture from scratch. Must not restart `/develop`.
+
+Complexity alone is not a reason to invoke this skill.

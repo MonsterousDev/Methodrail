@@ -16,6 +16,20 @@ Typical behavior:
 
 Do not invoke `architect`, `prototype`, or `interrogate`.
 
+## Multi-agent cost
+
+Guidance, not a scheduler. Explicit user invocation remains allowed.
+
+| Rigor | Parallel posture |
+|---|---|
+| 0–1 | Prefer one context |
+| 2 | Isolated subagents only where they improve context quality or independence |
+| 3 | Parallel exploration may be justified |
+| 4 | Arena/interrogate may be justified for consequential uncertainty or review |
+| 5 | Strong independent evidence/review is expected where available |
+
+Keep parallel semantics distinct: swarm partitions work; arena competes candidates; interrogate reviews adversarially; how explorers partition understanding; code-review axes split review dimensions.
+
 ## Level 1 — Bounded
 
 A small local change or bug.

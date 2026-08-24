@@ -1,5 +1,6 @@
 Origin: obra/superpowers / skills/verification-before-completion
 Import mode: adapted
+Fidelity: methodrail-composed
 Upstream revision: b36e0829c6d0140e93cfef2ca599b1b07d4a7797
 License: MIT (Copyright (c) 2025 Jesse Vincent)
 

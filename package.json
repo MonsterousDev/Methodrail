@@ -1,7 +1,7 @@
 {
   "name": "methodrail",
-  "version": "0.4.0",
-  "description": "Curated, evidence-driven engineering methodology for AI coding agents.",
+  "version": "0.5.0",
+  "description": "Unified, evidence-driven engineering environment for AI coding agents.",
   "type": "module",
   "license": "MIT",
   "engines": {

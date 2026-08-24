@@ -41,3 +41,10 @@ Every required slice needs a result. For a race, apply the selection rule declar
 ## Phase D: Report
 
 One consolidated in-chat report: table, issue one-liners, gaps or dropouts, and the race rule when used.
+
+## Neighbors
+
+```text
+Same artifact, compete        → arena
+Understanding partition       → how explorers
+```

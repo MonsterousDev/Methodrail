@@ -23,3 +23,13 @@ If the host supports a background or child agent, spin one up so this context ca
 3. Save it where the repo already keeps such notes. If there is none, put it in `.methodrail/knowledge/` or another sensible project location and say where.
 
 Findings may become a knowledge candidate. Do not promote them to standing rules automatically. See [knowledge lifecycle](../../references/knowledge/lifecycle.md).
+
+## Neighbors
+
+```text
+Current code                  → how
+History                       → why
+Live behavior                 → observe
+```
+
+Do not use research for the local codebase.

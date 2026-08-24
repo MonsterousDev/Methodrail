@@ -52,3 +52,13 @@ The synthesized artifact has to hold up under `verify-change`. The arena does no
 ## Outputs
 
 One synthesized artifact. One short synthesis note: base, grafts, rejections, dropouts, verification result.
+
+## Neighbors
+
+```text
+Different slices              → swarm
+Adversarial review            → interrogate
+Must finish with              → verify-change
+```
+
+Do not auto-trigger for routine work.

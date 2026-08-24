@@ -45,3 +45,11 @@ Any safety fact you can't get to step 4, say so out loud. Don't write it up as s
 - **Before you merge.** The cheapest test or repro that catches the real bug.
 
 Silent "nothing else is affected" is forbidden without evidence.
+
+## Neighbors
+
+```text
+Need current system           → how
+Need competing safety proofs  → arena
+Do not auto-invoke            → local mechanical edits
+```

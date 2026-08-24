@@ -1,0 +1,14 @@
+id: behavioral.diagnosing-bugs.use-project-verify
+kind: behavioral
+skill: diagnosing-bugs
+description: Diagnosis should use the project verification skill for reproduction when present.
+input:
+  prompt: "The idle CPU test is failing in the running app. Diagnose it."
+fixture: evals/fixtures/project-verify
+expected:
+  skills:
+    required: [diagnosing-bugs]
+  behaviors:
+    - use the project verification skill for reproduction when appropriate
+    - build a red-capable loop before hypothesising
+    - name a supported root cause before editing

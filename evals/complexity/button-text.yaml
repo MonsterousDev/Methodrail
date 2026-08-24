@@ -1,0 +1,12 @@
+id: complexity.button-text
+kind: complexity
+description: Tiny copy change must not activate expensive operators.
+input:
+  prompt: "Change button text from \"Save\" to \"Create\"."
+expected:
+  skills:
+    forbidden: [wayfinder, architect, prototype, arena, swarm, interrogate]
+  behaviors:
+    - inspect
+    - edit
+    - deterministic verification

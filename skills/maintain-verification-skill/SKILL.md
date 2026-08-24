@@ -37,3 +37,10 @@ Only edit the verification skill's own directory (SKILL.md, features/, harness s
 6. **Ship or stop.** For changed: re-read every changed file first. For clean or blocked: no verification-code change, report the outcome honestly.
 
 Keep concise run notes in a scratch location; don't commit them.
+
+## Neighbors
+
+```text
+Missing verify skill          → create-verification-skill
+Project index                 → `.methodrail/PROJECT.md`
+```

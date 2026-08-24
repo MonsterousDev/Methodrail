@@ -1,0 +1,9 @@
+id: skill.writing-for-agents.routing-negative
+kind: routing
+skill: writing-for-agents
+description: Ordinary implementation is not agent-document design.
+input:
+  prompt: "Rename the local variable usr to user in src/auth.ts."
+expected:
+  skills:
+    forbidden: [writing-for-agents]

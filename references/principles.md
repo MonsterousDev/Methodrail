@@ -19,8 +19,13 @@ Resolve uncertainty by type:
 
 Context is a budget. Keep permanent rules short, load skills and references only when relevant, and leave durable handoff artifacts instead of conversational sediment.
 
+Complexity must earn its keep. Share infrastructure aggressively. Compose procedures conservatively.
+
 Progressive disclosure:
 
+- [skill substrate](methodrail-skill-substrate.md)
+- [context economics](context-economics.md)
+- [skill composition](skill-composition.md)
 - [rigor](rigor.md)
 - [decision frontier](decision-frontier.md)
 - [knowledge](knowledge.md)

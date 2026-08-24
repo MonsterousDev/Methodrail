@@ -67,3 +67,13 @@ For each: which reviewer(s), category, one-line rationale.
 ### Agreement Map
 
 Keep it expensive and conservative. Do not simulate reviewers with personas.
+
+## Neighbors
+
+```text
+Receive                       → review packet with project context
+Must not                      → auto-apply patches
+Must not                      → auto-trigger from /review
+```
+
+Rigor 0–1 work must not invoke this skill.

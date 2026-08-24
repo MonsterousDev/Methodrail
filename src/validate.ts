@@ -54,6 +54,8 @@ const REQUIRED_SKILLS = new Set([
   "maintain-verification-skill",
   "show-me-your-work",
   "reflect",
+  "writing-for-agents",
+  "handoff",
 ]);
 const EXPLICIT_SKILLS = new Set([
   "methodrail-init",
@@ -81,6 +83,7 @@ const EXPLICIT_SKILLS = new Set([
   "maintain-verification-skill",
   "show-me-your-work",
   "reflect",
+  "handoff",
 ]);
 const REQUIRED_REFERENCES = [
   "references/rigor.md",
@@ -104,6 +107,9 @@ const REQUIRED_REFERENCES = [
   "references/capability-map.md",
   "references/upstream-skill-matrix.md",
   "references/host-capabilities.md",
+  "references/methodrail-skill-substrate.md",
+  "references/context-economics.md",
+  "references/skill-composition.md",
 ];
 const REQUIRED_BEHAVIORAL_SKILLS = [
   "verify-change",
@@ -120,8 +126,18 @@ const REQUIRED_BEHAVIORAL_SKILLS = [
   "architect",
   "interrogate",
   "create-verification-skill",
+  "writing-for-agents",
+  "handoff",
+  "methodrail-init",
 ];
-const REQUIRED_EVAL_KINDS = ["routing", "behavioral", "pressure"] as const;
+const REQUIRED_EVAL_KINDS = ["routing", "behavioral", "pressure", "complexity"] as const;
+const VALID_FIDELITY = new Set([
+  "upstream-preserved",
+  "upstream-preserved-with-extensions",
+  "methodrail-composed",
+  "concept-derived",
+]);
+const MAX_GLOBAL_RULE_CHARS = 1800;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -423,6 +439,12 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
   }
 
   issues.push(...validateMaintainerEvals(root));
+  issues.push(...validateUpstreamFidelity(root, skillPaths));
+
+  const obsoleteSkill = join(root, "skills", "writing-great-skills");
+  if (existsSync(obsoleteSkill)) {
+    issues.push(issue(obsoleteSkill, "Do not ship writing-great-skills; writing-for-agents superseded it"));
+  }
 
   if (
     isRecord(packageJson.repository) &&
@@ -537,6 +559,43 @@ function validateGlobalRules(root: string): ValidationIssue[] {
     if (lines > MAX_GLOBAL_RULE_LINES) {
       issues.push(
         issue(path, `Global Cursor rule must stay at or below ${MAX_GLOBAL_RULE_LINES} lines`),
+      );
+    }
+    if (source.length > MAX_GLOBAL_RULE_CHARS) {
+      issues.push(
+        issue(
+          path,
+          `Global Cursor rule must stay at or below ${MAX_GLOBAL_RULE_CHARS} characters (found ${source.length})`,
+        ),
+      );
+    }
+    for (const banned of ["wayfinder", "interrogate", "capability map", "rigor table", "skill graph"]) {
+      if (source.toLowerCase().includes(banned)) {
+        issues.push(issue(path, `Global Cursor rule must not embed methodology detail: ${banned}`));
+      }
+    }
+  }
+
+  return issues;
+}
+
+function validateUpstreamFidelity(root: string, skillPaths: string[]): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const valid = [...VALID_FIDELITY].join("|");
+  const pattern = new RegExp(`^Fidelity:\\s*(${valid})\\s*$`, "m");
+
+  for (const skillPath of skillPaths) {
+    if (!skillPath.startsWith(join(root, "skills"))) continue;
+    const skillDir = dirname(skillPath);
+    const upstreamPath = join(skillDir, "UPSTREAM.md");
+    if (!existsSync(upstreamPath)) continue;
+    const source = readFileSync(upstreamPath, "utf8");
+    if (!pattern.test(source)) {
+      issues.push(
+        issue(
+          upstreamPath,
+          `UPSTREAM.md must declare Fidelity as one of: ${[...VALID_FIDELITY].join(", ")}`,
+        ),
       );
     }
   }

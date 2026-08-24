@@ -2,11 +2,10 @@ name: mattpocock/skills
 repository: https://github.com/mattpocock/skills
 license: MIT
 copyright: Copyright (c) 2026 Matt Pocock
-last_reviewed_commit: 5b15a47f2d7150f545fbcacbfe381787fc0230dc
+last_reviewed_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
 last_reviewed_at: 2026-08-24
 notes: >
-  Engineering skills under skills/engineering/. License verified from
-  repository LICENSE at the recorded commit. Do not import ask-matt,
-  setup-matt-pocock-skills, or in-progress/misc/productivity skills as
-  competing control planes. Tracker-specific setup is isolated behind
-  project-local fallbacks.
+  Inspected current engineering skills plus productivity/writing-for-agents
+  and productivity/handoff. writing-for-agents subsumes writing-great-skills;
+  do not ship both. Do not import ask-matt, setup-matt-pocock-skills, or
+  remaining productivity/in-progress/misc skills as competing control planes.

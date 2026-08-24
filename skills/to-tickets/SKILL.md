@@ -55,3 +55,10 @@ Local ticket body:
 ```
 
 Avoid specific file paths or code snippets unless a prototype snippet encodes a decision.
+
+## Neighbors
+
+```text
+Wide refactor tickets         → blast-radius
+Foggy destination             → wayfinder
+```

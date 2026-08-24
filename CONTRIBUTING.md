@@ -2,6 +2,16 @@
 
 Do not create a skill because advice sounds good. Create a skill because a **recurring agent failure** has been observed and the skill **measurably** improves behavior.
 
+**Complexity must earn its keep.** New skills or extra orchestration must answer:
+
+- What recurring failure does this solve?
+- Why can't an existing skill solve it?
+- Why isn't a deterministic tool better?
+- What additional token/context/runtime cost does it introduce?
+- When should it NOT trigger?
+- How does it compose with existing capabilities?
+- How will we test that it improves behavior?
+
 Methodrail prefers evidence over NIH.
 
 ```text
@@ -9,15 +19,25 @@ Observed recurring agent failure
         ↓
 Does Methodrail already solve it?
         │
-        ├── yes → improve/eval existing skill
+        ├── yes → improve/eval existing capability
         │
         └── no
              ↓
-Does a strong upstream skill already solve it?
+Does proven upstream work solve it?
         │
-        ├── yes → evaluate/adopt/adapt
+        ├── yes → adopt/adapt
         │
-        └── no → design new Methodrail skill
+        └── no → design a new skill
+             ↓
+write using writing-for-agents principles
+             ↓
+baseline behavior
+             ↓
+skill-enabled behavior
+             ↓
+pressure cases where relevant
+             ↓
+ship only when behavior improves
 ```
 
 New skills must justify:
@@ -30,6 +50,8 @@ New skills must justify:
 - eval strategy
 
 When adopting upstream work: inspect the current license and commit, record them, preserve notices, keep provenance out of the prompt, and do not import competing global routers. See [upstream maintenance](docs/upstream-maintenance.md) and [capability map](references/capability-map.md).
+
+When adopting or modifying a skill, use the [family integration](docs/family-integration.md) checklist.
 
 ## Skill changes
 
@@ -55,7 +77,7 @@ Shared methodology belongs in `references/`. Skills should stay short and link t
 
 ## Evals
 
-Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/`, and `skills/<name>/evals/`. They are not required in consuming projects. Prefer mixed-intent prompts over textbook phrases. Behavioral evals compare a baseline agent with the Methodrail skill loaded; recorded/manual runs are acceptable.
+Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/`, `evals/complexity/`, and `skills/<name>/evals/`. They are not required in consuming projects. Prefer mixed-intent prompts over textbook phrases. Behavioral evals compare a baseline agent with the Methodrail skill loaded; recorded/manual runs are acceptable. Complexity evals guard over-orchestration of simple work.
 
 ## Repo commands
 

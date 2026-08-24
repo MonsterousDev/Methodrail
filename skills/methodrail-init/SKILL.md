@@ -8,6 +8,19 @@ disable-model-invocation: true
 
 Create the highest-leverage project-specific AI harness with the least permanent-context cost and maintenance burden. Inspect first, preserve existing guidance, and make repeated runs safe.
 
+Init is a multiplier for every later skill. Optimize for future skill leverage per unit of permanent context and maintenance. Write all agent-facing harness files with [writing-for-agents](../writing-for-agents/SKILL.md).
+
+Ask internally:
+
+```text
+What will many skills repeatedly need?
+What project behavior is expensive to rediscover?
+What control/verification would improve multiple workflows?
+What terminology prevents repeated misunderstanding?
+What existing docs should agents be pointed to?
+What should NOT be copied because the environment already answers it?
+```
+
 A tiny project may need only `.methodrail/PROJECT.md`. A mature service may need knowledge notes, control procedures, and a project-local verification skill. Do not generate files merely to satisfy a template.
 
 Do not copy global Methodrail skills (`how`, `tdd`, `wayfinder`, …) into the project. Global skills stay globally installed. Generate only project-specific material.
@@ -49,6 +62,7 @@ determine whether the project has a meaningful executable surface
 - Do not create a skill for every command.
 - Do not install multiple integrations “for compatibility.”
 - Distinguish documentation/control drift from actual product regression.
+- Write generated `AGENTS.md`, `CLAUDE.md`, Cursor rules, project verification skills, and `.methodrail/PROJECT.md` as indexes and pointers. Do not copy canonical docs into them.
 
 ## Progressive disclosure
 
@@ -63,6 +77,16 @@ Load only the reference needed for the current phase:
 - [merge semantics](references/merge-semantics.md)
 - [integrations](references/integrations.md)
 - [completion checklist](references/completion-checklist.md)
+
+## Neighbors
+
+```text
+Runnable surface              → create-verification-skill
+Agent-facing prose            → writing-for-agents
+Later harness upkeep          → maintain-verification-skill
+```
+
+Do not copy global Methodrail operators into the project.
 
 ## Completion
 

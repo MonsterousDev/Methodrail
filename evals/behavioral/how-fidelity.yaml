@@ -1,0 +1,20 @@
+id: behavioral.how.fidelity-partition
+kind: behavioral
+skill: how
+description: Complex subsystem questions should partition, synthesize flow/state, and label runtime claims.
+input:
+  prompt: "How does billing authorization work across API, worker, and webhook?"
+fixture: evals/fixtures/how-subsystem
+conditions:
+  baseline: native agent without how
+  treatment: native agent with how loaded
+expected:
+  skills:
+    required: [how]
+  behaviors:
+    - question-driven decomposition
+    - appropriate explorer partitioning when complex
+    - flow and state synthesis, not a directory summary
+    - runtime claims labeled correctly as inferred unless observed
+    - reuse fresh project knowledge for unaffected areas
+  baseline_failure: summarizing folders as architecture

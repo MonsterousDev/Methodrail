@@ -131,3 +131,20 @@ Present the explanation first, then the critique. Someone who just wants to unde
 - Do not infer architecture from filenames alone.
 - Do not produce giant repository summaries unless specifically requested.
 - Runtime evidence is out of scope unless you escalate to `observe`.
+
+## Neighbors
+
+```text
+Need live behavior            → observe
+Need historical motivation    → why
+Need change consequences      → blast-radius
+Need domain vocabulary        → domain-modeling
+```
+
+Complexity alone is not a reason to invoke `architect`.
+
+May produce a knowledge candidate when a stable, surprising ownership or flow rule would be expensive to rediscover. Do not persist ordinary source summaries.
+
+## Done when
+
+The relevant path from entrypoint to effect is traced, authoritative state and side effects are accounted for, inference is labeled, and remaining unknowns are explicit.

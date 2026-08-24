@@ -1,0 +1,12 @@
+id: complexity.rename-local-variable
+kind: complexity
+description: Local rename stays local.
+input:
+  prompt: "Rename local variable `usr` to `user`."
+expected:
+  skills:
+    forbidden: [wayfinder, architect, prototype, arena, swarm, interrogate]
+  behaviors:
+    - local inspection
+    - edit
+    - deterministic validation

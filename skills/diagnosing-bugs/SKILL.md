@@ -127,3 +127,7 @@ live runtime mystery → observe / runtime-forensics
 captured trace/profile → trace-forensics
 metric-driven optimization → performance / hillclimb
 ```
+
+Reuse project control and known-failure knowledge when relevant. Prefer the project verification skill for reproduction.
+
+A recurring failure mode may become a known-failure, regression test, lint, or type constraint. Do not auto-promote it.

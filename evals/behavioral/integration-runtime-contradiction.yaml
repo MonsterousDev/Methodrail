@@ -1,0 +1,19 @@
+id: behavioral.integration.runtime-contradicts-source
+kind: behavioral
+description: Family integration on a bug whose runtime behavior contradicts source assumptions.
+input:
+  prompt: "Fix the bug where expired tokens still show the dashboard."
+fixture: evals/fixtures/runtime-contradiction
+expected:
+  skills:
+    required: [debug, diagnosing-bugs, verify-change]
+    forbidden: [wayfinder, architect, arena, swarm, interrogate]
+  behaviors:
+    - reuse project context from PROJECT.md
+    - use diagnosing-bugs
+    - use project verification for reproduction
+    - observe or runtime-escalate if source and runtime disagree
+    - add regression evidence
+    - fix
+    - verify
+    - do not call source inference observed

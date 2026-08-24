@@ -28,3 +28,17 @@ At the same time, run `domain-modeling`:
 - Offer ADRs only when hard to reverse, surprising, and the result of a real trade-off
 
 Do not act on the plan until the user confirms shared understanding.
+
+## Neighbors
+
+```text
+Needs glossary/ADRs           → domain-modeling (already included)
+Needs a large decision map    → wayfinder
+Needs a durable spec          → to-spec after the frontier is empty
+```
+
+Do not auto-start `/develop`. Read `.methodrail/PROJECT.md` for glossary and ADR pointers when present.
+
+## Done when
+
+The current frontier is empty and the user has confirmed shared understanding.

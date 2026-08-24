@@ -44,3 +44,10 @@ By default a working artifact, not committed: `decisions.tsv` in the work dir, o
 At the end of the run, check the log told the truth against the actual work. If the host exposes a transcript for this session, walk it; do not glob unrelated private chats. Cut invented entries. Add unlogged forks that shaped the work.
 
 If the host can spawn a reviewer on a different model family, do so and end with an Attention section. If not, self-audit and state that independent review was unavailable. See [host capabilities](../../references/host-capabilities.md).
+
+## Neighbors
+
+```text
+Often follows                 → hillclimb, arena, long debug
+May inform                    → reflect, handoff
+```

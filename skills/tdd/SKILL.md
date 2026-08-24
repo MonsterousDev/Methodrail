@@ -47,3 +47,13 @@ If you wrote production code before the test, don't keep it as "reference." Impl
 ## Bug fixes
 
 Write a failing test that reproduces the bug, then follow the loop. The test proves the fix and prevents regression. Coordinate with `diagnosing-bugs`: the loop from diagnosis often *is* the red test.
+
+## Neighbors
+
+```text
+Design vocabulary             → codebase-design
+After green                   → verify-change
+Diagnosis loop                → diagnosing-bugs
+```
+
+Use project test conventions and the project verification skill when representative integration evidence is needed.

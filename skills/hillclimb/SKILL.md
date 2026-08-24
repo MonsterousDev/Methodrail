@@ -23,3 +23,10 @@ Follow [playbook.md](references/playbook.md). Summary:
 5. Loop: one change, measure, keep only if the metric moves past noise and the gate stays green; otherwise revert in full.
 6. Push past the first plateau. Don't relax the predicate to declare victory.
 7. Stop when the predicate is met or remaining ideas are genuinely marginal.
+
+## Neighbors
+
+```text
+Trail                         → show-me-your-work
+Must not                      → optimize without a metric
+```

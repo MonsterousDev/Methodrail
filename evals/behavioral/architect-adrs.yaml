@@ -1,0 +1,14 @@
+id: behavioral.architect.use-existing-adrs
+kind: behavioral
+skill: architect
+description: Architecture work should use existing ADRs and domain vocabulary.
+input:
+  prompt: "Architect organization-level billing."
+fixture: evals/fixtures/adrs-and-domain
+expected:
+  skills:
+    required: [architect]
+  behaviors:
+    - use existing ADRs and domain vocabulary
+    - ground in current implementation
+    - do not invent architecture from scratch

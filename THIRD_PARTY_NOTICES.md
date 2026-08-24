@@ -9,7 +9,7 @@ Methodrail itself is licensed under the MIT License. See `LICENSE`.
 ## mattpocock/skills
 
 - Repository: https://github.com/mattpocock/skills
-- Reviewed commit: `5b15a47f2d7150f545fbcacbfe381787fc0230dc`
+- Reviewed commit: `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76`
 - License: MIT
 
 ```
@@ -36,7 +36,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-Adopted or derived skills include `domain-modeling`, `diagnosing-bugs`, `tdd`, `code-review`, `grill-with-docs`, `wayfinder`, `codebase-design`, `improve-codebase-architecture`, `prototype`, `research`, `to-spec`, and `to-tickets`.
+Adopted or derived skills include `domain-modeling`, `diagnosing-bugs`, `tdd`, `code-review`, `grill-with-docs`, `wayfinder`, `codebase-design`, `improve-codebase-architecture`, `prototype`, `research`, `to-spec`, `to-tickets`, `writing-for-agents`, and `handoff`. `writing-for-agents` subsumes the earlier `writing-great-skills` concept.
 
 ---
 

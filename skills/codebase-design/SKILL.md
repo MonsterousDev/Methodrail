@@ -58,3 +58,11 @@ When designing an interface, ask:
 
 - [DEEPENING.md](references/DEEPENING.md) — dependency categories, seam discipline, replace-don't-layer testing.
 - [DESIGN-IT-TWICE.md](references/DESIGN-IT-TWICE.md) — parallel alternative interfaces, then compare on depth, locality, and seam placement.
+
+## Neighbors
+
+```text
+Consequential decision        → architect
+Structured hunt               → improve-codebase-architecture
+TDD at a seam                 → tdd
+```

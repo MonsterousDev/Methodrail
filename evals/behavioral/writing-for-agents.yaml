@@ -1,0 +1,19 @@
+id: behavioral.writing-for-agents.pointer-not-copy
+kind: behavioral
+skill: writing-for-agents
+description: Agent-facing instructions should point at canonical docs instead of copying them.
+input:
+  prompt: "Add instructions to AGENTS.md covering how tests, architecture, and domain terms work."
+fixture: evals/fixtures/agent-docs
+conditions:
+  baseline: native agent without writing-for-agents
+  treatment: native agent with writing-for-agents loaded
+expected:
+  skills:
+    required: [writing-for-agents]
+  behaviors:
+    - write pointer-oriented instructions
+    - avoid duplicating canonical docs already in the repository
+    - use clear trigger wording
+    - keep context cost small
+  baseline_failure: copying full docs into AGENTS.md

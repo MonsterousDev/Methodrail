@@ -40,6 +40,10 @@ Canonical Methodrail surface. One owner per capability. Provenance is metadata, 
 | Verify-skill upkeep | `maintain-verification-skill` | pstack | explicit | `create-verification-skill` if missing | humans |
 | Compact decision trail | `show-me-your-work` | pstack | explicit | — | `hillclimb`, long runs |
 | Session lessons as candidates | `reflect` | pstack | explicit | knowledge / skill / structural-enforcement candidates | humans |
+| Cross-session continuity | `handoff` | Matt Pocock | explicit | — | humans, long sessions, `prototype` round-trips |
+| Agent-facing document design | `writing-for-agents` | Matt Pocock | model-invoked | skill mechanics | `methodrail-init`, skill maintenance, harness generation, verification-skill generation, agent-facing docs |
+
+Typical artifacts, not process nesting: `how` → implementation understanding; `observe` → runtime evidence; `why` → historical rationale; `domain-modeling` → vocabulary; `prototype` → empirical evidence; `wayfinder` → decision map; `architect` → decision; `tdd` → behavioral tests; `verify-change` → fresh verification; `code-review` → findings; `show-me-your-work` → trail; `reflect` → learning candidates; `handoff` → continuity artifact.
 
 ## Ownership decisions
 
@@ -49,3 +53,5 @@ Canonical Methodrail surface. One owner per capability. Provenance is metadata, 
 - **Review:** `/review` is the workflow; `code-review` is the two-axis leaf. `interrogate` is explicit-only.
 - **Implement:** Matt `implement` is not shipped. `/develop` owns the lifecycle and reuses `tdd` / `code-review` / `verify-change`.
 - **Control planes:** `poteto-mode`, `ask-matt`, `using-superpowers`, and `setup-*` global routers are not imported.
+- **Skill authoring:** `writing-for-agents` subsumes the earlier `writing-great-skills` concept. Do not ship both.
+- **Handoff:** operational skill for Methodrail's handoff context transition. Explicit-only.

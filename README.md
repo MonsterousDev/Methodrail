@@ -1,6 +1,6 @@
 # Methodrail
 
-Methodrail is a curated, evidence-driven engineering methodology for AI coding agents. It integrates proven agent workflows with a project-specific harness generated from the repository itself.
+Methodrail is a unified, evidence-driven engineering environment for AI coding agents. It combines proven agent practices under one project-aware methodology, using progressive disclosure and proportional rigor so simple work stays simple and difficult work gets the depth it deserves.
 
 ```text
 Install once
@@ -100,7 +100,7 @@ See [capability map](references/capability-map.md) for canonical ownership.
 Methodrail's value is careful selection and composition, not NIH. Major methodology influences:
 
 - [pstack](https://github.com/cursor/plugins/tree/main/pstack) (Lauren Tan) — `how`, `why`, `blast-radius`, architecture and parallel operators, verification-skill generation, forensics
-- [mattpocock/skills](https://github.com/mattpocock/skills) — domain modeling, diagnosis, TDD, review, wayfinder, design discipline
+- [mattpocock/skills](https://github.com/mattpocock/skills) — domain modeling, diagnosis, TDD, review, wayfinder, design discipline, writing-for-agents, handoff
 - [obra/superpowers](https://github.com/obra/superpowers) — the hard evidence gate behind `verify-change`
 
 Licenses, commits, and notices: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Per-skill provenance: `skills/<name>/UPSTREAM.md`. Maintainer records: [upstreams/](upstreams/README.md).
@@ -136,4 +136,4 @@ See `references/` for the methodology and `adapters/` for thin host-specific ins
 
 ## Status
 
-v0.4.0 is a curated distribution of proven AI software-engineering practices: Methodrail-native workflows compose upstream-adapted operators, with attribution, behavioral evals, and no competing control planes. Cursor is first-class; the reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
+v0.5.0 unifies those operators into one Methodrail family: shared skill substrate, context economics, family-wide project-harness integration, proportional complexity, `writing-for-agents`, and `handoff`. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups. Cross-host behavioral parity is not claimed beyond Cursor.

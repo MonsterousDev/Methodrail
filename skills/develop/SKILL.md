@@ -6,44 +6,58 @@ disable-model-invocation: true
 
 # Develop
 
-Deliver the requested change with the smallest justified scope. This workflow orchestrates leaf skills; it does not duplicate them.
+Deliver the requested change with the smallest justified scope. This workflow sets intent, proportionality, and phase ownership. It does not duplicate leaf-skill procedures.
+
+One workflow owner at a time. Leaf skills are bounded operators. They must not restart another development lifecycle.
 
 ```text
 task
 ↓
-understand current system          → how
+cheap project-context lookup
 ↓
-grill-with-docs                    when intent is unclear
+understand relevant existing system
 ↓
-domain-modeling                    when language/model is unclear
+identify uncertainty
 ↓
-wayfinder                          when the work remains foggy/huge
+resolve current decision frontier
 ↓
-architect                          when an architecture choice exists
+define observable success
 ↓
-prototype                          when empirical uncertainty exists
+architecture/prototype only if justified
 ↓
-tdd                                for appropriate implementation
+plan proportionally
 ↓
-code-review
+implement with canonical discipline
 ↓
-verify-change
+verify
 ↓
-blast-radius                       proportional to risk
+blast-radius/review proportional to risk
+↓
+retain valuable learning
 ```
 
-Matt's `implement` skill is not a public Methodrail skill. `/develop` owns the lifecycle. Implementation disciplines (seams, vertical slices, review, verification) are reused via `tdd`, `code-review`, and `verify-change`.
+## Cheap path first
+
+Match effort to [rigor](../../references/rigor.md). Do not activate the whole stack.
+
+**Tiny bounded change:** inspect → edit → deterministic check → done.
+
+**Normal feature:** `how` if needed → acceptance criteria → `tdd` / implementation → `verify-change` → `code-review` if warranted.
+
+**Large uncertain redesign:** `wayfinder` → `domain-modeling` → `how` → `architect` → `prototype` only for empirical claims → decision → implementation → `blast-radius` → `code-review` → `interrogate` only if rigor warrants → `verify-change`.
+
+Do not auto-invoke `wayfinder`, `architect`, `prototype`, `arena`, `swarm`, or `interrogate` for routine work.
 
 ## Workflow
 
-1. Read `.methodrail/PROJECT.md` if present, the request, relevant code, tests, and current git state. Check knowledge freshness before relying on stored notes.
-2. Classify uncertainty with the [decision frontier](../../references/decision-frontier.md). Resolve only currently actionable questions. Leave fog questions unanswered — use `wayfinder` rather than a premature full plan when the work is too large.
-3. Define observable success and a verification strategy before editing. Ask only when a missing choice materially changes behavior or compatibility.
-4. Trace current implementation with `how`. Add `grill-with-docs`, `domain-modeling`, `architect`, `prototype`, or `blast-radius` only when [rigor](../../references/rigor.md) justifies them. `to-spec` / `to-tickets` may crystallize resolved intent; they do not replace this workflow.
-5. Implement in focused increments with `tdd` at agreed seams. Follow established project patterns. Avoid drive-by cleanup. Use `refactor` when the request is structural rather than a feature.
-6. Inspect the resulting diff for accidental scope, compatibility risks, generated files, and secrets.
-7. Use `observe` when the claim is behavioral, then `verify-change` for fresh evidence. Use `code-review` on the diff. Use `/review` only when the user requests a separate review or rigor requires it.
-8. Summarize changed behavior, files, verification evidence, residual risk, and any durable knowledge worth proposing.
+1. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Check [freshness](../../references/knowledge/freshness.md) before relying on stored notes.
+2. Classify uncertainty with the [decision frontier](../../references/decision-frontier.md). Resolve only currently actionable questions. Use the cheapest reliable method: deterministic tool, source/`how`, `observe`, `why`, `research`, `prototype`, `domain-modeling`, or a human.
+3. Define observable success and a verification strategy before editing. Ask only when a missing choice is product/taste/preference and the repository cannot answer it.
+4. Implement in focused increments with `tdd` at agreed seams when that is the honest strategy. Follow established project patterns. Use `refactor` when the request is structural rather than a feature.
+5. Use `observe` and the project verification skill when the claim is behavioral. Finish with `verify-change`. Use `/review` only when the user requests a separate review or rigor requires it.
+6. Summarize changed behavior, files, verification evidence, residual risk, and any durable knowledge worth proposing. Do not persist ordinary summaries.
+
+Matt's `implement` skill is not a public Methodrail skill. `/develop` owns the lifecycle.
 
 ## Constraints
 
@@ -51,9 +65,9 @@ Matt's `implement` skill is not a public Methodrail skill. `/develop` owns the l
 - Do not broaden a local request into an architectural rewrite.
 - Do not claim completion from code inspection alone.
 - Do not commit, push, deploy, or mutate production unless explicitly requested.
-- Do not auto-invoke `wayfinder`, `architect`, `arena`, `swarm`, or `interrogate` for routine work.
 - Prefer [isolate or handoff](../../references/context-management.md) over stuffing an oversized conversation.
+- See [skill composition](../../references/skill-composition.md) and [context economics](../../references/context-economics.md).
 
-## Completion
+## Done when
 
 Acceptance criteria are met, the diff is scoped, and each completion claim has fresh relevant evidence or a clearly reported verification gap.
