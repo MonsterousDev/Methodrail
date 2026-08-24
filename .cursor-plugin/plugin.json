@@ -1,0 +1,18 @@
+{
+  "name": "methodrail",
+  "version": "0.2.0",
+  "description": "Evidence-driven methodology and project harness builder for AI coding agents.",
+  "author": {
+    "name": "MonsterousDev"
+  },
+  "repository": "https://github.com/MonsterousDev/Methodrail",
+  "license": "MIT",
+  "skills": "skills/",
+  "rules": "rules/",
+  "keywords": [
+    "engineering",
+    "evidence",
+    "skills",
+    "verification"
+  ]
+}

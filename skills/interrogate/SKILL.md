@@ -1,61 +1,38 @@
 ---
 name: interrogate
-description: Independent analysis against a shared rubric. Use disagreement as signal. Explicit or high-risk activation only.
+description: Conduct conservative independent adversarial analysis of a high-risk change. Run only when the user explicitly requests interrogate.
+disable-model-invocation: true
 ---
 
 # Interrogate
 
-## Problem
+Use independent analysis to expose consequential blind spots. This skill never activates from risk alone.
 
-High-risk changes get a friendly self-review from the same context that wrote the code.
+## Activation
 
-## Observed failure
+Proceed only when the user explicitly names or invokes `interrogate`. A request to “review,” “double-check,” or implement high-risk code is not sufficient.
 
-Invented personas for fake diversity, or interrogate on a rename.
-
-## When to activate
-
-Activate only when explicitly requested or when rigor/risk is high (billing, permissions, irreversible migrations) and independent review is available.
-
-## When not to activate
-
-Do not auto-activate. Do not use for mechanical or bounded local work.
-
-## Required context
-
-The same ReviewPacket for every reviewer. No hidden extra story.
+Decline or suggest ordinary `review` when the change is mechanical, narrowly local, or independent analysis would not materially improve confidence.
 
 ## Method
 
-If multiple models/agents are available:
-- provide the same core rubric
-- seek independent analysis
-- use disagreement as signal
-- do not invent artificial personas merely to force diversity
-- synthesize evidence and disagreements
+1. Fix a shared scope: request, acceptance criteria, full change range, relevant context, verification evidence, known deviations, and review rubric.
+2. Obtain genuinely independent analyses when available. Give each reviewer the same core evidence and rubric.
+3. Ask reviewers to identify concrete failure modes, violated invariants, unsafe assumptions, missing evidence, and rollback concerns.
+4. Reject theatrical personas, duplicated opinions, and claims unsupported by source or runtime evidence.
+5. Compare findings:
+   - agreement increases confidence but is not proof;
+   - disagreement identifies an assumption to inspect;
+   - unique findings require direct validation.
+6. Synthesize only validated findings, unresolved disagreements, and residual risk. Do not average incompatible conclusions.
 
-Use only when cost/risk justifies it.
+## Constraints
 
-## Permitted evidence
-
-Packet, diff, verification, independent writeups.
-
-## Side effects
-
-Read-only.
+- Read-only unless the user separately requests fixes.
+- Minimize disclosure: share only repository context required for the review.
+- Do not send secrets, credentials, personal data, or proprietary code to external services without explicit authorization.
+- If independent reviewers are unavailable, say so; do not simulate independence.
 
 ## Completion
 
-Independent findings exist; disagreements are synthesized; residual risk is explicit.
-
-## Artifacts
-
-Adversarial review synthesis.
-
-## What survives
-
-Disagreements that reveal real risk. Discard theatrical dissent.
-
-## Evaluation
-
-Positive: high-risk payment review may recommend this. Negative: mechanical rename forbids it.
+The report states who or what reviewed which scope, evidence-backed findings, unresolved disagreements, verification gaps, and residual risk.

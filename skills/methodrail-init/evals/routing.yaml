@@ -1,0 +1,9 @@
+id: skill.methodrail-init.routing-positive
+kind: routing
+skill: methodrail-init
+description: "Explicit initialization requests activate methodrail-init."
+input:
+  prompt: "Run methodrail-init for this repository and preserve our existing agent instructions."
+expected:
+  skills:
+    required: [methodrail-init]

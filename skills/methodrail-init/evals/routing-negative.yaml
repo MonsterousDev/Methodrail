@@ -1,0 +1,9 @@
+id: skill.methodrail-init.routing-negative
+kind: routing
+skill: methodrail-init
+description: "Ordinary development does not initialize Methodrail."
+input:
+  prompt: "Add pagination to the existing users endpoint."
+expected:
+  skills:
+    forbidden: [methodrail-init]

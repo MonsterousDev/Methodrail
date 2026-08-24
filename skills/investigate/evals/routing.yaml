@@ -1,0 +1,9 @@
+id: skill.investigate.routing-positive
+kind: routing
+skill: investigate
+description: "Explicit investigate requests activate the investigate entry skill."
+input:
+  prompt: "Use investigate to explain how authentication state reaches the API client."
+expected:
+  skills:
+    required: [investigate]

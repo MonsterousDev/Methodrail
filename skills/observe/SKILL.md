@@ -23,7 +23,7 @@ Do not activate when the question is purely structural, when starting the system
 
 ## Required context
 
-How to start the system (prefer project control adapter or existing scripts), the path to exercise, expected vs unknown behavior, and revision.
+How to start the system using existing project commands, the path to exercise, expected vs unknown behavior, and revision.
 
 ## Method
 
@@ -51,7 +51,7 @@ Runtime logs, UI/API responses, traces, screenshots, DB state after exercise, he
 
 ## Side effects
 
-May start local processes. Must not mutate production. Prefer isolated data. Reset when the adapter provides it.
+May start local processes. Must not mutate production. Prefer isolated data and use established reset commands when available.
 
 ## Completion
 

@@ -5,7 +5,5 @@ description: "Mechanical rename forbids architect."
 input:
   prompt: "Rename getUserById to findUserById. Formatting only."
 expected:
-  rigor:
-    equals: 0
   skills:
     forbidden: [architect]

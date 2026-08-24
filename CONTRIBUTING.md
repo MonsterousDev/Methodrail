@@ -2,38 +2,34 @@
 
 Do not create a skill because advice sounds good. Create a skill because a **recurring agent failure** has been observed and the skill **measurably** improves behavior.
 
-## New skills must explain
+## Skill changes
 
 1. **Failure observed** — what the agent actually did wrong, repeatedly.
 2. **Skill hypothesis** — how a bounded procedure prevents that failure.
-3. **Activation rule** — when the router or a workflow may invoke it.
+3. **Activation rule** — when a native agent or workflow entry skill should load it.
 4. **Non-activation rule** — when it must stay dark (especially expensive skills).
 5. **Evals** — at least positive routing, negative routing, behavioral (or structural stand-in), and a pressure case.
 
 Reject skills that are generic advice, long reference manuals, personality text, duplicate methodology, or work a compiler/linter/test should enforce.
 
-## Skill contract
+Each skill directory requires `SKILL.md` with standard Agent Skills frontmatter. Use `disable-model-invocation: true` for explicit workflow skills and expensive procedures. Put detailed material in directly linked `references/` files.
 
-Every skill directory needs `skill.yaml`, `SKILL.md` (Agent Skills–compatible frontmatter plus the required headings), and `evals/` fixtures.
+Do not add Methodrail-specific metadata when native skill metadata expresses the same intent.
 
-`SKILL.md` must answer: problem, observed failure, when to activate, when not to, required context, method, permitted evidence, side effects, completion, artifacts, what survives, evaluation.
+## Architecture boundary
 
-## Architecture changes
+Methodrail defines good engineering behavior. Cursor, Claude Code, Codex, and other Agent Skills-compatible harnesses own context, tool execution, planning, task state, and subagents.
 
-Updates to protocols, router policy, workflows, or promotion rules must include:
+Do not add a router, workflow engine, agent protocol, daemon, database, mandatory CLI, or generated copies of canonical skills. Host-specific adapters must remain thin projections.
 
-- schema changes
-- documentation updates
-- eval fixtures that lock the new contract
+Project harness artifacts use `.methodrail/PROJECT.md` as their source of truth and must preserve existing AI instructions.
 
 ## Repo commands
 
 ```bash
 npm install
 npm test
-npx tsx src/cli/index.ts validate
-npx tsx src/cli/index.ts eval
-npx tsx src/cli/index.ts check
+npm run validate
 ```
 
-Do not add databases, vector stores, model SDKs, or cloud services unless the current functionality requires them. This repository stays local-first and inspectable.
+Before submitting, inspect the diff for obsolete runtime concepts, duplicated instructions, broken references, invalid plugin metadata, and excessive permanent context.

@@ -5,6 +5,5 @@ description: "Explicit review requests activate review."
 input:
   prompt: "Review this payment change"
 expected:
-  workflow: review
   skills:
     required: [review]

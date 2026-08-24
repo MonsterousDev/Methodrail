@@ -1,0 +1,7 @@
+---
+description: Use the repository's generated Methodrail project guidance.
+alwaysApply: true
+---
+
+Read `.methodrail/PROJECT.md` for project knowledge and use the relevant native skill.
+Preserve existing project instructions, including `AGENTS.md`.

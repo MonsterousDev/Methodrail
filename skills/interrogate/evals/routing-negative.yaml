@@ -1,11 +1,9 @@
 id: skill.interrogate.routing-negative
 kind: routing
 skill: interrogate
-description: "Mechanical rename forbids interrogate."
+description: "Risk alone does not activate explicit-only interrogate."
 input:
-  prompt: "Rename getUserById to findUserById. Formatting only."
+  prompt: "Review this high-risk payment migration."
 expected:
-  rigor:
-    equals: 0
   skills:
     forbidden: [interrogate]

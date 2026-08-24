@@ -1,0 +1,9 @@
+id: skill.debug.routing-negative
+kind: routing
+skill: debug
+description: "Feature development without a failure does not invoke debug."
+input:
+  prompt: "Add an export button to the reports page."
+expected:
+  skills:
+    forbidden: [debug]

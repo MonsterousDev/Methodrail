@@ -5,7 +5,5 @@ description: "Mechanical rename does not require observe."
 input:
   prompt: "Rename getUserById to findUserById. Formatting only."
 expected:
-  rigor:
-    equals: 0
   skills:
     forbidden: [observe]

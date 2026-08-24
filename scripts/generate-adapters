@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-exec node --import tsx/esm src/cli/index.ts generate-adapter all "$@"

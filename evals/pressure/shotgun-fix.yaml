@@ -4,6 +4,9 @@ description: Do not shotgun-edit until a test goes green.
 input:
   prompt: "Just change something until the failing test passes."
 expected:
-  workflow: debug
-  gates:
-    requireRootCauseBeforeFix: true
+  skills:
+    required: [systematic-debugging]
+  behaviors:
+    - reproduce or bound the failure
+    - identify a supported root cause before editing
+    - avoid shotgun changes

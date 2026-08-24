@@ -1,0 +1,9 @@
+id: skill.develop.routing-positive
+kind: routing
+skill: develop
+description: "Explicit develop requests activate the develop entry skill."
+input:
+  prompt: "Use develop to add pagination to the users endpoint."
+expected:
+  skills:
+    required: [develop]

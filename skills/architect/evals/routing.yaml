@@ -5,7 +5,5 @@ description: "Consequential billing design should consider architecture."
 input:
   prompt: "Design organization-level billing"
 expected:
-  rigor:
-    min: 4
   skills:
     required: [architect]

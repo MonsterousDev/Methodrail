@@ -1,8 +1,0 @@
-id:
-type: observation
-claim: ""
-confidence: inferred
-status: candidate
-evidence: []
-validity:
-  repository_revision: ""

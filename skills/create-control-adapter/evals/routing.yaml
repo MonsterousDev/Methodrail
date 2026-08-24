@@ -1,9 +1,0 @@
-id: skill.create-control-adapter.routing-positive
-kind: routing
-skill: create-control-adapter
-description: "Explicit adapter creation activates create-control-adapter."
-input:
-  prompt: "Create a project-local control adapter for this app"
-expected:
-  skills:
-    required: [create-control-adapter]

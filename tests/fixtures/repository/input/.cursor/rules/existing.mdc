@@ -1,0 +1,6 @@
+---
+description: Existing project testing requirement
+alwaysApply: true
+---
+
+Run `npm test` before reporting JavaScript behavior as verified.

@@ -1,0 +1,403 @@
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { pathToFileURL } from "node:url";
+import { parse } from "yaml";
+
+export interface ValidationIssue {
+  path: string;
+  message: string;
+}
+
+export interface ValidationResult {
+  ok: boolean;
+  issues: ValidationIssue[];
+}
+
+const SKILL_FILE = "SKILL.md";
+const LEGACY_SKILL_FILE = "skill.yaml";
+const MAX_SKILL_LINES = 500;
+const MAX_GLOBAL_RULE_LINES = 40;
+const REQUIRED_SKILLS = new Set([
+  "methodrail-init",
+  "investigate",
+  "develop",
+  "debug",
+  "review",
+  "how",
+  "observe",
+  "why",
+  "domain-modeling",
+  "prototype",
+  "architect",
+  "systematic-debugging",
+  "verify-change",
+  "blast-radius",
+  "interrogate",
+]);
+const EXPLICIT_SKILLS = new Set([
+  "methodrail-init",
+  "investigate",
+  "develop",
+  "debug",
+  "review",
+  "prototype",
+  "interrogate",
+]);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function walk(root: string, predicate: (path: string) => boolean): string[] {
+  if (!existsSync(root)) return [];
+
+  const files: string[] = [];
+  for (const entry of readdirSync(root)) {
+    if ([".git", "dist", "node_modules"].includes(entry)) continue;
+    const path = join(root, entry);
+    const stat = statSync(path);
+    if (stat.isDirectory()) files.push(...walk(path, predicate));
+    else if (predicate(path)) files.push(path);
+  }
+  return files;
+}
+
+function issue(path: string, message: string): ValidationIssue {
+  return { path, message };
+}
+
+function lineCount(source: string): number {
+  return source.length === 0 ? 0 : source.split(/\r?\n/).length;
+}
+
+function frontmatter(source: string): Record<string, unknown> | undefined {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(source);
+  if (!match?.[1]) return undefined;
+  const parsed: unknown = parse(match[1]);
+  return isRecord(parsed) ? parsed : undefined;
+}
+
+function validateMarkdownLinks(path: string, source: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const links = source.matchAll(/(?<!!)\[[^\]]*]\(([^)]+)\)/g);
+
+  for (const match of links) {
+    const target = match[1]?.trim().replace(/^<|>$/g, "");
+    if (
+      !target ||
+      target.startsWith("#") ||
+      /^[a-z][a-z0-9+.-]*:/i.test(target) ||
+      !target.split("#", 1)[0]?.toLowerCase().endsWith(".md")
+    ) {
+      continue;
+    }
+
+    const localPath = decodeURIComponent(target.split("#", 1)[0] ?? "");
+    const resolved = resolve(dirname(path), localPath);
+    if (!existsSync(resolved) || !statSync(resolved).isFile()) {
+      issues.push(issue(path, `Referenced Markdown file does not exist: ${localPath}`));
+    }
+  }
+
+  return issues;
+}
+
+function validateSkill(path: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const source = readFileSync(path, "utf8");
+  const metadata = frontmatter(source);
+
+  if (!metadata) {
+    return [issue(path, "SKILL.md must start with YAML frontmatter")];
+  }
+
+  const folder = basename(dirname(path));
+  if (typeof metadata.name !== "string" || metadata.name.trim() === "") {
+    issues.push(issue(path, "Skill frontmatter requires a non-empty name"));
+  } else if (metadata.name !== folder) {
+    issues.push(issue(path, `Skill name "${metadata.name}" must match folder "${folder}"`));
+  } else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(metadata.name) || metadata.name.length > 64) {
+    issues.push(issue(path, "Skill name must be lowercase kebab-case and at most 64 characters"));
+  }
+
+  if (typeof metadata.description !== "string" || metadata.description.trim() === "") {
+    issues.push(issue(path, "Skill frontmatter requires a non-empty description"));
+  } else if (metadata.description.length > 1024) {
+    issues.push(issue(path, "Skill description must be at most 1024 characters"));
+  }
+
+  if (
+    metadata["disable-model-invocation"] !== undefined &&
+    typeof metadata["disable-model-invocation"] !== "boolean"
+  ) {
+    issues.push(issue(path, "disable-model-invocation must be a boolean when present"));
+  }
+  if (EXPLICIT_SKILLS.has(folder) && metadata["disable-model-invocation"] !== true) {
+    issues.push(issue(path, `${folder} must set disable-model-invocation: true`));
+  }
+  if (
+    metadata.paths !== undefined &&
+    typeof metadata.paths !== "string" &&
+    !(Array.isArray(metadata.paths) && metadata.paths.every((value) => typeof value === "string"))
+  ) {
+    issues.push(issue(path, "paths must be a string or an array of strings when present"));
+  }
+
+  const lines = lineCount(source);
+  if (lines >= MAX_SKILL_LINES) {
+    issues.push(issue(path, `Skill must stay under ${MAX_SKILL_LINES} lines (found ${lines})`));
+  }
+
+  issues.push(...validateMarkdownLinks(path, source));
+  return issues;
+}
+
+function validateSkillEvals(skillPath: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const skill = basename(dirname(skillPath));
+  const evalDir = join(dirname(skillPath), "evals");
+  const evalFiles = walk(evalDir, (path) => path.endsWith(".yaml") || path.endsWith(".yml"));
+  let positive = false;
+  let negative = false;
+
+  for (const path of evalFiles) {
+    try {
+      const fixture: unknown = parse(readFileSync(path, "utf8"));
+      if (!isRecord(fixture)) {
+        issues.push(issue(path, "Eval fixture must contain a YAML object"));
+        continue;
+      }
+      if (typeof fixture.id !== "string" || typeof fixture.kind !== "string") {
+        issues.push(issue(path, "Eval fixture requires string id and kind fields"));
+      }
+      if (fixture.skill !== skill) {
+        issues.push(issue(path, `Eval fixture skill must be "${skill}"`));
+      }
+      const input = fixture.input;
+      if (!isRecord(input) || typeof input.prompt !== "string" || input.prompt.trim() === "") {
+        issues.push(issue(path, "Eval fixture requires a non-empty input.prompt"));
+      }
+      const expected = fixture.expected;
+      const skills = isRecord(expected) && isRecord(expected.skills) ? expected.skills : undefined;
+      const required = skills && Array.isArray(skills.required) ? skills.required : [];
+      const forbidden = skills && Array.isArray(skills.forbidden) ? skills.forbidden : [];
+      if (required.includes(skill)) positive = true;
+      if (forbidden.includes(skill)) negative = true;
+    } catch (error) {
+      issues.push(issue(path, `Eval fixture is invalid YAML: ${(error as Error).message}`));
+    }
+  }
+
+  if (!positive) issues.push(issue(evalDir, `Missing positive routing coverage for ${skill}`));
+  if (!negative) issues.push(issue(evalDir, `Missing negative routing coverage for ${skill}`));
+  return issues;
+}
+
+function validatePlugin(root: string): ValidationIssue[] {
+  const path = join(root, ".cursor-plugin", "plugin.json");
+  if (!existsSync(path)) return [];
+
+  try {
+    const value: unknown = JSON.parse(readFileSync(path, "utf8"));
+    if (value === null || typeof value !== "object" || Array.isArray(value)) {
+      return [issue(path, "plugin.json must contain a JSON object")];
+    }
+
+    const plugin = value as Record<string, unknown>;
+    const issues: ValidationIssue[] = [];
+    for (const field of ["name", "version", "description"]) {
+      if (typeof plugin[field] !== "string" || plugin[field].trim() === "") {
+        issues.push(issue(path, `plugin.json requires a non-empty ${field}`));
+      }
+    }
+    if (
+      typeof plugin.name === "string" &&
+      !/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/.test(plugin.name)
+    ) {
+      issues.push(issue(path, "plugin.json name must be lowercase and use only letters, numbers, dots, or hyphens"));
+    }
+    if (
+      typeof plugin.version === "string" &&
+      !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(plugin.version)
+    ) {
+      issues.push(issue(path, "plugin.json version must be semantic version syntax"));
+    }
+    for (const component of ["skills", "rules"]) {
+      const configured = plugin[component];
+      if (configured === undefined) continue;
+      const configuredPaths =
+        typeof configured === "string"
+          ? [configured]
+          : Array.isArray(configured) && configured.every((value) => typeof value === "string")
+            ? configured
+            : undefined;
+      if (!configuredPaths) {
+        issues.push(issue(path, `${component} must be a path string or string array when configured`));
+        continue;
+      }
+      for (const configuredPath of configuredPaths) {
+        if (!existsSync(resolve(root, configuredPath))) {
+          issues.push(issue(path, `Configured ${component} path does not exist: ${configuredPath}`));
+        }
+      }
+    }
+    return issues;
+  } catch (error) {
+    return [issue(path, `plugin.json is not valid JSON: ${(error as Error).message}`)];
+  }
+}
+
+function validateMethodrailStructure(root: string, skillPaths: string[]): ValidationIssue[] {
+  const packagePath = join(root, "package.json");
+  if (!existsSync(packagePath)) return [];
+
+  let packageJson: unknown;
+  try {
+    packageJson = JSON.parse(readFileSync(packagePath, "utf8"));
+  } catch {
+    return [];
+  }
+  if (!isRecord(packageJson) || packageJson.name !== "methodrail") return [];
+
+  const issues: ValidationIssue[] = [];
+  const pluginPath = join(root, ".cursor-plugin", "plugin.json");
+  const rulePath = join(root, "rules", "methodrail.mdc");
+  if (!existsSync(pluginPath)) issues.push(issue(pluginPath, "Methodrail requires a Cursor plugin manifest"));
+  if (!existsSync(rulePath)) issues.push(issue(rulePath, "Methodrail requires its small global rule"));
+
+  const discovered = new Set(skillPaths.map((path) => basename(dirname(path))));
+  for (const skill of REQUIRED_SKILLS) {
+    if (!discovered.has(skill)) {
+      issues.push(issue(join(root, "skills", skill), `Missing required Methodrail skill: ${skill}`));
+    }
+  }
+
+  if (existsSync(pluginPath)) {
+    try {
+      const plugin: unknown = JSON.parse(readFileSync(pluginPath, "utf8"));
+      if (
+        isRecord(plugin) &&
+        typeof packageJson.version === "string" &&
+        plugin.version !== packageJson.version
+      ) {
+        issues.push(issue(pluginPath, "Plugin and package versions must agree"));
+      }
+    } catch {
+      // validatePlugin reports malformed JSON.
+    }
+  }
+
+  for (const obsolete of ["workflows", "protocols", "rigor"]) {
+    const path = join(root, obsolete);
+    if (walk(path, () => true).length > 0) {
+      issues.push(issue(path, `Obsolete v0.1 directory must be removed: ${obsolete}`));
+    }
+  }
+  const obsoleteScripts = [
+    "bootstrap-content.mjs",
+    "bootstrap-rest.mjs",
+    "generate-adapters",
+    "eval",
+  ];
+  for (const script of obsoleteScripts) {
+    const path = join(root, "scripts", script);
+    if (existsSync(path)) issues.push(issue(path, `Obsolete v0.1 script must be removed: ${script}`));
+  }
+
+  return issues;
+}
+
+function validateEvalIds(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const seen = new Map<string, string>();
+  const files = walk(root, (path) => path.endsWith(".yaml") || path.endsWith(".yml")).filter(
+    (path) => path.includes(`${sep}evals${sep}`),
+  );
+  for (const path of files) {
+    try {
+      const fixture: unknown = parse(readFileSync(path, "utf8"));
+      if (!isRecord(fixture) || typeof fixture.id !== "string") continue;
+      const previous = seen.get(fixture.id);
+      if (previous) {
+        issues.push(issue(path, `Duplicate eval id "${fixture.id}" also used by ${previous}`));
+      } else {
+        seen.set(fixture.id, relative(root, path).split(sep).join("/"));
+      }
+    } catch {
+      // Skill coverage validation reports malformed per-skill fixtures.
+    }
+  }
+  return issues;
+}
+
+function validateGlobalRules(root: string): ValidationIssue[] {
+  const candidates = [join(root, "rules"), join(root, ".cursor", "rules")];
+  const paths = candidates.flatMap((dir) => walk(dir, (path) => path.endsWith(".mdc")));
+  const issues: ValidationIssue[] = [];
+
+  for (const path of paths) {
+    const source = readFileSync(path, "utf8");
+    const metadata = frontmatter(source);
+    if (!metadata) {
+      issues.push(issue(path, "Cursor rule must start with YAML frontmatter"));
+      continue;
+    }
+    if (typeof metadata.description !== "string" || metadata.description.trim() === "") {
+      issues.push(issue(path, "Cursor rule requires a non-empty description"));
+    }
+    if (metadata.alwaysApply !== true) {
+      issues.push(issue(path, "Global Cursor rule must set alwaysApply: true"));
+    }
+    const lines = lineCount(source);
+    if (lines > MAX_GLOBAL_RULE_LINES) {
+      issues.push(
+        issue(path, `Global Cursor rule must stay at or below ${MAX_GLOBAL_RULE_LINES} lines`),
+      );
+    }
+  }
+
+  return issues;
+}
+
+export function validateRepository(root: string): ValidationResult {
+  const absoluteRoot = resolve(root);
+  const issues: ValidationIssue[] = [];
+  const files = walk(absoluteRoot, () => true);
+  const skillPaths = files.filter((path) => basename(path) === SKILL_FILE);
+
+  for (const path of files.filter((path) => basename(path) === LEGACY_SKILL_FILE)) {
+    issues.push(issue(path, "Legacy skill.yaml is not allowed; use native SKILL.md frontmatter"));
+  }
+  for (const path of skillPaths) {
+    issues.push(...validateSkill(path));
+    if (path.includes(`${sep}skills${sep}`) && path.startsWith(join(absoluteRoot, "skills"))) {
+      issues.push(...validateSkillEvals(path));
+    }
+  }
+
+  issues.push(...validatePlugin(absoluteRoot));
+  issues.push(...validateGlobalRules(absoluteRoot));
+  issues.push(...validateMethodrailStructure(absoluteRoot, skillPaths));
+  issues.push(...validateEvalIds(absoluteRoot));
+  issues.sort((left, right) =>
+    `${left.path}\0${left.message}`.localeCompare(`${right.path}\0${right.message}`),
+  );
+
+  return { ok: issues.length === 0, issues };
+}
+
+export function formatValidation(result: ValidationResult, root: string): string {
+  if (result.ok) return "Repository validation passed.";
+  return result.issues
+    .map(({ path, message }) => `${relative(root, path).split(sep).join("/")}: ${message}`)
+    .join("\n");
+}
+
+function main(): void {
+  const root = resolve(process.argv[2] ?? process.cwd());
+  const result = validateRepository(root);
+  console.log(formatValidation(result, root));
+  if (!result.ok) process.exitCode = 1;
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) main();

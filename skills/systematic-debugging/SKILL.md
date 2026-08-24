@@ -39,7 +39,7 @@ Failing tests, logs, traces, profiles, bisect, observations.
 
 ## Side effects
 
-May run tests and local processes. Production mutation forbidden. Fix is a later step owned by the debug workflow.
+May run tests and local processes. Production mutation is forbidden. Apply a fix through the explicit `debug` entry skill or when the user has otherwise requested implementation.
 
 ## Completion
 

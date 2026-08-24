@@ -1,10 +1,8 @@
-# Methodrail adapter: cursor
+# Cursor adapter
 
-This directory is generated from Methodrail's internal representation.
+Methodrail is a native Cursor Plugin. Cursor discovers the canonical skills in
+`skills/*/SKILL.md` and the rule in `rules/methodrail.mdc` from the repository
+root using `.cursor-plugin/plugin.json`.
 
-- Skills projected: architect, blast-radius, create-control-adapter, domain-modeling, how, interrogate, maintain-control-adapter, observe, prototype, review, systematic-debugging, verify-change, why
-- Workflows: debug, develop, investigate, refactor, review
-
-The Methodrail package is the source of truth. Do not edit generated files by hand.
-
-See LIMITATIONS.md for harness-specific gaps.
+Do not copy skill or rule bodies into this directory. It only documents the
+Cursor projection; the root package content is the source of truth.

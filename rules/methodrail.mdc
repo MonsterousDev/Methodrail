@@ -1,0 +1,12 @@
+---
+description: Methodrail's cross-cutting engineering invariants
+alwaysApply: true
+---
+
+If `.methodrail/PROJECT.md` exists, read it before substantive work.
+
+- Inspect the existing system before making nontrivial changes.
+- Distinguish observed facts, inferences, and unknowns.
+- Prefer the smallest change that satisfies the stated intent.
+- Do not claim success without fresh, relevant validation.
+- Ask the user only for intent or preferences the project cannot answer.

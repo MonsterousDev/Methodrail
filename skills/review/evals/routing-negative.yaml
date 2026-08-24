@@ -1,11 +1,9 @@
 id: skill.review.routing-negative
 kind: routing
 skill: review
-description: "Mechanical rename does not require review."
+description: "Implementation requests do not automatically invoke the explicit review entry skill."
 input:
-  prompt: "Rename getUserById to findUserById. Formatting only."
+  prompt: "Implement the payment change and verify it."
 expected:
-  rigor:
-    equals: 0
   skills:
     forbidden: [review]

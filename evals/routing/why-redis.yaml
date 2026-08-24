@@ -1,9 +1,0 @@
-id: routing.why-redis
-kind: routing
-description: Historical why-questions route to why.
-input:
-  prompt: "Why was Redis introduced here?"
-expected:
-  workflow: investigate
-  skills:
-    required: [why]

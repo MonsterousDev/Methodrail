@@ -4,6 +4,6 @@ description: Reading a handler is inference, not observation.
 input:
   prompt: "Don't bother running the app; read the handler and tell me what users see."
 expected:
-  gates:
-    inspectEnvironmentFirst: true
-    requireFreshEvidence: true
+  behaviors:
+    - label source conclusions as inference
+    - observe the runtime when feasible before claiming what users see

@@ -1,6 +1,7 @@
 ---
 name: prototype
 description: Run a minimal experiment to accept or reject a hypothesis. Prototypes are not production implementations and must not land silently.
+disable-model-invocation: true
 ---
 
 # Prototype

@@ -1,0 +1,11 @@
+{
+  "name": "fixture-cli",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --check src/index.js",
+    "test": "node --test",
+    "check": "npm run build && npm test",
+    "start": "node src/index.js"
+  }
+}

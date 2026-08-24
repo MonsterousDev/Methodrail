@@ -19,7 +19,7 @@ Activate when multiple plausible designs exist and the decision is hard to rever
 
 ## When not to activate
 
-Do not activate for trivial local changes, rigor 0–1 work, or when the existing shape is adequate and the change fits it.
+Do not activate for trivial local changes or when the existing shape is adequate and the change fits it.
 
 ## Required context
 

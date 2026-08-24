@@ -5,6 +5,5 @@ description: "How-questions activate the how skill."
 input:
   prompt: "How does authentication work in this codebase?"
 expected:
-  workflow: investigate
   skills:
     required: [how]

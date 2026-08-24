@@ -11,16 +11,11 @@
     "exactOptionalPropertyTypes": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "rootDir": "src",
+    "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "rewriteRelativeImportExtensions": true
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules", "src/**/*.test.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
 }

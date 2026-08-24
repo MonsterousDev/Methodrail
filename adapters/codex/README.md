@@ -1,10 +1,9 @@
-# Methodrail adapter: codex
+# Codex adapter
 
-This directory is generated from Methodrail's internal representation.
+The root `skills/` directory is Methodrail's source of truth. A consuming
+project can expose selected skills through Codex's native `.agents/skills/`
+location and place the short guidance from `AGENTS.md` in its project
+instructions.
 
-- Skills projected: architect, blast-radius, create-control-adapter, domain-modeling, how, interrogate, maintain-control-adapter, observe, prototype, review, systematic-debugging, verify-change, why
-- Workflows: debug, develop, investigate, refactor, review
-
-The Methodrail package is the source of truth. Do not edit generated files by hand.
-
-See LIMITATIONS.md for harness-specific gaps.
+Do not copy skill bodies into this adapter. Link or install the canonical skill
+directories so updates remain centralized.

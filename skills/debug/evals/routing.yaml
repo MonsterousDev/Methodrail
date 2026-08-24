@@ -1,0 +1,9 @@
+id: skill.debug.routing-positive
+kind: routing
+skill: debug
+description: "Explicit debug requests activate the debug entry skill."
+input:
+  prompt: "Use debug to reproduce and fix the CPU spike after idle."
+expected:
+  skills:
+    required: [debug]

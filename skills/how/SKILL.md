@@ -64,7 +64,7 @@ The question has a direct answer or an explicit unresolved status. Important cla
 
 ## Artifacts
 
-A result packet plus, when useful, a subsystem model suitable as a knowledge candidate — not a dump of the tree.
+A concise implementation map and, when useful, a subsystem note — not a dump of the tree.
 
 ## What survives
 

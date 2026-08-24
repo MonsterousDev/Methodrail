@@ -1,0 +1,9 @@
+id: skill.develop.routing-negative
+kind: routing
+skill: develop
+description: "A read-only explanation does not invoke develop."
+input:
+  prompt: "Explain how pagination currently works; do not change files."
+expected:
+  skills:
+    forbidden: [develop]

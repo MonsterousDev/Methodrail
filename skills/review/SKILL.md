@@ -1,68 +1,40 @@
 ---
 name: review
-description: Review specification fit, correctness, architecture, tests, complexity, and blast radius. Use a prepared ReviewPacket so reviewers do not rediscover deterministic context.
+description: Review a change for correctness, requirement fit, maintainability, evidence, and regressions. Run only when explicitly requested.
+disable-model-invocation: true
 ---
 
 # Review
 
-## Problem
+Review independently from implementation and remain read-only unless the user asks for fixes.
 
-Open-ended review loops, or reviewers spending tokens rediscovering the diff and test commands.
+## Workflow
 
-## Observed failure
+1. Establish the review target, base revision, request, acceptance criteria, and repository guidance.
+2. Inspect the complete diff and relevant surrounding code, tests, contracts, and callers. Do not review only the latest commit when the requested range is broader.
+3. Check:
+   - requirement and specification fit;
+   - correctness, error paths, and state transitions;
+   - security and data handling relevant to the change;
+   - maintainability and unnecessary complexity;
+   - test quality and whether evidence supports the claims;
+   - compatibility and regressions, using `blast-radius` when boundaries changed.
+4. Verify suspected issues against source evidence. Avoid speculative findings without a concrete failure mode.
+5. Classify findings:
+   - critical: data loss, security exposure, or unusable core behavior;
+   - high: likely incorrect behavior or serious regression;
+   - medium: real bounded defect or meaningful maintainability risk;
+   - low: optional improvement that does not block.
+6. Lead with findings, ordered by severity. Cite paths and lines, explain impact, and suggest a focused remedy.
+7. If there are no findings, say so and list material verification gaps or residual risks.
 
-Endless churn on nits, or a 'LGTM' with no evidence.
+## Constraints
 
-## When to activate
-
-Activate when asked to review a change, or as a develop/refactor workflow gate at sufficient rigor.
-
-## When not to activate
-
-Do not activate instead of verification. Do not interrogate by default (use interrogate for high-risk independent review).
-
-## Required context
-
-A ReviewPacket: task, spec slice, acceptance, base/head revisions, diff references, implementation summary, verification evidence, known deviations, risk, rubric.
-
-## Method
-
-Axes:
-- specification/acceptance compliance
-- correctness
-- architecture
-- maintainability
-- tests/evidence
-- unnecessary complexity
-- regressions/blast radius
-
-Severity:
-- critical → must fix
-- important → must fix or explicitly adjudicate
-- minor → record, does not automatically block
-
-Repeated disagreement escalates to arbitration rather than looping forever.
-
-## Permitted evidence
-
-The packet, the diff, verification evidence. Do not re-run deterministic context assembly if the controller already did.
-
-## Side effects
-
-Read-only regarding product code unless applying agreed fixes under the parent workflow.
+- Do not substitute review for verification.
+- Do not edit code unless explicitly asked to apply fixes.
+- Do not report style preferences as defects unless they violate an established standard.
+- Do not invoke `interrogate` automatically; it is explicit-only.
 
 ## Completion
 
-Findings are classified. Blocking items are explicit. Minors do not block by default.
-
-## Artifacts
-
-Review findings attached to the packet.
-
-## What survives
-
-Adjudicated decisions and blocking issues. Discard style bikesheds.
-
-## Evaluation
-
-Positive: 'review this payment change'. Negative: 'how does auth work'.
+The requested change range was inspected in context, findings are evidence-backed and prioritized, and verification gaps are explicit.

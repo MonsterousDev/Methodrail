@@ -1,0 +1,9 @@
+id: skill.investigate.routing-negative
+kind: routing
+skill: investigate
+description: "A direct implementation request does not invoke investigate explicitly."
+input:
+  prompt: "Implement pagination for the users endpoint."
+expected:
+  skills:
+    forbidden: [investigate]
