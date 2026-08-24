@@ -1,0 +1,17 @@
+id: behavioral.domain-modeling.terms
+kind: behavioral
+skill: domain-modeling
+description: Loading domain-modeling should challenge fuzzy terms instead of implementing marketing language.
+input:
+  prompt: "Add organization billing. An organization is basically just an account."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the domain-modeling skill loaded
+expected:
+  skills:
+    required: [domain-modeling]
+  behaviors:
+    - challenge overloaded terms against the glossary
+    - record canonical terms and rejected synonyms
+    - stress-test with a concrete edge-case scenario
+  baseline_failure: treating organization and account as the same concept and coding immediately

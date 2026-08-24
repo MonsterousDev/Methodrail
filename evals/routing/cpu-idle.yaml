@@ -5,8 +5,8 @@ input:
   prompt: "CPU grows after 20 minutes idle."
 expected:
   skills:
-    required: [debug, systematic-debugging]
-    optional: [observe]
+    required: [debug, diagnosing-bugs]
+    optional: [observe, runtime-forensics]
     forbidden: [develop, refactor]
   behaviors:
     - reproduce before patching

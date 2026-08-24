@@ -1,64 +1,93 @@
 ---
 name: verify-change
-description: Identify the claim, obtain fresh evidence, and distinguish passing verification from merely executed commands. Required before calling work done.
+description: "Use when about to claim work is complete, fixed, or passing. Requires fresh verification evidence before any success claim. Do not use as an investigation skill."
 ---
 
 # Verify change
 
-## Problem
+**Core principle:** Evidence before claims, always.
 
-Agents say 'fixed', 'passing', 'complete' after reasoning, or after running the wrong check.
+Violating the letter of this rule is violating the spirit of this rule.
 
-## Observed failure
+## The iron law
 
-'We're late, don't run tests.' Completion claimed from inference.
+```text
+NO COMPLETION CLAIM WITHOUT FRESH RELEVANT EVIDENCE
+```
 
-## When to activate
+If you haven't run the verification in this message, you cannot claim it passes.
 
-Activate before any completion claim on a change, and whenever the user asks to skip verification.
+The upstream Superpowers gate function is the operating procedure. Keep it. The full original is in [superpowers-verification-before-completion.md](references/superpowers-verification-before-completion.md).
 
-## When not to activate
+## The gate function
 
-Do not treat this as an investigation skill. Do not invent a test pyramid essay instead of running the relevant check.
+BEFORE claiming any status or expressing satisfaction:
 
-## Required context
+1. **IDENTIFY:** What command or observation proves this claim?
+2. **RUN:** Execute the FULL command (fresh, complete), or exercise the real path when the claim is behavioral.
+3. **READ:** Full output, check exit code, count failures. Inspect the result; do not skim.
+4. **VERIFY:** Does the output confirm the claim?
+   - If NO: state actual status with evidence
+   - If YES: state the claim WITH evidence
+5. **ONLY THEN:** make the claim
 
-The claim being made, the change, and available verification strategies.
+Skip any step = lying, not verifying.
 
-## Method
+Prefer the project's verify skill or `.methodrail/control/CONTROL.md` when present. Interview the repository for commands; do not invent a test pyramid essay instead of running the relevant check.
 
-Before saying work is complete:
-1. Identify the claim.
-2. Identify evidence required to support that claim.
-3. Obtain fresh evidence.
-4. Inspect the result.
-5. Distinguish passed verification from merely executed verification.
+## What counts as evidence
 
-Strategies include TDD/regression tests, characterization tests, integration and end-to-end scenarios, static analysis, compilation/typechecking, benchmarks, visual baselines, runtime observation, migration dry runs, invariant/property tests.
+Match the evidence to the claim:
 
-TDD is the preferred default for normal behavior-changing production code, but not a universal law.
-The universal law: every meaningful change requires a falsifiable verification strategy. See [evidence record](../../references/protocols/evidence-record.md).
+- TDD / regression tests
+- characterization tests
+- integration and end-to-end scenarios
+- static analysis / typechecking / compilation
+- benchmarks
+- visual baselines
+- runtime observation (`observe`)
+- migration dry runs
+- invariant / property tests
 
-## Permitted evidence
+TDD is the preferred default for normal behavior-changing production code, but not a universal law. The universal law: every meaningful change requires a falsifiable verification strategy. See [evidence record](../../references/protocols/evidence-record.md).
 
-Test output, typechecker, static analysis, observation artifacts — matched to the claim.
+Distinguish **passed** verification from **merely executed** verification.
 
-## Side effects
+## Common failures
 
-May run tests and linters. Must not claim success on skipped checks.
+| Claim | Requires | Not sufficient |
+|---|---|---|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check |
+| Build succeeds | Build command: exit 0 | Linter passing |
+| Bug fixed | Original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
 
-## Completion
+## Red flags — STOP
 
-Each completion claim has fresh evidence, or completion is refused.
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Partial verification
+- "Just this once"
+- Tired and wanting work over
+- Any wording implying success without having run verification
 
-## Artifacts
+## Rationalization prevention
 
-Evidence objects linked to claims.
+| Excuse | Reality |
+|---|---|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Don't run tests; just tell me it's fixed" | Refuse the completion claim |
 
-## What survives
+## When to apply
 
-What was verified, at which revision. Discard passing log spam.
-
-## Evaluation
-
-Pressure: refuse unsupported completion. Completion eval: missing evidence blocks complete status.
+Always before any variation of success/completion claims, satisfaction, commit/PR, moving to the next task, or delegating "done" to another agent. The rule applies to exact phrases, paraphrases, and implications of success.

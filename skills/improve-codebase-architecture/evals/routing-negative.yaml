@@ -1,0 +1,9 @@
+id: skill.improve-codebase-architecture.routing-negative
+kind: routing
+skill: improve-codebase-architecture
+description: "A local rename is not an architecture hunt."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [improve-codebase-architecture]

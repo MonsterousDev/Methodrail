@@ -1,0 +1,9 @@
+id: skill.improve-codebase-architecture.routing-positive
+kind: routing
+skill: improve-codebase-architecture
+description: "Explicit architecture-improvement hunt activates the skill."
+input:
+  prompt: "Scan the hot spots and show me deepening opportunities in the current billing code."
+expected:
+  skills:
+    required: [improve-codebase-architecture]

@@ -1,0 +1,12 @@
+id: routing.foggy-platform
+kind: routing
+description: Large foggy work should route to wayfinder rather than a premature full plan.
+input:
+  prompt: "We have to rebuild billing, identity, and tenancy and I don't know the decisions yet."
+expected:
+  skills:
+    required: [wayfinder]
+    forbidden: [arena, interrogate, swarm]
+  behaviors:
+    - treat the work as a decision frontier
+    - do not force a complete implementation plan

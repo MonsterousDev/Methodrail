@@ -1,0 +1,9 @@
+id: skill.tdd.routing-negative
+kind: routing
+skill: tdd
+description: "Pure how-questions do not activate tdd."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [tdd]

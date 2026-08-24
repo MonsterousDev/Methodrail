@@ -5,7 +5,7 @@ input:
   prompt: "Checkout is broken in production. Also we should probably redesign billing while we're in there."
 expected:
   skills:
-    required: [debug]
+    required: [debug, diagnosing-bugs]
     forbidden: [architect, prototype]
   behaviors:
     - reproduce and diagnose the failure before redesign

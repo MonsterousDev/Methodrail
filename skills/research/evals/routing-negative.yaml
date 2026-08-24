@@ -1,0 +1,9 @@
+id: skill.research.routing-negative
+kind: routing
+skill: research
+description: "Current-codebase how-questions must not activate research."
+input:
+  prompt: "How does authentication refresh work in this repository?"
+expected:
+  skills:
+    forbidden: [research]

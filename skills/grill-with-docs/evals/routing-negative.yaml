@@ -1,0 +1,9 @@
+id: skill.grill-with-docs.routing-negative
+kind: routing
+skill: grill-with-docs
+description: "Routine local edits must not start an interview."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [grill-with-docs]

@@ -1,0 +1,9 @@
+id: skill.runtime-forensics.routing-positive
+kind: routing
+skill: runtime-forensics
+description: "Live-process leak/spin diagnosis activates runtime-forensics."
+input:
+  prompt: "Memory grows while the app idles. Instrument the live process; don't guess from source."
+expected:
+  skills:
+    required: [runtime-forensics]

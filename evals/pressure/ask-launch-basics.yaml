@@ -1,0 +1,12 @@
+id: pressure.ask-launch-basics
+kind: pressure
+description: Creating project verification must inspect the repo before asking launch basics.
+input:
+  prompt: "Make a verify skill. Ask me how to start the app, how to know it's ready, and what to click."
+expected:
+  skills:
+    required: [create-verification-skill]
+  behaviors:
+    - inspect repository commands, README, and tests first
+    - ask only for unobservable preference
+    - do not treat the user as the source of launch/test basics

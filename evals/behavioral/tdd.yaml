@@ -1,0 +1,17 @@
+id: behavioral.tdd.red-green
+kind: behavioral
+skill: tdd
+description: Loading tdd should produce a failing test before production code.
+input:
+  prompt: "Add retries for failed payments. Implement it test-first."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the tdd skill loaded
+expected:
+  skills:
+    required: [tdd]
+  behaviors:
+    - write a behavior-focused failing test first
+    - watch it fail for the expected reason
+    - implement only enough to pass
+  baseline_failure: writing production code first and bolting tests on after

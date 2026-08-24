@@ -1,0 +1,9 @@
+id: skill.code-review.routing-negative
+kind: routing
+skill: code-review
+description: "A how-question is not a code review."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [code-review]

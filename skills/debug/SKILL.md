@@ -6,47 +6,36 @@ disable-model-invocation: true
 
 # Debug
 
-Find the mechanism before changing code.
+Find the mechanism before changing code. This workflow orchestrates; `diagnosing-bugs` owns the diagnosis loop.
 
 ```text
 symptom
 ↓
-reproduce
+diagnosing-bugs
+  │
+  ├── ordinary bug → tdd / verify-change
+  ├── live runtime mystery → observe / runtime-forensics
+  └── captured trace/profile → trace-forensics
 ↓
-baseline evidence
+performance / hillclimb when metric-driven
 ↓
-understand mechanism
+blast-radius where warranted
 ↓
-explicit hypotheses
-↓
-cheap falsification
-↓
-runtime escalation when needed
-↓
-root cause
-↓
-verification strategy
-↓
-minimal fix
-↓
-observe
-↓
-verify
+verify-change
 ```
 
-Do not allow symptom → guess → broad patch.
+Do not allow symptom → guess → broad patch. Do not repeat the full diagnosis procedure here.
 
 ## Workflow
 
 1. Capture the symptom, expected behavior, environment, revision, and available reproduction.
 2. Read `.methodrail/PROJECT.md` and [control guidance](../../references/project-harness.md) when present. Prefer documented start/doctor/drive commands over asking how the project runs.
-3. Apply `systematic-debugging`: reproduce or establish why reproduction is blocked, collect evidence, trace the failing path, and falsify explicit hypotheses.
-4. Use `observe` for runtime evidence, `how` for source flow, and `why` only when history constrains the fix.
+3. Invoke `diagnosing-bugs`: build a red-capable loop, minimise, hypothesise, instrument, then fix.
+4. Escalate when the loop is not enough: `observe` / `runtime-forensics` for live mechanism, `trace-forensics` for an existing capture, `performance` / `hillclimb` when the work is metric-driven.
 5. Name the root cause with evidence. If the root cause remains unknown, do not disguise a guess as a fix.
-6. Add the smallest regression check that fails for the demonstrated cause when practical.
-7. Apply a minimal fix after the evidence supports it.
-8. Use `blast-radius` for shared contracts or cross-boundary changes, then `verify-change` for fresh regression and relevant broader checks.
-9. Report reproduction, root cause, change, evidence, and residual uncertainty.
+6. Apply `tdd` for the regression at a correct seam, then `verify-change`.
+7. Use `blast-radius` for shared contracts or cross-boundary changes.
+8. Report reproduction, root cause, change, evidence, and residual uncertainty.
 
 ## Constraints
 

@@ -1,35 +1,38 @@
 ---
 name: architect
-description: Use only when a design choice is consequential. Ground in current implementation, domain, and constraints; compare options on ownership, reversibility, and operational cost.
+description: "Explicit architecture decision exercise. Ground in current implementation, sketch distinct alternatives, compare tradeoffs, then implement against the chosen sketch. Use only when a consequential architecture choice exists. Do not use for local mechanical changes."
+disable-model-invocation: true
 ---
 
 # Architect
 
-## Problem
+Design before implementing when jumping to code would lock in the wrong shape. This is an explicit architecture decision exercise. `codebase-design` is the reusable design vocabulary; this skill is the decision workshop.
 
-Agents invent a new architecture for a local change, or pick a shape with no comparison.
+Use [rigor](../../references/rigor.md) and the [decision frontier](../../references/decision-frontier.md) to decide whether this ceremony is justified. Skip for trivial local changes.
 
-## Observed failure
+## Start
 
-A rewrite proposal for a rename. Or a single 'best practice' architecture with no alternatives.
+Track phases so they don't silently disappear: Ground, Sketch, Agree, Implement, Scrap.
 
-## When to activate
+## Phase A: Ground the problem
 
-Activate when multiple plausible designs exist and the decision is hard to reverse: ownership boundaries, billing, permissions, migrations, new subsystems.
+Build a real mental model of every system the new code touches. Run `how` over the relevant subsystems. Critique mode if existing structure is the constraint.
 
-## When not to activate
+Naming a file isn't grounding. If the design redefines ownership or layering, also run `why` on the existing shape so the rationale is a constraint, not a guess.
 
-Do not activate for trivial local changes or when the existing shape is adequate and the change fits it.
+Skip Phase A only when the work is genuinely greenfield with no surrounding system.
 
-## Required context
+## Phase B: Sketch
 
-Current implementation (how), domain terms, constraints, and relevant evidence. Do not architect in a vacuum.
+Produce at least two structurally distinct candidates before synthesis. Whole-shape alternatives, not point fixes inside one shape.
 
-## Method
+If the host supports `arena`, run it with the design-sketch task and Phase A grounding. Each candidate produces a design package per [runner-prompt.md](references/runner-prompt.md) and [rationale-template.md](references/rationale-template.md). If not, sketch two alternatives in this context. See [host capabilities](../../references/host-capabilities.md).
 
-Require prior grounding in existing implementation, domain, constraints, and evidence. Use the [decision frontier](../../references/decision-frontier.md) and [rigor](../../references/rigor.md) to decide whether architecture work is justified.
+Screen every candidate against [design-red-flags.md](references/design-red-flags.md). Reject shallow modules, information leakage, temporal decomposition, and pass-through methods.
 
-When multiple designs exist, compare:
+Compare viable candidates on:
+
+- interface depth (prefer hiding more complexity behind a smaller public surface)
 - ownership boundaries
 - reversibility
 - operational complexity
@@ -37,28 +40,20 @@ When multiple designs exist, compare:
 - observability and testability
 - risks
 
-Recommend, or record that the human must choose.
+## Phase C: Agree (opt-in)
 
-## Permitted evidence
+Default: proceed to implementation with the synthesized design. Opt in to a checkpoint when the invoker asks to stop and show the sketch first. For adversarial pressure before implementing, run `interrogate` on the sketch.
 
-Current code, ADRs, operational constraints, prototypes if empirical.
+## Phase D: Implement against the sketch
 
-## Side effects
+Replace `not implemented` bodies with code. Deviations from the sketch are signal. Surface them; don't bolt them on.
 
-Read-only unless producing an ADR candidate. No drive-by refactors.
+## Phase E: Scrap when the architecture is wrong
 
-## Completion
+If implementation keeps producing friction the sketch can't absorb, throw the sketch out. The signal is a *pattern*: repeated workarounds, escape hatches, callers needing internal rules. A few edge cases don't condemn an architecture.
 
-Options are compared on the axes above. A recommendation is evidence-backed or explicitly deferred.
+When you scrap: re-run `how` over what's been built, redesign from the new constraints, prefer a smaller sketch, return to Phase B.
 
-## Artifacts
+## Outputs
 
-A comparison note; optional ADR candidate.
-
-## What survives
-
-The comparison and chosen constraints. Discard aesthetic lectures.
-
-## Evaluation
-
-Positive: organization-level billing. Negative: mechanical rename must exclude this skill.
+Caller's usage written first, type sketch derived from it. Rationale shaped per [rationale-template.md](references/rationale-template.md), including the synthesis decision.

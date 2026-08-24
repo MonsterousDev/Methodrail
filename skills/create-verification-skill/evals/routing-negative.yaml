@@ -1,0 +1,9 @@
+id: skill.create-verification-skill.routing-negative
+kind: routing
+skill: create-verification-skill
+description: "A local rename does not generate verification infrastructure."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [create-verification-skill]

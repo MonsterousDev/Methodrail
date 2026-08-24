@@ -13,4 +13,6 @@ A useful skill:
 
 Keep one canonical body. Put shared methodology in `references/` and link it. Test routing separately from behavioral and pressure evals, and revise the skill when evaluation exposes ambiguity.
 
+Prefer a mature upstream skill over a weaker Methodrail reimplementation when behavior, license, and portability allow it. See [CONTRIBUTING.md](../CONTRIBUTING.md) and [capability-map.md](capability-map.md).
+
 Do not add Methodrail-specific metadata when native skill metadata expresses the same intent. Expensive or explicit-only skills set `disable-model-invocation: true`.

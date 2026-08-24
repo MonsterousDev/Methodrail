@@ -2,6 +2,35 @@
 
 Do not create a skill because advice sounds good. Create a skill because a **recurring agent failure** has been observed and the skill **measurably** improves behavior.
 
+Methodrail prefers evidence over NIH.
+
+```text
+Observed recurring agent failure
+        ↓
+Does Methodrail already solve it?
+        │
+        ├── yes → improve/eval existing skill
+        │
+        └── no
+             ↓
+Does a strong upstream skill already solve it?
+        │
+        ├── yes → evaluate/adopt/adapt
+        │
+        └── no → design new Methodrail skill
+```
+
+New skills must justify:
+
+- problem
+- observed failure
+- why existing skills are insufficient
+- routing behavior
+- non-routing behavior
+- eval strategy
+
+When adopting upstream work: inspect the current license and commit, record them, preserve notices, keep provenance out of the prompt, and do not import competing global routers. See [upstream maintenance](docs/upstream-maintenance.md) and [capability map](references/capability-map.md).
+
 ## Skill changes
 
 1. **Failure observed** — what the agent actually did wrong, repeatedly.
@@ -14,13 +43,13 @@ Reject skills that are generic advice, long reference manuals, personality text,
 
 Each skill directory requires `SKILL.md` with standard Agent Skills frontmatter. Use `disable-model-invocation: true` for explicit workflow skills and expensive procedures. Put detailed material in directly linked `references/` files.
 
-Do not add Methodrail-specific metadata when native skill metadata expresses the same intent.
+Do not add Methodrail-specific metadata when native skill metadata expresses the same intent. Do not expose two skills for the same base capability.
 
 ## Architecture boundary
 
 Methodrail defines good engineering behavior. Cursor, Claude Code, Codex, and other Agent Skills-compatible harnesses own context, tool execution, planning, task state, and subagents.
 
-Do not add a router, workflow engine, agent protocol, daemon, database, mandatory CLI, or generated copies of canonical skills. Host-specific adapters must remain thin projections.
+Do not add a router, workflow engine, agent protocol, daemon, database, mandatory CLI, or generated copies of canonical skills. Host-specific adapters must remain thin projections. Do not install `poteto-mode`, `ask-matt`, or `using-superpowers` as additional operating systems.
 
 Shared methodology belongs in `references/`. Skills should stay short and link to it. Project harness artifacts use `.methodrail/PROJECT.md` as a concise index and must preserve existing AI instructions.
 
@@ -34,6 +63,7 @@ Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/
 npm install
 npm test
 npm run validate
+npm run check-upstreams
 ```
 
-Before submitting, inspect the diff for obsolete runtime concepts, duplicated instructions, broken references, invalid plugin metadata, and excessive permanent context.
+Before submitting, inspect the diff for obsolete runtime concepts, duplicated instructions, broken references, invalid plugin metadata, unexplained copied content, and excessive permanent context.

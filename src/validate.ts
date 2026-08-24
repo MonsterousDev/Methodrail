@@ -27,13 +27,33 @@ const REQUIRED_SKILLS = new Set([
   "how",
   "observe",
   "why",
+  "research",
   "domain-modeling",
+  "grill-with-docs",
+  "wayfinder",
   "prototype",
   "architect",
-  "systematic-debugging",
+  "codebase-design",
+  "improve-codebase-architecture",
+  "tdd",
+  "diagnosing-bugs",
   "verify-change",
   "blast-radius",
+  "code-review",
   "interrogate",
+  "arena",
+  "swarm",
+  "to-spec",
+  "to-tickets",
+  "runtime-forensics",
+  "trace-forensics",
+  "performance",
+  "hillclimb",
+  "visual-parity",
+  "create-verification-skill",
+  "maintain-verification-skill",
+  "show-me-your-work",
+  "reflect",
 ]);
 const EXPLICIT_SKILLS = new Set([
   "methodrail-init",
@@ -43,7 +63,24 @@ const EXPLICIT_SKILLS = new Set([
   "refactor",
   "review",
   "prototype",
+  "grill-with-docs",
+  "wayfinder",
+  "architect",
+  "improve-codebase-architecture",
   "interrogate",
+  "arena",
+  "swarm",
+  "to-spec",
+  "to-tickets",
+  "runtime-forensics",
+  "trace-forensics",
+  "performance",
+  "hillclimb",
+  "visual-parity",
+  "create-verification-skill",
+  "maintain-verification-skill",
+  "show-me-your-work",
+  "reflect",
 ]);
 const REQUIRED_REFERENCES = [
   "references/rigor.md",
@@ -64,14 +101,25 @@ const REQUIRED_REFERENCES = [
   "references/protocols/decision-record.md",
   "references/project-harness.md",
   "references/principles.md",
+  "references/capability-map.md",
+  "references/upstream-skill-matrix.md",
+  "references/host-capabilities.md",
 ];
 const REQUIRED_BEHAVIORAL_SKILLS = [
   "verify-change",
   "observe",
-  "systematic-debugging",
+  "diagnosing-bugs",
   "how",
+  "why",
   "develop",
   "refactor",
+  "domain-modeling",
+  "tdd",
+  "code-review",
+  "wayfinder",
+  "architect",
+  "interrogate",
+  "create-verification-skill",
 ];
 const REQUIRED_EVAL_KINDS = ["routing", "behavioral", "pressure"] as const;
 
@@ -349,6 +397,19 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
     const path = join(root, relativePath);
     if (!existsSync(path)) {
       issues.push(issue(path, `Missing required methodology reference: ${relativePath}`));
+    }
+  }
+  for (const relativePath of [
+    "THIRD_PARTY_NOTICES.md",
+    "docs/upstream-maintenance.md",
+    "upstreams/README.md",
+    "upstreams/matt-pocock.yaml",
+    "upstreams/pstack.yaml",
+    "upstreams/superpowers.yaml",
+  ]) {
+    const path = join(root, relativePath);
+    if (!existsSync(path)) {
+      issues.push(issue(path, `Missing required provenance file: ${relativePath}`));
     }
   }
 

@@ -1,0 +1,17 @@
+id: behavioral.code-review.two-axes
+kind: behavioral
+skill: code-review
+description: Loading code-review should keep Standards and Spec axes separate.
+input:
+  prompt: "Review the changes since main."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the code-review skill loaded
+expected:
+  skills:
+    required: [code-review]
+  behaviors:
+    - pin a fixed point and inspect that range
+    - report Standards and Spec separately
+    - not merge or rerank findings across axes
+  baseline_failure: a single blended style-and-intent review

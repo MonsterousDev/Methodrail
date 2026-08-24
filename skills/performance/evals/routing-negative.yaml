@@ -1,0 +1,9 @@
+id: skill.performance.routing-negative
+kind: routing
+skill: performance
+description: "A mechanical rename is not a perf investigation."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [performance]

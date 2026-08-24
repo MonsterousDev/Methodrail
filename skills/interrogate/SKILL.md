@@ -1,38 +1,69 @@
 ---
 name: interrogate
-description: Conduct conservative independent adversarial analysis of a high-risk change. Run only when the user explicitly requests interrogate.
+description: "Explicit multi-reviewer adversarial analysis of a high-risk change. Use only when the user names interrogate. Agreement is signal; disagreement is evidence; do not auto-apply patches."
 disable-model-invocation: true
 ---
 
 # Interrogate
 
-Use independent analysis to expose consequential blind spots. This skill never activates from risk alone.
+Spawn independent reviewers to adversarially review code changes. Each reviewer gets the same prompt and rubric. The adversarial signal comes from independence (and model diversity when available), not assigned theatrical personas.
 
-## Activation
+The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
-Proceed only when the user explicitly names or invokes `interrogate`. A request to “review,” “double-check,” or implement high-risk code is not sufficient.
+Proceed only when the user explicitly names or invokes `interrogate`. A request to "review" or implement high-risk code is not sufficient. `/review` may suggest this skill; it must not invoke it automatically.
 
-Humans or parent workflows should consider requesting it when rigor is high, architecture is consequential, review is contested, or failure cost is high. Decline or suggest ordinary `review` when the change is mechanical, narrowly local, or independent analysis would not materially improve confidence.
+## Step 1. Determine scope
 
-## Method
+- Specific files or a diff the user pointed at
+- On a feature branch: `git diff main...HEAD` (or the appropriate base)
+- Recent work referenced in the message
 
-1. Fix a shared [review packet](../../references/protocols/review-packet.md): request, acceptance criteria, full change range, relevant context, verification evidence, known deviations, and review rubric.
-2. Obtain genuinely independent analyses when available. Give each reviewer the same core evidence and rubric.
-3. Ask reviewers to identify concrete failure modes, violated invariants, unsafe assumptions, missing evidence, and rollback concerns.
-4. Reject theatrical personas, duplicated opinions, and claims unsupported by source or runtime evidence. Do not create fake personas solely for diversity.
-5. Compare findings:
-   - agreement increases confidence but is not proof;
-   - disagreement identifies an assumption to inspect;
-   - unique findings require direct validation.
-6. Synthesize only validated findings, unresolved disagreements, and residual risk. Do not average incompatible conclusions.
+Package the diff plus surrounding context. Prefer a [review packet](../../references/protocols/review-packet.md) when one exists.
 
-## Constraints
+## Step 2. State the intent
 
-- Read-only unless the user separately requests fixes.
-- Minimize disclosure: share only repository context required for the review.
-- Do not send secrets, credentials, personal data, or proprietary code to external services without explicit authorization.
-- If independent reviewers are unavailable, say so; do not simulate independence.
+One clear paragraph: what this code is trying to accomplish. Reviewers challenge whether the work achieves the intent well, not whether the intent itself is correct. If you're unsure, ask before proceeding.
 
-## Completion
+## Step 3. Spawn reviewers
 
-The report states who or what reviewed which scope, evidence-backed findings, unresolved disagreements, verification gaps, and residual risk.
+Launch reviewers in a single message when the host supports parallel read-only subagents. Prefer diverse model families if the host can select models. If multi-model is unavailable, use independent agent contexts. If neither is available, say so and do not fake independence. See [host capabilities](../../references/host-capabilities.md).
+
+Fill [reviewer-prompt.md](references/reviewer-prompt.md) with:
+
+1. The stated intent
+2. The diff or file contents
+3. [rubric.md](references/rubric.md)
+4. [code-quality-review.md](references/code-quality-review.md)
+
+The same filled template goes to all reviewers.
+
+## Step 4. Synthesize
+
+1. Parse all findings
+2. Identify consensus (2+ independent reviewers)
+3. Identify lone findings (worth reading, lower confidence)
+4. Deduplicate
+5. Note disagreements
+
+## Step 5. Lead judgment
+
+You are a pragmatic lead, not a neutral aggregator. Read [lead-judgment.md](references/lead-judgment.md). Categorize every finding:
+
+- **Act on.** Would block a real PR
+- **Consider.** Legitimate, cost unclear
+- **Noted.** Valid, not actionable now
+- **Dismissed.** Wrong, nitpicky, or missing context
+
+For each: which reviewer(s), category, one-line rationale.
+
+## Output
+
+### Intent
+### Reviewers
+### Act On
+### Consider
+### Noted
+### Dismissed
+### Agreement Map
+
+Keep it expensive and conservative. Do not simulate reviewers with personas.

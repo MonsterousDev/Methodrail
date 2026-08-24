@@ -1,0 +1,9 @@
+id: skill.codebase-design.routing-positive
+kind: routing
+skill: codebase-design
+description: "Module interface / seam design activates codebase-design."
+input:
+  prompt: "Help me deepen this module: the interface is huge and callers reach inside."
+expected:
+  skills:
+    required: [codebase-design]

@@ -1,0 +1,9 @@
+id: skill.visual-parity.routing-positive
+kind: routing
+skill: visual-parity
+description: "Pixel-exact matching activates visual-parity."
+input:
+  prompt: "Make the new settings page match the old one exactly and prove it with image diffs."
+expected:
+  skills:
+    required: [visual-parity]

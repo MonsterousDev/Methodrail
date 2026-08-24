@@ -1,0 +1,9 @@
+id: skill.to-tickets.routing-negative
+kind: routing
+skill: to-tickets
+description: "A how-question is not ticket breakdown."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [to-tickets]

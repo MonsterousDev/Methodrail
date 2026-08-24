@@ -1,7 +1,7 @@
 {
   "name": "methodrail",
-  "version": "0.3.0",
-  "description": "Evidence-driven methodology and project harness builder for AI coding agents.",
+  "version": "0.4.0",
+  "description": "Curated, evidence-driven engineering methodology for AI coding agents.",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -10,7 +10,8 @@
   "scripts": {
     "test": "tsx --test \"tests/**/*.test.ts\"",
     "validate": "tsx src/validate.ts",
-    "check": "tsc --noEmit && npm test && npm run validate"
+    "check": "tsc --noEmit && npm test && npm run validate",
+    "check-upstreams": "node scripts/check-upstreams.mjs"
   },
   "repository": {
     "type": "git",

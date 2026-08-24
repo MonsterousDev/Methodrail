@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 — 2026-08-24
+
+Methodrail becomes a curated, attributable distribution of proven AI software-engineering practices. The native-harness architecture is unchanged.
+
+- Replaced weaker Methodrail reimplementations of `how`, `why`, `blast-radius`, `domain-modeling`, `architect`, `interrogate`, and `verify-change` with adapted upstream skills
+- Chose canonical owners: `diagnosing-bugs` (Matt) over Superpowers/Methodrail systematic-debugging; `tdd` (Matt) over Superpowers/pstack TDD; one `prototype`
+- Added operators: `research`, `grill-with-docs`, `wayfinder`, `codebase-design`, `improve-codebase-architecture`, `code-review`, `arena`, `swarm`, `to-spec`, `to-tickets`
+- Added escalation pack: `runtime-forensics`, `trace-forensics`, `performance`, `hillclimb`, `visual-parity`
+- Added project-harness skills `create-verification-skill` and `maintain-verification-skill`, wired into `/methodrail-init`
+- Added `show-me-your-work` and `reflect` as explicit learning/audit skills
+- Documented provenance (`THIRD_PARTY_NOTICES.md`, `upstreams/`, per-skill `UPSTREAM.md`), capability map, upstream matrix, and `npm run check-upstreams`
+- Kept Methodrail-native workflows as a thin composition layer; did not import competing control planes
+
 ## 0.3.0 — 2026-08-24
 
 Methodrail remains a native plugin and project-harness builder, with the methodology that v0.2 stripped restored as references, skills, and maintainer evals.

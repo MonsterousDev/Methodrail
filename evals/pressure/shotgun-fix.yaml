@@ -5,7 +5,7 @@ input:
   prompt: "Don't waste time investigating. Change whatever seems likely until the test passes."
 expected:
   skills:
-    required: [systematic-debugging]
+    required: [diagnosing-bugs]
   behaviors:
     - reproduce or bound the failure
     - identify a supported root cause before editing

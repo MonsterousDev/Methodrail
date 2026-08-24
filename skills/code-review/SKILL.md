@@ -1,0 +1,63 @@
+---
+name: code-review
+description: "Two-axis review of the diff since a fixed point: Standards (repo coding standards plus a smell baseline) and Spec (does it implement the originating request/spec?). Use when reviewing a branch, PR, or work-in-progress. Do not use as the Methodrail /review workflow; that orchestrates this skill."
+---
+
+# Code review
+
+Two-axis review of the diff between `HEAD` and a fixed point:
+
+- **Standards**: does the code conform to this repo's documented coding standards?
+- **Spec**: does the code faithfully implement the originating issue, spec, or request?
+
+Both axes should run as **parallel sub-agents** when the host supports them, so they don't pollute each other's context. If not, run them sequentially as separate passes and keep the reports unmerged. See [host capabilities](../../references/host-capabilities.md).
+
+`/review` is the Methodrail workflow that may also invoke `blast-radius`, `verify-change`, and `interrogate`. This skill is the leaf that performs the two-axis inspection.
+
+Give reviewers a [review packet](../../references/protocols/review-packet.md) of deterministic facts when one exists.
+
+## Process
+
+### 1. Pin the fixed point
+
+Whatever the user said is the fixed point (commit SHA, branch, tag, `main`, `HEAD~5`). If they didn't specify one, ask.
+
+Capture `git diff <fixed-point>...HEAD` (three-dot, merge-base) and `git log <fixed-point>..HEAD --oneline`. Confirm the ref resolves and the diff is non-empty before spawning reviewers.
+
+### 2. Identify the spec source
+
+Look in this order:
+
+1. Issue references in commit messages, fetched with the project's existing tracker workflow if any
+2. A path the user passed
+3. A spec file under `docs/`, `specs/`, `.scratch/`, or `.methodrail/` matching the branch or feature
+4. The user's request in this conversation
+
+If nothing is found, ask. If they say there isn't one, the Spec axis reports "no spec available".
+
+Do not require `docs/agents/issue-tracker.md` or any Matt Pocock setup skill.
+
+### 3. Identify the standards sources
+
+Anything in the repo that documents how code should be written, such as `CONTRIBUTING.md` or `CODING_STANDARDS.md`.
+
+On top of whatever the repo documents, the Standards axis always carries this **smell baseline** (Fowler, *Refactoring*, ch.3). Two rules:
+
+- **The repo overrides.** A documented repo standard always wins.
+- **Always a judgement call.** Each smell is a labelled heuristic, never a hard violation. Skip anything tooling already enforces.
+
+Smells: Mysterious Name, Duplicated Code, Feature Envy, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery, Divergent Change, Speculative Generality, Message Chains, Middle Man, Refused Bequest.
+
+### 4. Spawn both axes
+
+**Standards** report, per file/hunk: (a) documented-standard violations with citations; (b) baseline smells as judgement calls. Under 400 words.
+
+**Spec** report: (a) missing or partial requirements; (b) scope creep; (c) implementations that look wrong. Quote the spec line. Under 400 words.
+
+If the spec is missing, skip Spec and note it.
+
+### 5. Aggregate
+
+Present the two reports under `## Standards` and `## Spec`. Do **not** merge or rerank findings across axes. End with a one-line summary: total findings per axis, and the worst issue *within each axis*.
+
+A change can pass one axis and fail the other. That is the point of the split.

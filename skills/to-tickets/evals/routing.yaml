@@ -1,0 +1,9 @@
+id: skill.to-tickets.routing-positive
+kind: routing
+skill: to-tickets
+description: "Breaking a spec into tracer bullets activates to-tickets."
+input:
+  prompt: "Break this billing spec into tracer-bullet tickets with blocking edges."
+expected:
+  skills:
+    required: [to-tickets]

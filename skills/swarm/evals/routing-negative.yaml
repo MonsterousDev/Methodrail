@@ -1,0 +1,9 @@
+id: skill.swarm.routing-negative
+kind: routing
+skill: swarm
+description: "A single local rename is not swarm work."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [swarm]

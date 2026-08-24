@@ -1,0 +1,10 @@
+Origin: pstack / how
+Import mode: adapted
+Upstream revision: 46125561306434d8a1d7745d540d8932ab0cd2a2
+License: MIT (Copyright (c) 2026 Lauren Tan)
+
+Methodrail changes:
+- project knowledge lookup and freshness check before expensive exploration
+- host-specific model slugs isolated; subagents optional
+- Methodrail inference/unknown labeling
+- added Methodrail behavioral evals

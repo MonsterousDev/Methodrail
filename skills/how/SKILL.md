@@ -1,75 +1,133 @@
 ---
 name: how
-description: "Map current implementation: entrypoints, control flow, data flow, and boundaries. Use before changing nontrivial existing code or when asked how something works."
+description: "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions. Explains subsystem architecture and runtime flow from actual implementation. Use why for historical motivation and observe for live behavior."
 ---
 
 # How
 
-## Problem
+Explore the codebase to answer "how does X work?" Produce a working mental model of the current implementation, not annotated source and not a directory tour.
 
-Agents propose changes, architecture, or 'obvious' fixes without knowing how the live implementation actually behaves. Filename folklore replaces traced flow.
+Two modes:
 
-## Observed failure
+1. **Explain** (default). Explore the codebase and produce a clear explanation.
+2. **Critique.** Explain first, then independently identify architectural issues.
 
-The agent summarizes the repository from layout, infers architecture from folder names, and then edits the wrong module. Or it dumps a giant repo tour nobody asked for.
+## Before expensive exploration
 
-## When to activate
+```text
+check project knowledge
+↓
+check whether relevant knowledge may be stale
+↓
+reuse or selectively refresh
+```
 
-Activate when the question is about current structure or behavior of existing code, or before a nontrivial change to an existing subsystem. Typical prompts: 'How does X work?', 'Where is Y handled?', 'What happens when Z is submitted?'
+1. Read `.methodrail/PROJECT.md` if present and any linked notes that match the question.
+2. Check [freshness](../../references/knowledge/freshness.md) before treating stored notes as current.
+3. Reuse still-valid knowledge. Refresh only the stale slice. Do not skip the investigation below merely because a note exists.
 
-## When not to activate
+Then follow the investigation procedure. Do not shorten it.
 
-Do not activate for mechanical edits, greenfield files with no existing behavior, or questions that are purely historical (use why), purely runtime (use observe), or purely empirical (use prototype).
+## Explain mode
 
-## Required context
+### Step 1. Understand the question and assess complexity
 
-The user question, repository revision, and any already-validated project knowledge that is still fresh. Do not load unrelated subsystems.
+Parse what the user is asking about:
 
-## Method
+- "How does the rate limiter work?" — a subsystem
+- "How do we handle billing for on-demand usage?" — a feature flow
+- "How is the auth service structured?" — an architectural overview
+- "Walk me through what happens when a user submits a form" — a runtime trace
 
-1. Start from the user's question, not from repository layout.
-2. Identify relevant entrypoints (HTTP handlers, CLI commands, jobs, exported APIs, UI actions).
-3. Follow callers and callees. Trace control flow and data flow.
-4. Inspect types and important state transitions. Distinguish authoritative state from derived or cached state.
-5. Name boundaries and side effects (IO, network, persistence, auth).
-6. For complex questions, partition exploration into non-overlapping slices and synthesize.
-7. Cite evidence. Record unknowns explicitly.
+Identify the scope. If ambiguous, state your best-guess interpretation before exploring. Don't ask. Let the user redirect if you're off.
 
-Do not infer architecture from filenames alone.
-Do not produce giant repository summaries unless specifically requested.
+**Assess complexity:**
 
-Preferred output:
-- question
-- short answer
-- entrypoints
-- flow
-- state
-- boundaries
-- side effects
-- important invariants
-- unknowns
-- evidence
+- **Simple** (a single module, a small utility, a narrow "how does function X work"): skip explorer agents; explore and explain in a single pass. Go to Step 2b.
+- **Complex** (a subsystem spanning multiple files/services, a cross-cutting feature, a full architectural overview): partition first, then synthesize. Go to Step 2a.
 
-## Permitted evidence
+When in doubt, lean simple. You can always partition later if the explainer hits a wall.
 
-Source code, types, tests as characterization of intended structure, generated schemas, configuration. Runtime evidence is out of scope unless you escalate to `observe`. Label source conclusions as inferred, not observed. See [observation record](../../references/protocols/observation-record.md).
+### Step 2a. Explore (complex questions only)
 
-## Side effects
+Decompose the question into 2–4 parallel exploration angles, each a distinct slice so explorers don't duplicate work. Example split for "how does the rate limiter work?":
 
-Filesystem read, git read. No runtime mutation. No network writes. No production code changes.
+- Explorer 1: data model and state management
+- Explorer 2: request path and enforcement
+- Explorer 3: configuration and metrics infrastructure
 
-## Completion
+Narrow questions: 2 explorers is fine. Broad subsystems: up to 4.
 
-The question has a direct answer or an explicit unresolved status. Important claims are linked to evidence. Inference is labeled. Unknowns are listed.
+If the host supports subagents, spawn all explorers in a single message, read-only. Each explorer gets [explorer-prompt.md](references/explorer-prompt.md) plus its slice. If the host does not, run the same slices sequentially in this context. See [host capabilities](../../references/host-capabilities.md).
 
-## Artifacts
+Each explorer should:
 
-A concise implementation map and, when useful, a subsystem note — not a dump of the tree.
+- Start broad: find relevant directories and key types/interfaces
+- Follow the thread: from an entry point, trace callers, callees, data flow, type definitions
+- Read the actual code; don't guess from file names
+- Stop when it can describe the full path from input to output without hand-waving
+- Note things that are surprising, non-obvious, or that a newcomer would get wrong
 
-## What survives
+Then proceed to Step 3.
 
-Entrypoints, traced flows, invariants, and unknowns. Discard file lists, dead ends, and speculative architecture.
+### Step 2b. Direct explain (simple questions)
 
-## Evaluation
+Explore and explain in one pass, read-only. Use [explainer-prompt.md](references/explainer-prompt.md) for communication style and output format. If the host supports a read-only subagent, you may use one; otherwise do the work here.
 
-Routing: how-questions activate this skill. Negative: mechanical rename does not. Behavioral: answers cite entrypoints and evidence. Pressure: refuses to invent architecture from folder names.
+Proceed to Step 4.
+
+### Step 3. Synthesize (complex questions only)
+
+Once all explorer slices return, synthesize them into one coherent explanation using [explainer-prompt.md](references/explainer-prompt.md). Reconcile overlapping findings, resolve contradictions by reading the code, and weave the slices into a unified picture.
+
+### Step 4. Present
+
+Present the explanation. You may lightly edit for clarity or add conversation context, but don't substantially rewrite.
+
+### Output format
+
+Follow this structure, adapted to the question. Not every section is needed.
+
+**Overview.** 1–2 paragraphs. What it is, what it does, why it exists. Enough to decide whether to keep reading.
+
+**Key Concepts.** The important types, services, or abstractions. Brief definition of each.
+
+**How It Works.** Walk through the flow: what triggers it, what happens step by step, where data goes, the decision points. Prose, not a dump of code. Reference specific files and functions.
+
+**Where Things Live.** A brief map of the relevant files. Not every file.
+
+**Gotchas.** Non-obvious or surprising things. Known sharp edges.
+
+**Unknowns.** Gaps you could not trace. Label inference as inferred, not observed. See [observation record](../../references/protocols/observation-record.md).
+
+## Critique mode
+
+Triggered when the user asks for architectural issues, problems, or improvements, not just understanding.
+
+### Step 1. Explain first
+
+Run the full explain flow above. You must understand the architecture before critiquing it.
+
+### Step 2. Independent critics
+
+After the explanation is complete, obtain independent critiques when the host supports it. Prefer diverse model families if the host can select models. Otherwise use independent agent contexts, or say that independent multi-model critique is unavailable.
+
+Each critic gets the explanation, relevant file paths, [critic-prompt.md](references/critic-prompt.md), and [critique-rubric.md](references/critique-rubric.md).
+
+### Step 3. Lead judgment
+
+Categorize findings:
+
+- **Act on.** Architectural problems worth fixing now
+- **Consider.** Real concerns, cost/benefit unclear
+- **Noted.** Valid observations, low priority
+- **Dismissed.** Wrong, missing context, or style preference
+
+Present the explanation first, then the critique. Someone who just wants to understand the system shouldn't wade through critique.
+
+## Constraints
+
+- Read-only. No production code changes.
+- Do not infer architecture from filenames alone.
+- Do not produce giant repository summaries unless specifically requested.
+- Runtime evidence is out of scope unless you escalate to `observe`.

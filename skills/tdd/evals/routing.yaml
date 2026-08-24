@@ -1,0 +1,9 @@
+id: skill.tdd.routing-positive
+kind: routing
+skill: tdd
+description: "Test-first feature work activates tdd."
+input:
+  prompt: "Build the retry helper test-first with a red-green loop."
+expected:
+  skills:
+    required: [tdd]

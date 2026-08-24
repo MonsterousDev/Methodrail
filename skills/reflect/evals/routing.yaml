@@ -1,0 +1,9 @@
+id: skill.reflect.routing-positive
+kind: routing
+skill: reflect
+description: "Explicit reflect after complex work activates reflect."
+input:
+  prompt: "Reflect on that session and propose knowledge, skill, or structural-enforcement candidates. Don't auto-apply rules."
+expected:
+  skills:
+    required: [reflect]

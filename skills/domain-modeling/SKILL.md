@@ -1,67 +1,65 @@
 ---
 name: domain-modeling
-description: Define concepts, ownership, states, transitions, and rejected synonyms. Use when product language is ambiguous or a consequential domain decision is pending.
+description: "Build and sharpen a project's domain model. Use when discussing codebase terminology, ownership, states, or recording a consequential domain decision. Challenge fuzzy terms, stress-test with scenarios, and write canonical language down when it crystallises."
 ---
 
 # Domain modeling
 
-## Problem
+Actively build and sharpen the project's domain model. This is the *active* discipline: challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. Merely *reading* an existing glossary is not this skill.
 
-Overloaded words ('customer', 'account', 'organization') cause agents to implement the wrong ownership model.
+## Where the glossary lives
 
-## Observed failure
+Do not force a filename. Prefer the project's established source of truth, in this order:
 
-The agent treats marketing language as the data model, or writes a running requirements novel instead of a compact vocabulary.
+1. An existing canonical glossary (`CONTEXT.md`, `CONTEXT-MAP.md`, `docs/domain.md`, or another project-native vocabulary the repository already uses)
+2. `.methodrail/knowledge/domain.md` when Methodrail is the knowledge home and no project glossary exists
+3. Create lazily: only when the first term is actually resolved
 
-## When to activate
+If a `CONTEXT-MAP.md` (or equivalent) exists, the repo has multiple contexts. Follow that map. System-wide decisions may live in `docs/adr/` or `.methodrail/knowledge/decisions/`; context-specific decisions stay with that context.
 
-Activate when a term is ambiguous, ownership is unclear, states/transitions matter, or a hard-to-reverse domain decision is approaching.
+`PROJECT.md` should point at whichever glossary is canonical. Do not copy the glossary into Methodrail-only duplicates.
 
-## When not to activate
+The glossary should be devoid of implementation details. It is a vocabulary, not a spec, scratch pad, or repository for implementation decisions. Use the format in [CONTEXT-FORMAT.md](references/CONTEXT-FORMAT.md), adapted to the file you actually maintain.
 
-Do not activate to restyle code, to duplicate the issue tracker, or when the environment already has a crisp, validated vocabulary.
+## During the session
 
-## Required context
+### Challenge against the glossary
 
-The contested terms, current implementation of those terms, and who can adjudicate preference.
+When the user uses a term that conflicts with the existing language, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y. Which is it?"
 
-## Method
+### Sharpen fuzzy language
 
-Distinguish:
-- concepts
-- definitions
-- ownership
-- states
-- transitions
+When the user uses vague or overloaded terms, propose a precise canonical term. "You're saying 'account': do you mean the Customer or the User? Those are different things."
+
+### Discuss concrete scenarios
+
+When domain relationships are being discussed, stress-test them with specific scenarios. Invent scenarios that probe edge cases and force precision about boundaries.
+
+### Cross-reference with code
+
+When the user states how something works, check whether the code agrees. If you find a contradiction, surface it.
+
+### Update the glossary inline
+
+When a term is resolved, update the canonical glossary right there. Don't batch these up. Record:
+
+- canonical term
+- definition
+- ownership when it matters
+- states and transitions when they matter
 - invariants
-- synonyms
 - rejected synonyms
 
-Keep the vocabulary concise. Do not turn the domain model into a running requirements document.
-Consequential, hard-to-reverse decisions may become ADR candidates.
-Ask humans only for preference/intent the environment cannot resolve.
-See the [knowledge model](../../references/knowledge/model.md) and [decision frontier](../../references/decision-frontier.md).
+Keep it concise. Do not turn the domain model into a running requirements document. See the [knowledge model](../../references/knowledge/model.md).
 
-## Permitted evidence
+### Offer ADRs sparingly
 
-Code that implements the terms, existing docs, stakeholder decisions labeled as human-decision evidence.
+Only offer to create an ADR when all three are true:
 
-## Side effects
+1. **Hard to reverse**: the cost of changing your mind later is meaningful
+2. **Surprising without context**: a future reader will wonder why
+3. **The result of a real trade-off**: genuine alternatives, picked for specific reasons
 
-May write project-local knowledge candidates. No silent production schema changes.
+If any of the three is missing, skip the ADR. Use [ADR-FORMAT.md](references/ADR-FORMAT.md). Write the ADR next to the project's existing decision records, or `.methodrail/knowledge/decisions/` if that is the home. See the [decision frontier](../../references/decision-frontier.md).
 
-## Completion
-
-Each contested term has a definition, ownership, and rejected synonyms. Unknowns are explicit.
-
-## Artifacts
-
-Domain concept records; optional ADR candidate.
-
-## What survives
-
-Definitions, invariants, rejected synonyms. Discard meeting recap prose.
-
-## Evaluation
-
-Positive: 'what does customer mean?'. Negative: rename a symbol. Pressure: do not ask the human questions git can answer.
+Ask humans only for preference or intent the environment cannot resolve.

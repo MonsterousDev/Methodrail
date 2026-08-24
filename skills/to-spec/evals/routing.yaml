@@ -1,0 +1,9 @@
+id: skill.to-spec.routing-positive
+kind: routing
+skill: to-spec
+description: "Crystallizing resolved intent activates to-spec."
+input:
+  prompt: "Turn the decisions we already made about billing into a durable spec. Don't interview me again."
+expected:
+  skills:
+    required: [to-spec]

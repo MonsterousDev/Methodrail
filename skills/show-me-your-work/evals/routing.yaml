@@ -1,0 +1,9 @@
+id: skill.show-me-your-work.routing-positive
+kind: routing
+skill: show-me-your-work
+description: "Long autonomous work with a decision trail activates show-me-your-work."
+input:
+  prompt: "Keep a decision/evidence TSV while you run this multi-hour migration unattended."
+expected:
+  skills:
+    required: [show-me-your-work]

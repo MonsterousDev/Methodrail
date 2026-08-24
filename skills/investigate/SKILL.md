@@ -13,12 +13,16 @@ Answer the question without changing product code.
 1. Restate the question and define what evidence would answer it.
 2. Read `.methodrail/PROJECT.md` if present. Check whether relevant project knowledge is still [fresh](../../references/knowledge/freshness.md) before relying on it.
 3. Choose the cheapest reliable evidence source, then the matching leaf skill:
-   - `how` for current implementation and flow;
-   - `observe` for actual runtime behavior;
-   - `why` for historical intent;
-   - `domain-modeling` for ambiguous concepts;
-   - `prototype` for an empirical uncertainty;
-   - `blast-radius` for impact.
+
+```text
+how          = current implementation
+why          = historical motivation
+observe      = live behavior
+research     = external/reference sources
+prototype    = empirical experiment
+blast-radius = what else a change could affect
+```
+
 4. Gather primary evidence. Label every important claim as one of:
 
 ```text

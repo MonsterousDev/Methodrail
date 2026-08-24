@@ -1,0 +1,9 @@
+id: skill.diagnosing-bugs.routing-negative
+kind: routing
+skill: diagnosing-bugs
+description: "Mechanical rename does not require diagnosing-bugs."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [diagnosing-bugs]

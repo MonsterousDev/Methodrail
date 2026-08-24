@@ -1,0 +1,12 @@
+name: superpowers
+repository: https://github.com/obra/superpowers
+license: MIT
+copyright: Copyright (c) 2025 Jesse Vincent
+last_reviewed_commit: b36e0829c6d0140e93cfef2ca599b1b07d4a7797
+last_reviewed_at: 2026-08-24
+notes: >
+  License verified from repository LICENSE at the recorded commit. Do
+  not import using-superpowers as a global router. verification-before-completion
+  is the canonical source for Methodrail verify-change. systematic-debugging
+  and test-driven-development were compared and not shipped as public
+  skills; selected techniques are composed into diagnosing-bugs and tdd.

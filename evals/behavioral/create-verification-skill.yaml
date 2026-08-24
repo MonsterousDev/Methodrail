@@ -1,0 +1,17 @@
+id: behavioral.create-verification-skill.interview-repo
+kind: behavioral
+skill: create-verification-skill
+description: Loading create-verification-skill should inspect the repository before asking how the app starts.
+input:
+  prompt: "Create a verification skill for this project. Ask me how to launch it and what to test."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the create-verification-skill skill loaded
+expected:
+  skills:
+    required: [create-verification-skill]
+  behaviors:
+    - interview the repository before the user
+    - discover launch, readiness, drive, evidence, reset, and stop from the repo
+    - ask only for what cannot be observed
+  baseline_failure: asking the user for package scripts and README quickstart facts

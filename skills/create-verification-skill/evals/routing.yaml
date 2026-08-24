@@ -1,0 +1,9 @@
+id: skill.create-verification-skill.routing-positive
+kind: routing
+skill: create-verification-skill
+description: "Explicit request to generate project verification activates the skill."
+input:
+  prompt: "Create a verification skill for this app by inspecting how it actually launches and is driven."
+expected:
+  skills:
+    required: [create-verification-skill]

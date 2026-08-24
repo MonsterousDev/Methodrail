@@ -1,0 +1,9 @@
+id: skill.performance.routing-positive
+kind: routing
+skill: performance
+description: "Measured perf investigation activates performance."
+input:
+  prompt: "Checkout p95 is 4s. Capture a baseline and tie any fix to a measurement."
+expected:
+  skills:
+    required: [performance]

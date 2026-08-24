@@ -6,5 +6,5 @@ input:
 expected:
   skills:
     required: [develop, architect]
-    optional: [domain-modeling, prototype]
+    optional: [domain-modeling, prototype, grill-with-docs, codebase-design]
     forbidden: []

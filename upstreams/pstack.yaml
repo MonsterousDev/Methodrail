@@ -1,0 +1,13 @@
+name: pstack
+repository: https://github.com/cursor/plugins
+path: pstack/
+license: MIT
+copyright: Copyright (c) 2026 Lauren Tan
+last_reviewed_commit: 46125561306434d8a1d7745d540d8932ab0cd2a2
+last_reviewed_at: 2026-08-24
+notes: >
+  License verified from pstack/LICENSE and plugin.json at the recorded
+  commit. Do not import poteto-mode, setup-pstack, principle-* skills as
+  a second operating system, Graphite/GitHub shipping playbooks, or
+  Cursor-only automations. Host-specific model slugs are isolated in
+  references/host-capabilities.md.

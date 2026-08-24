@@ -1,0 +1,17 @@
+id: behavioral.interrogate.no-auto-patch
+kind: behavioral
+skill: interrogate
+description: Loading interrogate should synthesize independent review, not auto-apply patches.
+input:
+  prompt: "Interrogate this payment migration. Tear it apart."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the interrogate skill loaded
+expected:
+  skills:
+    required: [interrogate]
+  behaviors:
+    - obtain independent analyses with the same rubric
+    - treat disagreement as evidence
+    - synthesize a verdict without auto-applying patches
+  baseline_failure: a single-pass review that starts editing

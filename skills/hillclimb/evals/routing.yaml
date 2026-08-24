@@ -1,0 +1,9 @@
+id: skill.hillclimb.routing-positive
+kind: routing
+skill: hillclimb
+description: "Iterative metric optimization activates hillclimb."
+input:
+  prompt: "Hillclimb startup until it is 50% faster than baseline, one change per measurement."
+expected:
+  skills:
+    required: [hillclimb]

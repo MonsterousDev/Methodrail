@@ -1,0 +1,59 @@
+---
+name: create-verification-skill
+description: "Generate a project-local verification skill that drives the app the way a user does. Interview the repository, not the user. Use when explicitly requested or when methodrail-init finds a meaningful executable surface. Do not use on libraries with no runnable surface."
+disable-model-invocation: true
+---
+
+# Create a verification skill
+
+Every serious runnable project needs a scripted way to drive the real app and prove behavior. This skill generates that as a **project-local** skill tailored to the repo. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.
+
+Do not copy global Methodrail skills into the project. This generates only project-specific verification.
+
+## 1. Interview the repo, not the user
+
+Answer these from the codebase and only ask the user what you cannot observe:
+
+- **Surface:** what does a user actually touch? Web UI, CLI/TUI, desktop, API, mobile, library? Pick the primary one and note the rest.
+- **Run:** how does the app start locally? Prefer the repo's own documented command. Note ports, env vars, seed data, auth.
+- **Drive:** how can an agent interact programmatically? Existing harnesses first. Only then pick a generic recipe.
+- **Observe:** what evidence can be captured?
+- **Isolate:** can two instances run side by side? If not, say so: refusing to double-drive a shared instance beats corrupting the user's session.
+- **Reset / stop:** how is state restored and the process torn down?
+
+If the checkout doesn't build or start as-is, fix that first (or report it precisely) before generating.
+
+If there is no meaningful executable surface (pure library, docs-only, generated bindings), do **not** invent runtime infrastructure. Document appropriate static verification instead and stop.
+
+## 2. Generate the skill
+
+Write the skill in the repository's established native skill location, preferring:
+
+```text
+.agents/skills/verify-<app>/SKILL.md
+```
+
+Fall back to `.cursor/skills/verify-<app>/` or `.claude/skills/verify-<app>/` only when that is already the project's convention. YAML frontmatter is required (`name: verify-<app>` and a description that names the app, the surface, and when to reach for it).
+
+Sections, each grounded in what the interview actually found (no placeholders):
+
+- **Launch:** exact command, readiness signal, teardown. For a short-lived CLI there is no server to keep alive.
+- **Doctor:** one read-only check that answers "is this instance worth driving?"
+- **Drive:** harness recipe with real selectors/commands from this repo.
+- **Evidence:** what to capture and where. Exercise the real user path. Capture action and resulting state. Verify side effects. Mocks only at production boundaries.
+- **Cleanup:** tear down instances the run created. Never kill by process name. Evidence survives teardown.
+- **Helpers:** any shipped script is executable and its invocation is shown in the skill body.
+
+Also record start/doctor/drive/inspect/capture/reset/stop in `.methodrail/control/CONTROL.md` when those steps are non-obvious. `PROJECT.md` should point at both.
+
+## 3. Seed the feature map
+
+Create `features/README.md` plus one file per user-facing feature you can identify (aim for the top 3–5). Follow [`references/feature-map-example/`](references/feature-map-example/). Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it, and what observable end state proves it works. H2s: `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, `Gotchas`.
+
+## 4. Prove the generated skill before handing it over
+
+Run its own instructions end to end once: launch, doctor, drive ONE mapped feature, capture evidence, clean up. After cleanup, confirm the evidence still exists. A generated skill that was never executed is a draft, not a deliverable.
+
+## 5. Offer the maintenance loop
+
+Point at `maintain-verification-skill` for keeping the map honest as the app changes.

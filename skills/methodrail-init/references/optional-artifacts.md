@@ -51,7 +51,9 @@ Place a new skill in the repository's established native skill location (`.agent
 
 ## verify-project
 
-Create `.agents/skills/verify-project/SKILL.md` (or the established native skill location) only when project verification requires a reusable decision tree that agents cannot infer cheaply.
+When the project has a meaningful executable surface, prefer `create-verification-skill` over hand-writing a stub. That path interviews the repository and produces launch/doctor/drive/evidence/cleanup plus a feature map.
+
+Create `.agents/skills/verify-project/SKILL.md` (or the established native skill location) only when project verification requires a reusable decision tree that agents cannot infer cheaply. A static command map is enough when there is no user-facing runtime.
 
 Required frontmatter:
 

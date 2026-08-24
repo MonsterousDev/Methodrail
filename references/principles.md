@@ -29,3 +29,5 @@ Progressive disclosure:
 - [project harness](project-harness.md)
 - [agent-friendly codebase](agent-friendly-codebase.md)
 - [structural enforcement](structural-enforcement.md)
+- [capability map](capability-map.md)
+- [host capabilities](host-capabilities.md)

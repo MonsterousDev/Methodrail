@@ -1,0 +1,9 @@
+id: skill.grill-with-docs.routing-positive
+kind: routing
+skill: grill-with-docs
+description: "Explicit grill of ambiguous product intent activates grill-with-docs."
+input:
+  prompt: "Grill me with the docs until we know what organization billing actually means."
+expected:
+  skills:
+    required: [grill-with-docs]

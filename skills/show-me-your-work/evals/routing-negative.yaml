@@ -1,0 +1,9 @@
+id: skill.show-me-your-work.routing-negative
+kind: routing
+skill: show-me-your-work
+description: "Trivial edits do not require a decision log."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [show-me-your-work]

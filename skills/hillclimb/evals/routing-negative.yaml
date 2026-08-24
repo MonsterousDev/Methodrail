@@ -1,0 +1,9 @@
+id: skill.hillclimb.routing-negative
+kind: routing
+skill: hillclimb
+description: "A one-line rename is not hillclimb."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [hillclimb]

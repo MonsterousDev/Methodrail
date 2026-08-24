@@ -1,0 +1,9 @@
+id: skill.arena.routing-negative
+kind: routing
+skill: arena
+description: "Routine edits must not auto-trigger arena."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [arena]

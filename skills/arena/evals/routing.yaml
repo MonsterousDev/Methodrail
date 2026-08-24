@@ -1,0 +1,9 @@
+id: skill.arena.routing-positive
+kind: routing
+skill: arena
+description: "Competing candidates for one artifact activate arena."
+input:
+  prompt: "Arena this: three structurally different designs for the billing ledger, then synthesize."
+expected:
+  skills:
+    required: [arena]

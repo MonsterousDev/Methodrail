@@ -1,0 +1,9 @@
+id: skill.research.routing-positive
+kind: routing
+skill: research
+description: "External primary-source questions activate research."
+input:
+  prompt: "What does the official OAuth 2.1 spec say about refresh token rotation?"
+expected:
+  skills:
+    required: [research]

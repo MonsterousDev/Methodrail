@@ -1,0 +1,9 @@
+id: skill.trace-forensics.routing-positive
+kind: routing
+skill: trace-forensics
+description: "An existing capture activates trace-forensics."
+input:
+  prompt: "I dropped a .cpuprofile from last night's hang. Diagnose from the artifact; don't re-run the app."
+expected:
+  skills:
+    required: [trace-forensics]

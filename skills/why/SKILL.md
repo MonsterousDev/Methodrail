@@ -1,63 +1,129 @@
 ---
 name: why
-description: Separate what the system does now from why evidence suggests it was designed that way. Use git history, ADRs, issues, and docs — never current code alone.
+description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, or postmortems. Searches historical evidence categories in parallel and returns a cited read on decisions and tradeoffs. Never infer intent from current code alone. Use how for current implementation."
 ---
 
 # Why
 
-## Problem
+Investigate the motivation and intent behind code. Why was it built this way? What alternatives were rejected, and why?
 
-Agents invent origin stories from the current implementation: 'this was written this way because...'
+Companion to `how`. `how` answers what the code does. `why` answers what forces led to its shape. See [provenance](../../references/knowledge/provenance.md).
 
-## Observed failure
+If `.methodrail/` already records the rationale and that note is still [fresh](../../references/knowledge/freshness.md), reuse it and say so. Otherwise search primary historical sources.
 
-A confident narrative of intent with no commit, ADR, issue, or interview behind it.
+## Operating posture
 
-## When to activate
+Operate as a careful investigator. When the record is thin, say so.
 
-Activate for 'why is it like this', 'why was X introduced', design archaeology, or when a change needs historical constraint.
+- **Evidence before narrative.** Collect the pieces first. Never pick a story and recruit the evidence that fits it.
+- **Precision over polish.** Prefer the exact quote and citation over a smooth paraphrase.
+- **Name the gaps.** If a thread goes cold or a source isn't searchable, document the gap.
+- **Hedge on purpose.** When evidence is indirect, say "appears to" / "likely" / "suggests".
+- **No shortcut by code-reading.** The code tells you what it does, rarely why it exists.
 
-## When not to activate
+## Core epistemics
 
-Do not activate for 'how does this work now' (how) or 'what happens at runtime' (observe). Do not use why as a substitute for reading current code.
+Build a patchwork understanding from fragmented historical evidence. Tickets go stale. Commit messages lie. People change their minds.
 
-## Required context
+- **Cite everything.** Every claim about intent should reference a commit hash, PR, ticket, doc, chat permalink, or comment. If you can't cite it, it's inference.
+- **Prefer "appears to" over "because".**
+- **Surface contradictions.** If two sources disagree, show both.
+- **Acknowledge gaps.** An honest "we couldn't find out why" beats a confident guess.
+- **Multiple hypotheses are valid.** Present them with the evidence for each.
+- **Beware rationalization.** Don't retrofit intent onto code that merely exists.
 
-The artifact or decision under question, revision range if known, and available historical sources.
+Read [epistemics.md](references/epistemics.md). The synthesizer must follow it.
 
-## Method
+Map claims onto Methodrail labels:
 
-1. State current behavior separately (from how/observe, not from myth).
-2. Search version history, commit messages, ADRs, design docs, issues, PRs, comments, incident reports.
-3. Quote or cite the evidence that actually exists.
-4. If evidence is thin, say so. Offer plausible hypotheses only as hypotheses.
-5. Never infer intent from current implementation alone. If motivation cannot be established, say so. See [provenance](../../references/knowledge/provenance.md).
+```text
+Historically supported — cited historical source
+Inferred — indirect chain, hedged
+Unknown — searched, not established
+```
 
-Output:
-- what currently happens
-- why evidence suggests it was designed that way
-- gaps
+Current implementation is not historical evidence. Use `how` for "what currently happens."
 
-## Permitted evidence
+## Step 1. Understand the target and the question
 
-git log/blame, ADRs, PRs, issues, comments, incident reports, design docs.
+Parse the **target** (code, pattern, feature, named decision) and the **question** (design rationale, tradeoff, edge cases, business constraint, dead-code territory, history).
 
-## Side effects
+If the target is vague, guess from conversation context, state the interpretation, then proceed.
 
-Read-only git and documents.
+## Step 2. Establish the code anchor
 
-## Completion
+Before spawning investigators, anchor in concrete code:
 
-Current vs historical are separated. Claims have citations or are marked unknown.
+- relevant file path(s) and line range(s)
+- key symbols
+- an initial commit list
+- PR numbers from merge commits when present
 
-## Artifacts
+```bash
+git blame -L <start>,<end> <file>
+git log --follow -p -- <file>
+git log --oneline -20 -- <file>
+```
 
-A rationale note, possibly a knowledge candidate if the motivation is expensive to rediscover.
+Pull PR bodies via `gh` when the project uses GitHub and `gh` is available. Capture seed context for investigators.
 
-## What survives
+## Step 3. Search evidence categories (default posture)
 
-Cited rationale and rejected myths. Discard commit tours that do not answer the question.
+Historical context spreads across seven categories. You cannot predict from the question alone which one holds the answer. Enumerate what this environment can actually search, map each source to a category, query available categories in parallel, then synthesize. Null results are first-class evidence. See [host capabilities](../../references/host-capabilities.md).
 
-## Evaluation
+Categories:
 
-Positive: 'Why was Redis introduced?'. Negative: 'How does the cache work?' should prefer how. Pressure: refuse invented intent.
+1. **Source control history** — always available through git (and `gh` when present). Best at implementation-time rationale captured during review.
+2. **Issue / ticket tracker** — Linear, Jira, GitHub Issues, and similar. Best at the product or business forcing function.
+3. **Long-form documents** — ADRs, RFCs, PRDs, design docs, postmortems, `.methodrail/knowledge/`.
+4. **Real-time team chat** — only if a matching MCP or export is available.
+5. **Infrastructure observability** — only if a matching MCP is available.
+6. **Error / exception tracking** — only if a matching MCP is available.
+7. **Product analytics warehouse** — only if a matching MCP is available.
+
+Source control is always spawned. For the others, skip only with a written justification:
+
+- no searchable source exists in this environment (a gap, not a choice), or
+- the source is provably irrelevant (high bar: a build-time script with no runtime path, not "probably a feature").
+
+"I doubt long-form docs would have this" is not sufficient. Run the search; let the null result speak.
+
+If the host supports subagents, spawn one investigator per available category using [investigator-prompt.md](references/investigator-prompt.md) and the matching [sources](references/source-playbook.md) playbook. If not, search the same categories sequentially. Do not collapse every category into one vague search.
+
+Give investigators the code anchor and the original question. If the target looks defensive (retries, timeouts, rate limits, flags, OOM handlers), also load [incident-postmortem.md](references/sources/incident-postmortem.md).
+
+## Step 4. Synthesize
+
+Synthesize with [synthesizer-prompt.md](references/synthesizer-prompt.md) and [epistemics.md](references/epistemics.md). Separate "what we know" from "what we're inferring." Include null-result sources.
+
+If the host supports a synthesizer subagent, use it. Otherwise synthesize here. Do not rewrite confidence language to sound more authoritative.
+
+## Step 5. Present
+
+Keep the confidence separation intact.
+
+**The Question.** Restate what the user asked.
+
+**The Code in Question.** File paths, line ranges, key symbols.
+
+**What We Found (direct evidence).** Cited claims.
+
+**What We Can Reasonably Infer.** Inference chains with hedges.
+
+**Competing Hypotheses.** If the evidence fits multiple stories.
+
+**What We Don't Know.** Specific gaps and empty searches.
+
+**Sources Consulted.** One line per category, including empty and skipped.
+
+If this `why` is a precursor to changing the code, convert findings into Preserve / Change / Avoid / Risk constraints.
+
+## Common failure modes
+
+- Confident storytelling from thin evidence
+- Citing the code as evidence for its own intent
+- Recency bias
+- Confirming the user's suggested reason without checking
+- Skipping the gaps section
+- Skipping categories by anticipation
+- Inventing historical rationale

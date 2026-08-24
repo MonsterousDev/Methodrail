@@ -1,0 +1,9 @@
+id: skill.wayfinder.routing-negative
+kind: routing
+skill: wayfinder
+description: "A local rename is not wayfinder work."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [wayfinder]

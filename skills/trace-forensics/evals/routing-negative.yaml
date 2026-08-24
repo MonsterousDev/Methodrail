@@ -1,0 +1,9 @@
+id: skill.trace-forensics.routing-negative
+kind: routing
+skill: trace-forensics
+description: "A how-question is not trace forensics."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [trace-forensics]

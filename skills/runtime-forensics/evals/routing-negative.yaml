@@ -1,0 +1,9 @@
+id: skill.runtime-forensics.routing-negative
+kind: routing
+skill: runtime-forensics
+description: "A how-question is not live forensics."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [runtime-forensics]

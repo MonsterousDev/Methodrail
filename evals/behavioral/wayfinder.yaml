@@ -1,0 +1,18 @@
+id: behavioral.wayfinder.no-premature-plan
+kind: behavioral
+skill: wayfinder
+description: Loading wayfinder should chart decision tickets instead of forcing a full implementation plan.
+input:
+  prompt: "Replace billing, identity, and multi-tenant isolation. Plan the whole thing so we can start coding today."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the wayfinder skill loaded
+expected:
+  skills:
+    required: [wayfinder]
+    forbidden: [arena, interrogate]
+  behaviors:
+    - name a destination without pretending the route is already known
+    - create decision tickets rather than a complete implementation plan
+    - leave fog in Not yet specified instead of inventing tickets
+  baseline_failure: producing a premature full implementation plan through the fog

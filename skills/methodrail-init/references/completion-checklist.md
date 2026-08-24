@@ -5,6 +5,8 @@
 - `.methodrail/PROJECT.md` is a useful index, not a dump of the tree.
 - Optional knowledge, control, and project-local skills have a stated recurring use.
 - Control/verification questions were investigated when the project has a runnable surface.
+- `create-verification-skill` ran when the surface is meaningful; static verification was documented when it is not.
+- Global Methodrail skills were not copied into the project.
 - Existing instructions and curated content are preserved.
 - Exactly one supported integration is installed or an existing one is retained.
 - Refresh distinguished documentation drift from product regression.

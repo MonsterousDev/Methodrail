@@ -1,0 +1,9 @@
+id: skill.swarm.routing-positive
+kind: routing
+skill: swarm
+description: "Partitioned parallel coverage activates swarm."
+input:
+  prompt: "Swarm this: independently audit logging, metrics, and tracing config in parallel."
+expected:
+  skills:
+    required: [swarm]

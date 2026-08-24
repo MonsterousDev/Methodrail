@@ -1,0 +1,9 @@
+id: skill.maintain-verification-skill.routing-negative
+kind: routing
+skill: maintain-verification-skill
+description: "A how-question is not verification-skill maintenance."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [maintain-verification-skill]

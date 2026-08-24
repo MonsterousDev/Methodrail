@@ -1,0 +1,9 @@
+id: skill.to-spec.routing-negative
+kind: routing
+skill: to-spec
+description: "Unresolved grilling is not to-spec."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [to-spec]

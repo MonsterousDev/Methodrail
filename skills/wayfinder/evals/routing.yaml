@@ -1,0 +1,9 @@
+id: skill.wayfinder.routing-positive
+kind: routing
+skill: wayfinder
+description: "Huge foggy work activates wayfinder."
+input:
+  prompt: "We need to replace our entire billing, identity, and multi-tenant model over the next two quarters and I don't even know the decisions yet."
+expected:
+  skills:
+    required: [wayfinder]

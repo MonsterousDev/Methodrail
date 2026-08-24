@@ -80,4 +80,6 @@ Inspect `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursor/skills/`, `.agents/
 
 Reference canonical Methodrail skills instead of copying their bodies.
 
+When the project has a meaningful executable surface, init should generate a project-local verification skill via `create-verification-skill` rather than copying global operators into the repo.
+
 See also [agent-friendly codebases](agent-friendly-codebase.md) and [structural enforcement](structural-enforcement.md).

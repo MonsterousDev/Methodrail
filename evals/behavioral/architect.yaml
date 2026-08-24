@@ -1,0 +1,17 @@
+id: behavioral.architect.ground-then-alternatives
+kind: behavioral
+skill: architect
+description: Loading architect should ground in current implementation and compare alternatives.
+input:
+  prompt: "Architect organization-level billing. Don't look at the current code, just design it."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the architect skill loaded
+expected:
+  skills:
+    required: [architect]
+  behaviors:
+    - ground in current implementation before sketching
+    - produce more than one structurally distinct candidate
+    - compare ownership, reversibility, and operational cost
+  baseline_failure: inventing a greenfield architecture from slogans

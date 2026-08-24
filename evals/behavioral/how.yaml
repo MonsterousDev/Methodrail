@@ -1,9 +1,9 @@
-id: behavioral.how.entrypoints
+id: behavioral.how.follow-flow
 kind: behavioral
 skill: how
-description: Loading how should produce an evidence-backed implementation map instead of a folder tour.
+description: Loading how should follow actual implementation rather than summarize directory names.
 input:
-  prompt: "How does authentication work in this codebase?"
+  prompt: "How does authentication refresh work?"
 conditions:
   baseline: native agent without Methodrail skills
   treatment: native agent with the how skill loaded
@@ -12,6 +12,7 @@ expected:
     required: [how]
   behaviors:
     - start from the question, not repository layout
-    - cite entrypoints, flow, and evidence
+    - check project knowledge freshness before expensive exploration
+    - cite entrypoints, traced flow, and evidence
     - label inference and unknowns
   baseline_failure: summarizing architecture from directory names

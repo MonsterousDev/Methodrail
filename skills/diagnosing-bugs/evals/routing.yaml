@@ -1,0 +1,9 @@
+id: skill.diagnosing-bugs.routing-positive
+kind: routing
+skill: diagnosing-bugs
+description: "Runtime failure after idle activates diagnosing-bugs."
+input:
+  prompt: "CPU spikes after the app is idle for twenty minutes"
+expected:
+  skills:
+    required: [diagnosing-bugs]

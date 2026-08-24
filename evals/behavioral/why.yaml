@@ -1,0 +1,18 @@
+id: behavioral.why.no-invented-intent
+kind: behavioral
+skill: why
+description: Loading why should refuse invented historical rationale.
+input:
+  prompt: "Why was this queue introduced? It was obviously for performance."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the why skill loaded
+expected:
+  skills:
+    required: [why]
+    forbidden: [how]
+  behaviors:
+    - separate current behavior from historical motivation
+    - cite historical evidence or say unknown
+    - treat the user's suggested reason as a hypothesis
+  baseline_failure: confirming a performance origin story from current code shape

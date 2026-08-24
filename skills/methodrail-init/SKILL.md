@@ -8,18 +8,32 @@ disable-model-invocation: true
 
 Create the highest-leverage project-specific AI harness with the least permanent-context cost and maintenance burden. Inspect first, preserve existing guidance, and make repeated runs safe.
 
-A tiny project may need only `.methodrail/PROJECT.md`. A mature service may need knowledge notes, control procedures, and a project-local skill. Do not generate files merely to satisfy a template.
+A tiny project may need only `.methodrail/PROJECT.md`. A mature service may need knowledge notes, control procedures, and a project-local verification skill. Do not generate files merely to satisfy a template.
+
+Do not copy global Methodrail skills (`how`, `tdd`, `wayfinder`, …) into the project. Global skills stay globally installed. Generate only project-specific material.
 
 ## Workflow
+
+```text
+inspect repository
+↓
+establish high-value project knowledge
+↓
+determine whether the project has a meaningful executable surface
+        │
+        ├── no  → document appropriate static verification
+        └── yes → create-verification-skill
+                 → project-local verify skill / feature map
+```
 
 1. Interview the repository before asking the user. Load [repository interview](references/repository-interview.md).
 2. If `.methodrail/` already exists, refresh rather than recreate. Load [control maintenance](references/control-maintenance.md).
 3. Resolve only choices the repository cannot answer. Ask a focused question only when the answer materially changes the generated files.
 4. Plan proportionally using [information ROI](references/information-roi.md) and [optional artifacts](references/optional-artifacts.md):
-   - always consider `.methodrail/PROJECT.md` as a short index;
+   - always consider `.methodrail/PROJECT.md` as a short index pointing at canonical sources (`AGENTS.md`, ADRs, runbooks) rather than copying them;
    - add knowledge, control, or a project-local skill only when it removes real recurring uncertainty;
    - in a monorepo, document shared conventions once and add package-specific detail only where commands or constraints differ.
-5. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md).
+5. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md). If the surface is meaningful, invoke `create-verification-skill` — this is one of init's highest-value outputs. If not, document static verification and do not invent runtime infrastructure.
 6. Preview conflicts. Never overwrite existing instructions or curated prose.
 7. Generate or merge files using [merge semantics](references/merge-semantics.md). Prefer templates in `templates/project/` as skeletons to fill from evidence, not as files to copy blindly.
 8. Install exactly one thin, supported integration described in [integrations](references/integrations.md). If a supported integration already exists, update only the Methodrail-owned pointer or leave it intact.
@@ -52,4 +66,4 @@ Load only the reference needed for the current phase:
 
 ## Completion
 
-Initialization or refresh is complete when generated guidance reflects observed repository facts, existing instructions remain intact, control procedures were investigated when applicable, one supported integration exposes Methodrail, and another unchanged run would be a no-op.
+Initialization or refresh is complete when generated guidance reflects observed repository facts, existing instructions remain intact, control procedures were investigated when applicable, a project-local verification skill exists when the surface warrants it, one supported integration exposes Methodrail, and another unchanged run would be a no-op.

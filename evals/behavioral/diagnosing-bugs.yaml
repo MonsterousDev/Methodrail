@@ -1,0 +1,17 @@
+id: behavioral.diagnosing-bugs.root-cause
+kind: behavioral
+skill: diagnosing-bugs
+description: Loading diagnosing-bugs should prevent shotgun fixes.
+input:
+  prompt: "The idle CPU test is failing. Make it pass."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the diagnosing-bugs skill loaded
+expected:
+  skills:
+    required: [diagnosing-bugs]
+  behaviors:
+    - build or bound a red-capable feedback loop before hypothesising
+    - state explicit falsifiable hypotheses
+    - name a supported root cause before editing
+  baseline_failure: editing whatever seems likely until the test is green

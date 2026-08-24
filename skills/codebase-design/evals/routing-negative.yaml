@@ -1,0 +1,9 @@
+id: skill.codebase-design.routing-negative
+kind: routing
+skill: codebase-design
+description: "Mechanical rename does not need codebase-design."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [codebase-design]

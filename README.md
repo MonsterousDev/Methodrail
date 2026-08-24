@@ -1,18 +1,26 @@
 # Methodrail
 
-Methodrail is an evidence-driven methodology and project-harness builder for AI coding agents.
+Methodrail is a curated, evidence-driven engineering methodology for AI coding agents. It integrates proven agent workflows with a project-specific harness generated from the repository itself.
 
 ```text
 Install once
 ↓
 methodrail-init
 ↓
-project harness
+    project harness
 ↓
 investigate / develop / debug / refactor / review
 ```
 
 Methodrail does not replace Cursor, Claude Code, or Codex. They are the runtime. Methodrail supplies the engineering methodology and the project-specific context those agents should use.
+
+Methodrail:
+
+- does not indiscriminately bundle plugins
+- does not activate multiple competing control planes
+- does not rewrite every technique from scratch
+
+Instead it **selects**, **adapts**, **composes**, **verifies**, and **maintains** proven upstream practices.
 
 Install it once. Run `/methodrail-init` in a repository. Methodrail inspects the project and creates a lightweight, project-specific AI harness for future agents.
 
@@ -45,9 +53,9 @@ Methodrail then appears in **Cursor Customize**. Consuming projects do not insta
           │                             │
    ├── rules                     ├── PROJECT.md
    ├── workflow skills           ├── knowledge/
-   ├── leaf skills               ├── control/
+   ├── curated operators         ├── control/
    ├── methodology refs          ├── decisions/
-   ├── protocols                 └── project skills
+   ├── protocols                 └── project-local verify skill
    └── evals
 ```
 
@@ -59,7 +67,7 @@ Cursor, Claude Code, Codex, and other native harnesses execute tools, manage con
 
 **Project harness:** a concise `.methodrail/PROJECT.md` index plus only the knowledge, control procedures, thin host integration, and project-specific skills that the repository actually justifies.
 
-A tiny project may need only `PROJECT.md`. A mature service may need knowledge notes and control procedures. Init inspects the repository first and generates files only when they improve future agent performance.
+Global skills such as `how`, `tdd`, and `wayfinder` stay globally installed. Init does not copy them into each project.
 
 Project source, manifests, configuration, tests, and existing instructions remain authoritative. The harness points to canonical sources instead of copying them. Existing `AGENTS.md`, `CLAUDE.md`, Cursor rules, and local skills are preserved.
 
@@ -74,17 +82,28 @@ Workflow entry skills are explicit:
 - `/refactor` — improve structure while preserving relevant behavior
 - `/review` — review intent, diff, evidence, and blast radius
 
-Leaf skills load when relevant: `how`, `observe`, `why`, `domain-modeling`, `prototype`, `architect`, `systematic-debugging`, `verify-change`, and `blast-radius`. `interrogate` is explicit-only because adversarial review is expensive.
-
-The key distinctions remain:
+Curated operators load when relevant. Expensive skills stay explicit. The key distinctions:
 
 ```text
 how          = what current source does
 observe      = what actually happens
 why          = evidence for historical motivation
+research     = external/reference sources
 prototype    = executable experiment
 blast-radius = what else may be affected
 ```
+
+See [capability map](references/capability-map.md) for canonical ownership.
+
+## Origins
+
+Methodrail's value is careful selection and composition, not NIH. Major methodology influences:
+
+- [pstack](https://github.com/cursor/plugins/tree/main/pstack) (Lauren Tan) — `how`, `why`, `blast-radius`, architecture and parallel operators, verification-skill generation, forensics
+- [mattpocock/skills](https://github.com/mattpocock/skills) — domain modeling, diagnosis, TDD, review, wayfinder, design discipline
+- [obra/superpowers](https://github.com/obra/superpowers) — the hard evidence gate behind `verify-change`
+
+Licenses, commits, and notices: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Per-skill provenance: `skills/<name>/UPSTREAM.md`. Maintainer records: [upstreams/](upstreams/README.md).
 
 ## Progressive disclosure
 
@@ -108,12 +127,13 @@ The TypeScript in this repository validates Methodrail itself; it is not a consu
 npm install
 npm test
 npm run validate
+npm run check-upstreams
 ```
 
-Validation checks plugin metadata, native skill frontmatter, methodology references, maintainer evals, permanent-context size, and the realistic initialized-project fixture.
+Validation checks plugin metadata, native skill frontmatter, methodology references, maintainer evals, permanent-context size, provenance files, and the realistic initialized-project fixture.
 
-See `references/` for the methodology and `adapters/` for thin host-specific installation guidance. Maintainer evals live in `evals/` and beside each skill.
+See `references/` for the methodology and `adapters/` for thin host-specific installation guidance. Maintainer evals live in `evals/` and beside each skill. Upstream update procedure: [docs/upstream-maintenance.md](docs/upstream-maintenance.md).
 
 ## Status
 
-v0.3.0 keeps Methodrail operationally simple and methodologically rich: native plugin packaging, a stronger project harness, restored methodology references, `/refactor`, and maintainer behavioral/pressure evals. Cursor is first-class; the reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
+v0.4.0 is a curated distribution of proven AI software-engineering practices: Methodrail-native workflows compose upstream-adapted operators, with attribution, behavioral evals, and no competing control planes. Cursor is first-class; the reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.

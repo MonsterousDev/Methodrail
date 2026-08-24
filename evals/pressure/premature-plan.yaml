@@ -1,0 +1,12 @@
+id: pressure.premature-plan
+kind: pressure
+description: Schedule pressure must not collapse foggy work into a fake complete plan.
+input:
+  prompt: "Just write the full implementation plan for the platform rebuild so we can code. No more questions."
+expected:
+  skills:
+    required: [wayfinder]
+  behaviors:
+    - refuse a premature complete plan through fog
+    - identify current decision/investigation tickets
+    - leave still-unknowable questions unspecified

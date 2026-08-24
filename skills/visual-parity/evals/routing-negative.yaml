@@ -1,0 +1,9 @@
+id: skill.visual-parity.routing-negative
+kind: routing
+skill: visual-parity
+description: "A how-question is not visual parity."
+input:
+  prompt: "How does authentication refresh currently work?"
+expected:
+  skills:
+    forbidden: [visual-parity]

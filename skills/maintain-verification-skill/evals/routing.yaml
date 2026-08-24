@@ -1,0 +1,9 @@
+id: skill.maintain-verification-skill.routing-positive
+kind: routing
+skill: maintain-verification-skill
+description: "Audit of the project verify skill activates maintenance."
+input:
+  prompt: "Audit the verify skill and keep the feature map honest against current source and live behavior."
+expected:
+  skills:
+    required: [maintain-verification-skill]

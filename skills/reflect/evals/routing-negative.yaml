@@ -1,0 +1,9 @@
+id: skill.reflect.routing-negative
+kind: routing
+skill: reflect
+description: "A mechanical rename is not a reflect session."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    forbidden: [reflect]
