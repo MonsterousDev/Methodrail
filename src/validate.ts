@@ -22,6 +22,7 @@ const REQUIRED_SKILLS = new Set([
   "investigate",
   "develop",
   "debug",
+  "refactor",
   "review",
   "how",
   "observe",
@@ -39,10 +40,40 @@ const EXPLICIT_SKILLS = new Set([
   "investigate",
   "develop",
   "debug",
+  "refactor",
   "review",
   "prototype",
   "interrogate",
 ]);
+const REQUIRED_REFERENCES = [
+  "references/rigor.md",
+  "references/decision-frontier.md",
+  "references/context-management.md",
+  "references/agent-friendly-codebase.md",
+  "references/structural-enforcement.md",
+  "references/knowledge.md",
+  "references/knowledge/model.md",
+  "references/knowledge/lifecycle.md",
+  "references/knowledge/freshness.md",
+  "references/knowledge/provenance.md",
+  "references/evidence.md",
+  "references/protocols/task-packet.md",
+  "references/protocols/review-packet.md",
+  "references/protocols/evidence-record.md",
+  "references/protocols/observation-record.md",
+  "references/protocols/decision-record.md",
+  "references/project-harness.md",
+  "references/principles.md",
+];
+const REQUIRED_BEHAVIORAL_SKILLS = [
+  "verify-change",
+  "observe",
+  "systematic-debugging",
+  "how",
+  "develop",
+  "refactor",
+];
+const REQUIRED_EVAL_KINDS = ["routing", "behavioral", "pressure"] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -293,6 +324,16 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
       issues.push(issue(path, `Obsolete v0.1 directory must be removed: ${obsolete}`));
     }
   }
+  for (const obsoletePath of [
+    "src/cli.ts",
+    "src/router.ts",
+    "src/engine.ts",
+    "src/packets.ts",
+    "bin/methodrail",
+  ]) {
+    const path = join(root, obsoletePath);
+    if (existsSync(path)) issues.push(issue(path, `Obsolete v0.1 runtime path must be removed: ${obsoletePath}`));
+  }
   const obsoleteScripts = [
     "bootstrap-content.mjs",
     "bootstrap-rest.mjs",
@@ -302,6 +343,89 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
   for (const script of obsoleteScripts) {
     const path = join(root, "scripts", script);
     if (existsSync(path)) issues.push(issue(path, `Obsolete v0.1 script must be removed: ${script}`));
+  }
+
+  for (const relativePath of REQUIRED_REFERENCES) {
+    const path = join(root, relativePath);
+    if (!existsSync(path)) {
+      issues.push(issue(path, `Missing required methodology reference: ${relativePath}`));
+    }
+  }
+
+  const referencesRoot = join(root, "references");
+  for (const path of walk(referencesRoot, (file) => file.endsWith(".md"))) {
+    issues.push(...validateMarkdownLinks(path, readFileSync(path, "utf8")));
+  }
+  for (const doc of ["README.md", "CONTRIBUTING.md"]) {
+    const path = join(root, doc);
+    if (existsSync(path)) issues.push(...validateMarkdownLinks(path, readFileSync(path, "utf8")));
+  }
+
+  issues.push(...validateMaintainerEvals(root));
+
+  if (
+    isRecord(packageJson.repository) &&
+    typeof packageJson.repository.url === "string" &&
+    !packageJson.repository.url.includes("github.com/MonsterousDev/Methodrail")
+  ) {
+    issues.push(issue(packagePath, "package.json repository URL must point at MonsterousDev/Methodrail"));
+  }
+
+  return issues;
+}
+
+function validateMaintainerEvals(root: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const evalsRoot = join(root, "evals");
+  for (const kind of REQUIRED_EVAL_KINDS) {
+    const dir = join(evalsRoot, kind);
+    const files = walk(dir, (path) => path.endsWith(".yaml") || path.endsWith(".yml"));
+    if (files.length === 0) {
+      issues.push(issue(dir, `Missing maintainer ${kind} eval fixtures`));
+      continue;
+    }
+    for (const path of files) {
+      try {
+        const fixture: unknown = parse(readFileSync(path, "utf8"));
+        if (!isRecord(fixture)) {
+          issues.push(issue(path, "Eval fixture must contain a YAML object"));
+          continue;
+        }
+        if (typeof fixture.id !== "string" || typeof fixture.kind !== "string") {
+          issues.push(issue(path, "Eval fixture requires string id and kind fields"));
+        } else if (fixture.kind !== kind) {
+          issues.push(issue(path, `Eval fixture kind must be "${kind}"`));
+        }
+        const input = fixture.input;
+        if (!isRecord(input) || typeof input.prompt !== "string" || input.prompt.trim() === "") {
+          issues.push(issue(path, "Eval fixture requires a non-empty input.prompt"));
+        }
+      } catch (error) {
+        issues.push(issue(path, `Eval fixture is invalid YAML: ${(error as Error).message}`));
+      }
+    }
+  }
+
+  const covered = new Set<string>();
+  for (const path of walk(join(evalsRoot, "behavioral"), (file) => file.endsWith(".yaml") || file.endsWith(".yml"))) {
+    try {
+      const fixture: unknown = parse(readFileSync(path, "utf8"));
+      if (isRecord(fixture) && typeof fixture.skill === "string") covered.add(fixture.skill);
+    } catch {
+      // Shape errors are reported above.
+    }
+  }
+  for (const skill of REQUIRED_BEHAVIORAL_SKILLS) {
+    if (!covered.has(skill)) {
+      issues.push(
+        issue(join(evalsRoot, "behavioral"), `Missing behavioral eval coverage for ${skill}`),
+      );
+    }
+  }
+
+  const fixturesReadme = join(evalsRoot, "fixtures", "README.md");
+  if (!existsSync(fixturesReadme)) {
+    issues.push(issue(fixturesReadme, "Maintainer eval fixtures require a README"));
   }
 
   return issues;

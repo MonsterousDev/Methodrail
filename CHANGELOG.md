@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 — 2026-08-24
+
+Methodrail remains a native plugin and project-harness builder, with the methodology that v0.2 stripped restored as references, skills, and maintainer evals.
+
+- Restored rigor, decision frontier, knowledge lifecycle, evidence/observation/decision records, task/review packets, context management, agent-friendly codebase principles, and structural enforcement as progressive-disclosure references
+- Added `/refactor` as a first-class workflow skill
+- Strengthened `/methodrail-init` to inspect first, scale harness output with project complexity, capture control/verification when justified, and refresh generated knowledge without overwriting curated content
+- Pointed workflow skills at shared methodology instead of embedding it
+- Added maintainer routing, behavioral, and pressure evals
+- Kept Cursor as the runtime: no workflow engine, daemon, consumer CLI, or project npm dependency
+
 ## 0.2.0 — 2026-08-24
 
 Methodrail now delegates orchestration to the native AI coding harness.

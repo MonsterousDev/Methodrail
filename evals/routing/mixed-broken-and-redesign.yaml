@@ -1,0 +1,12 @@
+id: routing.mixed-broken-and-redesign
+kind: routing
+description: A production failure plus a redesign request should debug first, not jump to architecture.
+input:
+  prompt: "Checkout is broken in production. Also we should probably redesign billing while we're in there."
+expected:
+  skills:
+    required: [debug]
+    forbidden: [architect, prototype]
+  behaviors:
+    - reproduce and diagnose the failure before redesign
+    - keep billing redesign in fog until the outage is understood

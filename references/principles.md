@@ -18,3 +18,14 @@ Resolve uncertainty by type:
 - deterministic fact → a deterministic tool.
 
 Context is a budget. Keep permanent rules short, load skills and references only when relevant, and leave durable handoff artifacts instead of conversational sediment.
+
+Progressive disclosure:
+
+- [rigor](rigor.md)
+- [decision frontier](decision-frontier.md)
+- [knowledge](knowledge.md)
+- [evidence](evidence.md)
+- [context management](context-management.md)
+- [project harness](project-harness.md)
+- [agent-friendly codebase](agent-friendly-codebase.md)
+- [structural enforcement](structural-enforcement.md)

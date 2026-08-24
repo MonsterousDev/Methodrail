@@ -12,14 +12,14 @@ Use independent analysis to expose consequential blind spots. This skill never a
 
 Proceed only when the user explicitly names or invokes `interrogate`. A request to “review,” “double-check,” or implement high-risk code is not sufficient.
 
-Decline or suggest ordinary `review` when the change is mechanical, narrowly local, or independent analysis would not materially improve confidence.
+Humans or parent workflows should consider requesting it when rigor is high, architecture is consequential, review is contested, or failure cost is high. Decline or suggest ordinary `review` when the change is mechanical, narrowly local, or independent analysis would not materially improve confidence.
 
 ## Method
 
-1. Fix a shared scope: request, acceptance criteria, full change range, relevant context, verification evidence, known deviations, and review rubric.
+1. Fix a shared [review packet](../../references/protocols/review-packet.md): request, acceptance criteria, full change range, relevant context, verification evidence, known deviations, and review rubric.
 2. Obtain genuinely independent analyses when available. Give each reviewer the same core evidence and rubric.
 3. Ask reviewers to identify concrete failure modes, violated invariants, unsafe assumptions, missing evidence, and rollback concerns.
-4. Reject theatrical personas, duplicated opinions, and claims unsupported by source or runtime evidence.
+4. Reject theatrical personas, duplicated opinions, and claims unsupported by source or runtime evidence. Do not create fake personas solely for diversity.
 5. Compare findings:
    - agreement increases confidence but is not proof;
    - disagreement identifies an assumption to inspect;

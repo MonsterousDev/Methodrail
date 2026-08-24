@@ -11,4 +11,6 @@ A useful skill:
 - links to shared references instead of repeating them;
 - avoids project-specific assumptions unless the skill explicitly targets one project.
 
-Keep one canonical body. Test routing examples separately from the instructions, and revise the skill when evaluation exposes ambiguity.
+Keep one canonical body. Put shared methodology in `references/` and link it. Test routing separately from behavioral and pressure evals, and revise the skill when evaluation exposes ambiguity.
+
+Do not add Methodrail-specific metadata when native skill metadata expresses the same intent. Expensive or explicit-only skills set `disable-model-invocation: true`.

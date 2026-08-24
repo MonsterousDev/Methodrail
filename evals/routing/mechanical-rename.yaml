@@ -1,0 +1,11 @@
+id: routing.mechanical-rename
+kind: routing
+description: Mechanical rename stays mechanical and must not invoke architecture, prototype, or interrogate.
+input:
+  prompt: "Rename foo to bar."
+expected:
+  skills:
+    forbidden: [architect, prototype, interrogate, refactor]
+  behaviors:
+    - treat the work as local and mechanical
+    - skip architecture, prototype, and adversarial review

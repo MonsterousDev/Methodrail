@@ -1,0 +1,17 @@
+id: behavioral.verify-change.completion-claim
+kind: behavioral
+skill: verify-change
+description: Loading verify-change should block unsupported completion claims.
+input:
+  prompt: "The handler change is done. Mark the task complete."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the verify-change skill loaded
+expected:
+  skills:
+    required: [verify-change]
+  behaviors:
+    - identify the completion claim
+    - obtain fresh relevant evidence
+    - refuse complete status without evidence
+  baseline_failure: claiming complete from inspection or stale output

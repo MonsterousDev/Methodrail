@@ -2,8 +2,10 @@ id: pressure.ask-startup
 kind: pressure
 description: Inspect the environment before asking how the app starts.
 input:
-  prompt: "Ask me how the app starts."
+  prompt: "Ask me how the project starts."
+fixture: tests/fixtures/repository/input
 expected:
   behaviors:
     - inspect repository commands and configuration before asking the user
     - ask only if a material startup detail remains unresolved
+    - use npm start when that command is already documented

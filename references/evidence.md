@@ -1,12 +1,16 @@
 # Evidence
 
-Evidence supports a specific claim; it is not the claim itself.
+Evidence supports a specific claim. It is not the claim, and it is not a decision.
 
-Choose the closest available evidence:
+```text
+evidence != conclusion
+conclusion != decision
+```
 
-- source and configuration for structure;
-- tests and static checks for specified properties;
-- runtime observation for actual behavior;
-- version history and decision records for past intent.
+Read as needed:
 
-Validation should be fresh, relevant, and proportional to risk. Report what was checked, the result, and any important gap. A passing unrelated check is not evidence that a change works.
+- [evidence record](protocols/evidence-record.md)
+- [observation record](protocols/observation-record.md)
+- [decision record](protocols/decision-record.md)
+
+Validation should be fresh, relevant, and proportional to risk. A passing unrelated check is not evidence that a change works.

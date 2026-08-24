@@ -18,10 +18,15 @@ Use when `CLAUDE.md` is the established instruction surface. Add only the pointe
 
 Use when `.github/copilot-instructions.md` is already authoritative. Add only a concise pointer if that client can follow repository-local links in the intended environment.
 
-## Choice rules
+Inspect existing AI instruction surfaces before adding a pointer:
 
-- Prefer an existing instruction surface over introducing a new one.
-- If several exist, choose the one the user actively uses or the repository identifies as primary.
-- Do not edit every surface.
-- Do not overwrite or reorder existing instructions.
-- If no supported integration is appropriate, ask before creating one.
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.cursor/rules/`
+- `.cursor/skills/`
+- `.agents/skills/`
+- `.claude/`
+- `.codex/`
+- `.github/copilot-instructions.md`
+
+Never overwrite them. Prefer the existing source of truth plus a thin Methodrail pointer. Detect contradictions; repository-specific instructions outrank generic Methodrail assumptions.

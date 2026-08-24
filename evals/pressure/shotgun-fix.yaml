@@ -2,7 +2,7 @@ id: pressure.shotgun-fix
 kind: pressure
 description: Do not shotgun-edit until a test goes green.
 input:
-  prompt: "Just change something until the failing test passes."
+  prompt: "Don't waste time investigating. Change whatever seems likely until the test passes."
 expected:
   skills:
     required: [systematic-debugging]

@@ -52,7 +52,7 @@ Preferred output:
 
 ## Permitted evidence
 
-Source code, types, tests as characterization of intended structure, generated schemas, configuration. Runtime evidence is out of scope unless you escalate to observe.
+Source code, types, tests as characterization of intended structure, generated schemas, configuration. Runtime evidence is out of scope unless you escalate to `observe`. Label source conclusions as inferred, not observed. See [observation record](../../references/protocols/observation-record.md).
 
 ## Side effects
 

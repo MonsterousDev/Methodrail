@@ -22,7 +22,11 @@ Methodrail defines good engineering behavior. Cursor, Claude Code, Codex, and ot
 
 Do not add a router, workflow engine, agent protocol, daemon, database, mandatory CLI, or generated copies of canonical skills. Host-specific adapters must remain thin projections.
 
-Project harness artifacts use `.methodrail/PROJECT.md` as their source of truth and must preserve existing AI instructions.
+Shared methodology belongs in `references/`. Skills should stay short and link to it. Project harness artifacts use `.methodrail/PROJECT.md` as a concise index and must preserve existing AI instructions.
+
+## Evals
+
+Maintainer evals live in `evals/routing/`, `evals/behavioral/`, `evals/pressure/`, and `skills/<name>/evals/`. They are not required in consuming projects. Prefer mixed-intent prompts over textbook phrases. Behavioral evals compare a baseline agent with the Methodrail skill loaded; recorded/manual runs are acceptable.
 
 ## Repo commands
 

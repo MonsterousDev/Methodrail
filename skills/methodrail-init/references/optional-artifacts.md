@@ -1,28 +1,57 @@
 # Optional artifacts
 
-Create optional files only when their expected reuse exceeds their maintenance cost.
+Create optional files only when their expected reuse exceeds their maintenance cost. See [information ROI](information-roi.md) and [project harness](../../../references/project-harness.md).
+
+Skeletons live in `templates/project/`. Fill them from repository evidence; omit empty sections and unneeded files.
 
 ## Knowledge
 
-Use `.methodrail/knowledge/` for stable facts that are expensive to rediscover: domain vocabulary, architectural boundaries, or verified operational constraints. Prefer a single focused note. Cite source paths or decisions and label uncertain claims.
+`.methodrail/PROJECT.md` remains a concise index. It may point to:
+
+```text
+knowledge/domain.md
+knowledge/architecture.md
+knowledge/behavior.md
+knowledge/operations.md
+knowledge/decisions/
+```
+
+Create those only when useful. Prefer a single focused note over a tree of stubs.
+
+Cite source paths or decisions, record a relevant revision when the claim is code-derived, and label uncertain claims. See [knowledge lifecycle](../../../references/knowledge/lifecycle.md).
 
 Do not mirror the README, issue tracker, or source tree.
 
 ## Project control guidance
 
-Use `.methodrail/control/CONTROL.md` only when starting, checking readiness, exercising, inspecting, capturing evidence from, resetting, or stopping the project requires non-obvious coordination. Document only capabilities the repository actually provides. Do not create wrappers merely to rename package scripts.
+Use `.methodrail/control/CONTROL.md` when starting, checking readiness, exercising, inspecting, capturing evidence from, resetting, or stopping the project requires non-obvious coordination. See [control investigation](control-investigation.md).
 
-Where relevant, answer:
+## Project-local skills
 
-- How is the system started and stopped?
-- What proves readiness?
-- How is a representative path exercised?
-- How can state and evidence be inspected?
-- How is an isolated environment reset?
+`methodrail-init` may create project-local skills such as:
 
-## Project-local verify-project skill
+```text
+verify-project
+run-integration-environment
+inspect-database
+release-project
+migrate-database
+```
 
-Create `.agents/skills/verify-project/SKILL.md` (or the repository's established native skill location) only when project verification requires a reusable decision tree that agents cannot infer cheaply.
+only when:
+
+- the procedure is nontrivial;
+- repeated use is likely;
+- mistakes are expensive;
+- project-specific knowledge is required.
+
+Do not create a skill for every command.
+
+Place a new skill in the repository's established native skill location (`.agents/skills/`, `.cursor/skills/`, or `.claude/skills/`). Preserve an existing skill with the same name unless the user approves a merge.
+
+## verify-project
+
+Create `.agents/skills/verify-project/SKILL.md` (or the established native skill location) only when project verification requires a reusable decision tree that agents cannot infer cheaply.
 
 Required frontmatter:
 
@@ -33,4 +62,4 @@ description: Verify changes in this project using its established checks. Use be
 ---
 ```
 
-The body should map change types to the smallest relevant existing checks, then describe broader checks for cross-boundary changes. Keep commands sourced from the repository. Preserve an existing skill with the same name unless the user approves a merge.
+The body should map change types to the smallest relevant existing checks, then describe broader checks for cross-boundary changes. Keep commands sourced from the repository.

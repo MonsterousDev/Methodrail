@@ -11,23 +11,33 @@ Answer the question without changing product code.
 ## Workflow
 
 1. Restate the question and define what evidence would answer it.
-2. Inspect existing project guidance and narrow the relevant scope.
-3. Select only the needed leaf skill:
+2. Read `.methodrail/PROJECT.md` if present. Check whether relevant project knowledge is still [fresh](../../references/knowledge/freshness.md) before relying on it.
+3. Choose the cheapest reliable evidence source, then the matching leaf skill:
    - `how` for current implementation and flow;
    - `observe` for actual runtime behavior;
    - `why` for historical intent;
    - `domain-modeling` for ambiguous concepts;
    - `prototype` for an empirical uncertainty;
    - `blast-radius` for impact.
-4. Gather primary evidence. Separate observed facts, source inference, historical evidence, and unknowns.
-5. Stop when the question is answered at the requested confidence; do not produce an unrelated repository tour.
-6. Report the answer first, followed by evidence, limits, and any useful next step.
+4. Gather primary evidence. Label every important claim as one of:
+
+```text
+Observed
+Source-supported
+Historically supported
+Inferred
+Unknown
+```
+
+5. Stop when the question is answered at the requested confidence. Do not produce an unrelated repository tour.
+6. Report the answer first, then evidence, limits, and any useful next step. Propose knowledge updates when a discovery is expensive to rediscover; do not persist them without evidence.
 
 ## Constraints
 
 - Read-only unless the user explicitly authorizes a disposable prototype.
 - Ask only for information unavailable from the repository or environment.
 - Do not turn an investigation into implementation.
+- Use [observation confidence labels](../../references/protocols/observation-record.md) consistently.
 
 ## Completion
 

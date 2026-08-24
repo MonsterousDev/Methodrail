@@ -31,7 +31,7 @@ reproduce → collect evidence → trace mechanism → form explicit hypotheses 
 
 If source-level investigation is insufficient, escalate to instrumentation, tracing, profiling, runtime observation, or a controlled experiment.
 
-Never jump from symptom to speculative fix.
+Never jump from symptom to speculative fix. See [observation record](../../references/protocols/observation-record.md) when labeling runtime evidence.
 
 ## Permitted evidence
 

@@ -1,0 +1,17 @@
+id: behavioral.how.entrypoints
+kind: behavioral
+skill: how
+description: Loading how should produce an evidence-backed implementation map instead of a folder tour.
+input:
+  prompt: "How does authentication work in this codebase?"
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the how skill loaded
+expected:
+  skills:
+    required: [how]
+  behaviors:
+    - start from the question, not repository layout
+    - cite entrypoints, flow, and evidence
+    - label inference and unknowns
+  baseline_failure: summarizing architecture from directory names

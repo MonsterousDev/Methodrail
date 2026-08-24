@@ -40,6 +40,7 @@ Distinguish:
 Keep the vocabulary concise. Do not turn the domain model into a running requirements document.
 Consequential, hard-to-reverse decisions may become ADR candidates.
 Ask humans only for preference/intent the environment cannot resolve.
+See the [knowledge model](../../references/knowledge/model.md) and [decision frontier](../../references/decision-frontier.md).
 
 ## Permitted evidence
 
@@ -55,7 +56,7 @@ Each contested term has a definition, ownership, and rejected synonyms. Unknowns
 
 ## Artifacts
 
-Domain concept records; optional ADR candidate; decision-map nodes.
+Domain concept records; optional ADR candidate.
 
 ## What survives
 

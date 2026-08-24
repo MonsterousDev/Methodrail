@@ -31,7 +31,7 @@ The artifact or decision under question, revision range if known, and available 
 2. Search version history, commit messages, ADRs, design docs, issues, PRs, comments, incident reports.
 3. Quote or cite the evidence that actually exists.
 4. If evidence is thin, say so. Offer plausible hypotheses only as hypotheses.
-5. Never infer intent from current implementation alone.
+5. Never infer intent from current implementation alone. If motivation cannot be established, say so. See [provenance](../../references/knowledge/provenance.md).
 
 Output:
 - what currently happens

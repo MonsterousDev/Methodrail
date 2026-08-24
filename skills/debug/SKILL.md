@@ -8,10 +8,38 @@ disable-model-invocation: true
 
 Find the mechanism before changing code.
 
+```text
+symptom
+↓
+reproduce
+↓
+baseline evidence
+↓
+understand mechanism
+↓
+explicit hypotheses
+↓
+cheap falsification
+↓
+runtime escalation when needed
+↓
+root cause
+↓
+verification strategy
+↓
+minimal fix
+↓
+observe
+↓
+verify
+```
+
+Do not allow symptom → guess → broad patch.
+
 ## Workflow
 
 1. Capture the symptom, expected behavior, environment, revision, and available reproduction.
-2. Read project guidance and recent relevant changes.
+2. Read `.methodrail/PROJECT.md` and [control guidance](../../references/project-harness.md) when present. Prefer documented start/doctor/drive commands over asking how the project runs.
 3. Apply `systematic-debugging`: reproduce or establish why reproduction is blocked, collect evidence, trace the failing path, and falsify explicit hypotheses.
 4. Use `observe` for runtime evidence, `how` for source flow, and `why` only when history constrains the fix.
 5. Name the root cause with evidence. If the root cause remains unknown, do not disguise a guess as a fix.

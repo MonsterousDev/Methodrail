@@ -1,0 +1,18 @@
+id: behavioral.develop.frontier
+kind: behavioral
+skill: develop
+description: Loading develop should make the agent resolve the current frontier before implementing.
+input:
+  prompt: "Add organization-level billing. I'm not sure whether invoices are per workspace or per user."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the develop skill loaded
+expected:
+  skills:
+    required: [develop]
+  behaviors:
+    - inspect current implementation before designing
+    - treat unresolved domain meaning as a frontier question
+    - define observable success before editing
+    - verify with fresh evidence
+  baseline_failure: implementing a guessed billing model immediately

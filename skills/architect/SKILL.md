@@ -27,7 +27,7 @@ Current implementation (how), domain terms, constraints, and relevant evidence. 
 
 ## Method
 
-Require prior grounding in existing implementation, domain, constraints, and evidence.
+Require prior grounding in existing implementation, domain, constraints, and evidence. Use the [decision frontier](../../references/decision-frontier.md) and [rigor](../../references/rigor.md) to decide whether architecture work is justified.
 
 When multiple designs exist, compare:
 - ownership boundaries

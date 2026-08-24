@@ -1,0 +1,55 @@
+# Knowledge model
+
+Do not conflate these types. They answer different questions and go stale in different ways.
+
+```text
+fact
+decision
+rationale
+observation
+invariant
+convention
+known-failure
+hypothesis
+```
+
+## Types
+
+**Fact** — a currently true statement about the system, usually recoverable from source, config, or a deterministic tool.
+
+**Decision** — a choice that was made. It constrains future work even if the original rationale is later questioned.
+
+**Rationale** — why a decision or shape exists. Historical. Do not invent it from current code.
+
+**Observation** — what actually happened in a specific exercise of the system.
+
+**Invariant** — a property that must remain true. Prefer encoding it in types, tests, or architecture.
+
+**Convention** — a local agreement that is not an invariant but is costly to violate accidentally.
+
+**Known-failure** — a trap, incident pattern, or false lead worth remembering.
+
+**Hypothesis** — an unconfirmed explanation. Never promote a hypothesis as fact.
+
+## Why the distinction matters
+
+```text
+FACT
+The worker currently retries four times.
+
+DECISION
+Transient jobs should retry at most three times.
+
+RATIONALE
+Additional retries caused duplicate external side effects.
+
+OBSERVATION
+The current production implementation performs four retries.
+
+HYPOTHESIS
+Retry count may explain duplicate charges.
+```
+
+These can all be true at once. Mixing them produces false confidence: agents treat desired policy as implemented fact, or treat a one-run observation as an invariant.
+
+Keep records lightweight. Use the templates in `templates/project/` when a durable note is justified. Do not force a database schema.

@@ -1,0 +1,17 @@
+id: behavioral.systematic-debugging.root-cause
+kind: behavioral
+skill: systematic-debugging
+description: Loading systematic-debugging should prevent shotgun fixes.
+input:
+  prompt: "The idle CPU test is failing. Make it pass."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the systematic-debugging skill loaded
+expected:
+  skills:
+    required: [systematic-debugging]
+  behaviors:
+    - reproduce or bound the failure
+    - state explicit hypotheses
+    - name a supported root cause before editing
+  baseline_failure: editing whatever seems likely until the test is green

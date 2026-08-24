@@ -1,22 +1,24 @@
 # Repository interview
 
-Inspect evidence in this order, stopping when the project is understood well enough:
+Inspect evidence in this order, stopping when the project is understood well enough to generate a useful harness. Do not ask humans questions the repository can answer.
 
-1. Existing AI guidance: `AGENTS.md`, `CLAUDE.md`, `.cursor/`, `.claude/`, `.codex/`, `.agents/skills/`, `.github/copilot-instructions.md`, other local skills, and `.methodrail/`.
+1. Existing AI guidance: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursor/skills/`, `.claude/`, `.codex/`, `.agents/skills/`, `.github/copilot-instructions.md`, other local skills, and `.methodrail/`.
 2. Project identity: README, contribution guide, manifests, lockfiles, workspace definitions, and directory shape.
-3. Supported operations: package scripts, Makefiles, task runners, CI jobs, container configuration, and test configuration.
-4. Representative implementation: runtime entrypoints, one core module, one test, deployment/configuration surfaces, and architecture docs or ADRs when relevant.
-5. Repository history or user input only for material unknowns.
+3. Supported operations: package scripts, Makefiles, task runners, CI jobs, container configuration, deployment configuration, and test configuration.
+4. Representative implementation: runtime entrypoints, source layout, one core module, one test, and architecture docs or ADRs when relevant.
+5. Domain terminology as used in code, docs, and tests — not guessed from folder names alone.
+6. Repository history only for material unknowns (why a boundary exists, when a risky subsystem landed).
 
-Record evidence, not guesses:
+Infer:
 
 - project type and primary languages;
-- package or service boundaries;
-- install, build, test, lint, typecheck, format, and run commands that actually exist;
-- generated/vendor directories to avoid;
-- architectural boundaries and project-specific safety constraints;
-- existing instruction precedence and conflicts;
-- whether runtime verification is practical.
+- important modules and ownership boundaries;
+- canonical install, build, test, lint, typecheck, format, and run commands that actually exist;
+- test strategy and whether runtime verification is practical;
+- runtime surface and how to start it;
+- existing architectural sources;
+- existing AI-harness conventions and conflicts;
+- generated/vendor directories to avoid.
 
 For monorepos, sample each distinct package kind. Do not inspect every package when conventions are shared.
 

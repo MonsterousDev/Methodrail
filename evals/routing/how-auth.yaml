@@ -1,0 +1,9 @@
+id: routing.how-auth
+kind: routing
+description: A current-implementation question should route to how or investigate, not why or observe.
+input:
+  prompt: "How does auth work?"
+expected:
+  skills:
+    required: [how]
+    forbidden: [why, observe, develop, refactor]

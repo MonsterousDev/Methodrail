@@ -37,7 +37,7 @@ Before saying work is complete:
 Strategies include TDD/regression tests, characterization tests, integration and end-to-end scenarios, static analysis, compilation/typechecking, benchmarks, visual baselines, runtime observation, migration dry runs, invariant/property tests.
 
 TDD is the preferred default for normal behavior-changing production code, but not a universal law.
-The universal law: every meaningful change requires a falsifiable verification strategy.
+The universal law: every meaningful change requires a falsifiable verification strategy. See [evidence record](../../references/protocols/evidence-record.md).
 
 ## Permitted evidence
 

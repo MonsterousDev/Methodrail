@@ -36,14 +36,14 @@ How to start the system using existing project commands, the path to exercise, e
 7. Record reproduction details.
 8. Label confidence correctly:
 
-- inferred — not executed
-- test-confirmed — tests ran
+- inferred — derived from code or reasoning but not executed
+- test-confirmed — a test demonstrates the behavior
 - observed — the system was executed
-- traced — runtime trace/instrumentation
+- traced — runtime evidence shows the mechanism
 - historically-confirmed — historical evidence, not current runtime
-- unknown — not established
+- unknown — insufficient or conflicting evidence
 
-Never call something observed unless it was executed.
+Never call something observed unless it was executed. See [observation record](../../references/protocols/observation-record.md).
 
 ## Permitted evidence
 

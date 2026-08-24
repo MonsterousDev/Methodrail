@@ -1,0 +1,9 @@
+id: routing.why-redis
+kind: routing
+description: Historical motivation should route to why, not how.
+input:
+  prompt: "Why was Redis introduced?"
+expected:
+  skills:
+    required: [why]
+    forbidden: [how, observe, develop]

@@ -1,0 +1,12 @@
+id: routing.mixed-rename-and-how
+kind: routing
+description: Mixed intent should not apply high-rigor skills to a mechanical rename.
+input:
+  prompt: "Rename getUserById to findUserById, then explain how authentication currently works."
+expected:
+  skills:
+    required: [how]
+    forbidden: [architect, prototype, interrogate, refactor]
+  behaviors:
+    - keep the rename mechanical
+    - use how for the explanation

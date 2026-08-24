@@ -1,23 +1,14 @@
 # Knowledge
 
-Treat source code, configuration, tests, version history, and observed behavior as the primary record.
+Project knowledge is durable understanding that is expensive to rediscover. Source, tests, history, and observation remain the primary record.
 
-Persist knowledge when it is costly to rediscover or cannot be recovered from the current tree, such as:
+Read as needed:
 
-- product intent and constraints;
-- architectural decisions and rejected alternatives;
-- operational hazards and known failure modes;
-- stable project-specific commands or boundaries.
+- [model](knowledge/model.md) — types that must not be conflated
+- [lifecycle](knowledge/lifecycle.md) — when a note is worth persisting
+- [freshness](knowledge/freshness.md) — how code-derived claims go stale
+- [provenance](knowledge/provenance.md) — how we know a claim
 
-Record the source and confidence of important claims. Update or remove notes when the project disproves them. Do not duplicate facts that are already obvious and searchable.
+`.methodrail/PROJECT.md` is a short index. Deeper notes belong in `.methodrail/knowledge/` only when they earn their keep.
 
-For a durable behavioral claim, record:
-
-```text
-Claim: <concise behavior or invariant>
-Confidence: observed | test-confirmed | historically supported | inferred
-Evidence: <commands, artifacts, tests, source, or history>
-Relevant revision: <commit when useful>
-```
-
-Future investigations may propose focused `.methodrail/knowledge/` updates. Do not persist every conversational insight.
+Do not copy manifests, directory listings, or generic framework documentation into project knowledge.

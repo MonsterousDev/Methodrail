@@ -40,6 +40,7 @@ Every prototype defines:
 
 Prototype conclusions may become durable knowledge.
 Prototype implementation itself must not silently become production code.
+See [decision frontier](../../references/decision-frontier.md) when classifying empirical questions.
 
 ## Permitted evidence
 

@@ -1,0 +1,9 @@
+id: skill.methodrail-init.routing-positive-refresh
+kind: routing
+skill: methodrail-init
+description: "Requests to refresh Methodrail control knowledge activate methodrail-init."
+input:
+  prompt: "Refresh the Methodrail harness and update stale control procedures without overwriting our AGENTS.md."
+expected:
+  skills:
+    required: [methodrail-init]

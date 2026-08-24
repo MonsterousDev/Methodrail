@@ -1,0 +1,17 @@
+id: behavioral.observe.users-see
+kind: behavioral
+skill: observe
+description: Loading observe should prevent labeling source inference as what users see.
+input:
+  prompt: "What do users actually see when they submit the invite form?"
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the observe skill loaded
+expected:
+  skills:
+    required: [observe]
+  behaviors:
+    - attempt runtime observation when reasonably possible
+    - label unread-runtime conclusions as inferred
+    - never call a handler reading observed
+  baseline_failure: narrating UX from the route handler alone

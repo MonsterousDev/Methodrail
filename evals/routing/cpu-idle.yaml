@@ -1,0 +1,13 @@
+id: routing.cpu-idle
+kind: routing
+description: Runtime degradation after idle should route to debug with observe likely.
+input:
+  prompt: "CPU grows after 20 minutes idle."
+expected:
+  skills:
+    required: [debug, systematic-debugging]
+    optional: [observe]
+    forbidden: [develop, refactor]
+  behaviors:
+    - reproduce before patching
+    - treat the symptom as runtime behavior, not a feature request

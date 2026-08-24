@@ -1,0 +1,10 @@
+id: routing.billing-design
+kind: routing
+description: Organization-level billing is high-rigor development, not a mechanical edit.
+input:
+  prompt: "Design organization-level billing and implement the first slice."
+expected:
+  skills:
+    required: [develop, architect]
+    optional: [domain-modeling, prototype]
+    forbidden: []
