@@ -1,0 +1,27 @@
+{
+  "fixture_id": "init-value",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [".methodrail/PROJECT.md"],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "npm install",
+    "npm test"
+  ],
+  "evidence": [
+    ".methodrail/PROJECT.md: library not service; published files index.js + lib/",
+    ".methodrail/PROJECT.md: package-lock=false so npm install not npm ci",
+    ".methodrail/PROJECT.md: tests must not app.listen; drive HTTP in-process",
+    "Required examples/hello.js from a test (module.parent set) and used the existing fake-supertest helper",
+    "npm test: tests 2, pass 2, fail 0"
+  ],
+  "outcome": "Read PROJECT.md first. Installed with npm install, added an in-process regression that requires the hello example without listening, and treated helloframe as a library. npm test passed.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "use npm install not npm ci",
+    "drive HTTP in-process without app.listen",
+    "treat the package as a library not a long-running service"
+  ],
+  "notes": "Constructed comparison, not a live host run. Methodrail condition: agent sees repository + .methodrail/PROJECT.md. Correct commands and library classification from the pointer index. Did not invoke wayfinder, architect, arena, swarm, or interrogate."
+}

@@ -1,0 +1,30 @@
+{
+  "fixture_id": "runtime-bug",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "started_at": "2026-08-24T20:44:29Z",
+  "ended_at": "2026-08-24T20:45:54Z",
+  "latency_ms": 84776,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read", "edit", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "node assertion: expiresAt 2000-01-01T00:00:00.000Z returned /dashboard before the patch",
+    "node assertion: missing token / expired ISO / expired numeric / epoch zero / future / token-only after the patch"
+  ],
+  "evidence": [
+    "Pre-fix: expiresAt \"2000-01-01T00:00:00.000Z\" returned /dashboard",
+    "Post-fix: missing token -> /login; expired ISO -> /login; expired numeric -> /login; epoch zero -> /login; future -> /dashboard; token-only legacy -> /dashboard",
+    "No web server was present or started",
+    "No regression test file added in the baseline copy"
+  ],
+  "outcome": "Reproduced expired-session landing on /dashboard, then patched landingPath. Follow-up node assertions passed. Did not load Methodrail skills or add a regression file.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "distinguish source inference from runtime evidence",
+    "verify the fix"
+  ],
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-baseline with -m gpt-5.5 --ignore-user-config. Stronger than the Cursor baseline because the fixture prompt already asked for evidence. Extra copy; canonical example remains the Cursor trace."
+}

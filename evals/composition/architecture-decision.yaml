@@ -1,16 +1,16 @@
 id: composition.architecture-decision
 kind: composition
-description: Ownership redesign should explain current system, then decide, without swarming.
+description: Ownership redesign should explain current system, then decide, without swarming or mapping the whole repo.
 fixture: evals/fixtures/architecture-decision
 input:
-  prompt: "Should subscription ownership live on User or Organization? Decide and sketch the first slice."
+  prompt: "Move session ownership from User to Organization. Decide and sketch the first slice."
 expected:
   skills:
-    required: [how, architect]
-    optional: [domain-modeling, prototype]
-    forbidden: [arena, swarm, interrogate]
+    required: [how, domain-modeling, architect]
+    optional: [prototype, verify-change]
+    forbidden: [wayfinder, arena, swarm, interrogate]
   behaviors:
-    - understand current billing implementation
+    - understand the current implementation
     - consider domain ownership
     - record a decision
-    - prototype only for empirical uncertainty
+    - prototype only if empirical uncertainty remains

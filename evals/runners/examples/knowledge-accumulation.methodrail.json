@@ -1,0 +1,29 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/webhooks.md",
+    "repo/src/webhooks.js",
+    "repo/src/ledger.js"
+  ],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "delivered invoice.paid evt_inv_1 twice; balanceOf stayed 900"
+  ],
+  "evidence": [
+    ".methodrail/knowledge/webhooks.md: ledger credits are idempotent on eventId; retries no-op",
+    "routed invoice.paid through post(walletId, cents, event.id)",
+    "duplicate delivery returned the same frozen row; wallet not double-credited"
+  ],
+  "outcome": "Loaded the promoted webhooks note and added invoice.paid through the existing eventId post path. Verified a retry did not double-credit. Did not re-derive the invariant from grep.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "apply the eventId idempotency invariant",
+    "skip rediscovery of the already-learned webhook rule",
+    "verify credits are not doubled"
+  ],
+  "notes": "constructed Task B methodrail. Promoted candidate .methodrail/knowledge/webhooks.md loaded; eventId applied without rediscovery."
+}

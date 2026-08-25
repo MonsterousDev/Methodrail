@@ -43,14 +43,14 @@ export function compareScores(baseline: ScoreResult, methodrail: ScoreResult): C
           ? null
           : methodrail.passed && extra.length > 0
             ? null
-            : methodrail.passed
-              ? true
-              : null;
+            : null;
 
   if (methodrailHelped === true) verdict = extra.length > 0 ? "mixed" : "helped";
   else if (methodrailHelped === false) verdict = "harmed";
   else if (where.length > 0 && extra.length > 0) verdict = "mixed";
-  else if (!methodrail.passed && !baseline.passed) verdict = "incomplete";
+  else if (methodrail.passed && baseline.passed && where.length === 0 && extra.length === 0) {
+    verdict = "neutral";
+  } else if (!methodrail.passed && !baseline.passed) verdict = "incomplete";
   else verdict = extra.length > 0 ? "mixed" : "incomplete";
 
   return {
@@ -67,7 +67,13 @@ export function compareScores(baseline: ScoreResult, methodrail: ScoreResult): C
 
 export function formatComparison(report: ComparisonReport): string {
   const helped =
-    report.methodrail_helped === true ? "yes" : report.methodrail_helped === false ? "no" : "unclear";
+    report.verdict === "neutral"
+      ? "no scored gain"
+      : report.methodrail_helped === true
+        ? "yes"
+        : report.methodrail_helped === false
+          ? "no"
+          : "unclear";
   return [
     `# Composition report: ${report.fixture_id}`,
     "",

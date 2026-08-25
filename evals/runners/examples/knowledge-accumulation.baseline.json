@@ -1,0 +1,23 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    "repo/src/webhooks.js",
+    "repo/src/ledger.js"
+  ],
+  "tools_used": ["grep", "read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "grep invoice.paid found no handler",
+    "how: walked webhooks.js and added a new invoice.paid branch that incremented the wallet on every delivery"
+  ],
+  "outcome": "Added invoice.paid by incrementing the wallet on every delivery. Stripe retries double-credited. Did not reuse the byKey post path.",
+  "failure_modes": ["rediscovery", "missed-idempotency"],
+  "behaviors_observed": [
+    "grep the repo for invoice.paid",
+    "add a parallel credit path"
+  ],
+  "notes": "constructed Task B baseline. No .methodrail/knowledge/webhooks.md loaded. Rediscovered the handler via how/grep and missed eventId idempotency."
+}

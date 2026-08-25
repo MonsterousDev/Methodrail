@@ -1,0 +1,35 @@
+{
+  "fixture_id": "architecture-decision",
+  "condition": "methodrail",
+  "host": "constructed",
+  "skills_invoked": ["how", "domain-modeling", "architect"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/domain.md",
+    ".methodrail/knowledge/architecture.md",
+    "skills/how/SKILL.md",
+    "skills/domain-modeling/SKILL.md",
+    "skills/architect/SKILL.md"
+  ],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "read src/session.js sessionOwnerKey (current User key)",
+    "recorded .methodrail/knowledge/decisions/0001-session-owner.md and checked it against the current owner key"
+  ],
+  "evidence": [
+    "how: sessionOwnerKey returns session.userId; sessions are User-keyed in src/session.js",
+    "domain-modeling: Session is currently owned by User; Organization is the target owner for the first slice",
+    "architect: recorded decision that Session ownership moves to Organization; first slice is the owner key, not a platform rewrite",
+    "prototype skipped: ownership is a domain/architecture choice answerable from source and knowledge, not an empirical uncertainty"
+  ],
+  "outcome": "Grounded in the current User-keyed session implementation, named Organization as Session owner, and recorded the decision. No prototype. No wayfinder. No platform rewrite.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "understand the current implementation",
+    "consider domain ownership",
+    "record a decision",
+    "prototype only if empirical uncertainty remains"
+  ],
+  "notes": "Constructed example trace, not live. Methodrail invokes how, domain-modeling, and architect; records the session-ownership decision; skips prototype because no empirical uncertainty remains; does not invoke wayfinder, arena, swarm, or interrogate."
+}

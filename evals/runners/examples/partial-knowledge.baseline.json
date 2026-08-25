@@ -1,0 +1,19 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "baseline",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/payments.md"
+  ],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    ".methodrail/knowledge/payments.md says all customer payments go through Stripe"
+  ],
+  "outcome": "Stripe charges both one-time invoice payments and monthly subscriptions.",
+  "failure_modes": ["knowledge-overtrusted"],
+  "behaviors_observed": ["trusted the all-payments Stripe claim"],
+  "notes": "constructed"
+}

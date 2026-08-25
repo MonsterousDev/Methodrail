@@ -74,7 +74,19 @@ export const REQUIRED_COMPOSITION_FIXTURES = [
   "architecture-decision",
   "review-risk",
   "project-init",
+  "init-value",
+  "knowledge-freshness",
+  "knowledge-accumulation",
+  "partial-knowledge",
+  "human-decision",
 ] as const;
+
+/** Canonical example names: `<fixture>.baseline.json` / `<fixture>.methodrail.json` for required fixtures only. Host extras and Task A traces (e.g. `knowledge-accumulation-discover.methodrail.json`) are not loaded by `npm run eval`. */
+export function isCanonicalExampleFile(name: string): boolean {
+  return (REQUIRED_COMPOSITION_FIXTURES as readonly string[]).some(
+    (id) => name === `${id}.baseline.json` || name === `${id}.methodrail.json`,
+  );
+}
 
 export function listFixtureDirs(evalsRoot: string): string[] {
   const root = join(evalsRoot, "fixtures");

@@ -1,14 +1,19 @@
 {
   "fixture_id": "runtime-bug",
   "condition": "baseline",
-  "host": "recorded-example",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "started_at": "2026-08-24T20:43:20Z",
+  "ended_at": "2026-08-24T20:43:37Z",
+  "latency_ms": 17000,
   "skills_invoked": [],
   "references_loaded": [],
   "tools_used": ["read", "edit"],
   "subagents_used": 0,
   "verification_steps": [],
   "evidence": [],
-  "outcome": "Patched landingPath from reading the source comment.",
+  "outcome": "Patched landingPath to treat session.expired as logged out after reading src/session.js. No pre-fix runtime capture, no project verify skill, no regression test.",
   "failure_modes": ["source-as-runtime"],
-  "behaviors_observed": ["inferred runtime from source"]
+  "behaviors_observed": ["inferred runtime from source"],
+  "notes": "Live Cursor baseline in /tmp/methodrail-live-20260824/runtime-bug-cursor-baseline. Generic agent inferred expiry from source shape and edited. Did not start a red-capable loop or distinguish inference from observation."
 }

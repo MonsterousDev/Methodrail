@@ -1,0 +1,26 @@
+{
+  "fixture_id": "simple-change",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "started_at": "2026-08-24T20:44:22Z",
+  "ended_at": "2026-08-24T20:44:58Z",
+  "latency_ms": 35491,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["rg", "sed", "npm"],
+  "subagents_used": 0,
+  "verification_steps": ["npm test"],
+  "evidence": [
+    "rg found return \"Save\" in src/button.js; methodrail-skills/rules/methodrail.mdc was present in the workdir",
+    "npm test: tests 1, pass 1, fail 0, duration_ms 74.400583"
+  ],
+  "outcome": "Changed buttonLabel from Save to Create. npm test passed (1/1). Did not invoke expensive operators.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "inspect the current label",
+    "edit locally",
+    "run a cheap check if one exists"
+  ],
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/simple-change-codex-methodrail with -m gpt-5.5. Prompt forbade wayfinder/architect/arena/swarm/interrogate. Codex listed methodrail.mdc via rg --files but did not open it. Extra copy; canonical example remains the Cursor trace."
+}

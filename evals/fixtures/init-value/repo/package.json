@@ -1,0 +1,14 @@
+{
+  "name": "helloframe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny CommonJS HTTP library. createApp() returns a request handler.",
+  "main": "index.js",
+  "files": ["index.js", "lib/"],
+  "scripts": {
+    "test": "node --test test/hello.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

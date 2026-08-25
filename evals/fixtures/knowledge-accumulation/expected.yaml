@@ -1,0 +1,8 @@
+id: fixture.knowledge-accumulation
+required_skills: []
+forbidden_skills: [arena, swarm, interrogate]
+expected_behaviors:
+  - apply the eventId idempotency invariant
+  - skip rediscovery of the already-learned webhook rule
+  - verify credits are not doubled
+max_expensive_skills: 0

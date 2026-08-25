@@ -3,6 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { compareScores, formatComparison } from "../../src/eval/compare.js";
 import {
+  isCanonicalExampleFile,
   loadExpectationFile,
   loadRunFile,
   REQUIRED_COMPOSITION_FIXTURES,
@@ -60,7 +61,9 @@ function comparePaths(baselinePath: string, methodrailPath: string): void {
 function examples(): void {
   validateFixtures();
   const exampleDir = join(repoRoot, "evals", "runners", "examples");
-  const files = existsSync(exampleDir) ? readdirSync(exampleDir).filter((name) => name.endsWith(".json")) : [];
+  const files = existsSync(exampleDir)
+    ? readdirSync(exampleDir).filter((name) => isCanonicalExampleFile(name))
+    : [];
   const byFixture = new Map<string, { baseline?: string; methodrail?: string }>();
   for (const file of files) {
     const path = join(exampleDir, file);

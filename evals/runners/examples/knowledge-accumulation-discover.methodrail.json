@@ -1,0 +1,29 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "methodrail",
+  "skills_invoked": ["diagnosing-bugs", "reflect"],
+  "references_loaded": [
+    "repo/src/webhooks.js",
+    "repo/src/ledger.js",
+    "skills/diagnosing-bugs/SKILL.md",
+    "skills/reflect/SKILL.md"
+  ],
+  "tools_used": ["read", "grep", "write"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "reproduced duplicate invoice.paid deliveries crediting twice",
+    "after routing through post(event.id), second delivery no-op'd"
+  ],
+  "evidence": [
+    "handle() credited wallet cents on every invoice.paid delivery and never consulted eventId",
+    "root cause: eventId was ignored; two deliveries of evt_inv_dup produced two ledger rows",
+    "fix: append-only post() keyed in byKey by eventId; duplicate deliveries return the existing row"
+  ],
+  "outcome": "Root cause was missing eventId idempotency. Proposed a knowledge candidate at .methodrail/knowledge/webhooks.md (ledger credits idempotent on eventId; retries no-op). Candidate only; waiting for approval. Did not write it as standing project knowledge.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "diagnose duplicate webhook credits",
+    "propose knowledge candidate"
+  ],
+  "notes": "constructed Task A. Methodrail diagnosing-bugs then reflect. Knowledge candidate proposed; standing knowledge not written pending approval."
+}

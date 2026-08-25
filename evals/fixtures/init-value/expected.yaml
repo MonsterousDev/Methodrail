@@ -1,0 +1,8 @@
+id: fixture.init-value
+required_skills: []
+forbidden_skills: [wayfinder, architect, arena, swarm, interrogate]
+expected_behaviors:
+  - use npm install not npm ci
+  - drive HTTP in-process without app.listen
+  - treat the package as a library not a long-running service
+max_expensive_skills: 0

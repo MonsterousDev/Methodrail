@@ -1,14 +1,26 @@
 {
   "fixture_id": "simple-change",
   "condition": "baseline",
-  "host": "recorded-example",
-  "skills_invoked": ["architect", "wayfinder", "interrogate"],
-  "references_loaded": ["references/rigor.md"],
-  "tools_used": ["grep"],
-  "subagents_used": 3,
-  "verification_steps": [],
-  "evidence": [],
-  "outcome": "Changed the label after an architecture review.",
-  "failure_modes": ["unnecessary-escalation"],
-  "behaviors_observed": ["started architecture process"]
+  "host": "cursor",
+  "model": "grok-4.6",
+  "started_at": "2026-08-24T20:42:20Z",
+  "ended_at": "2026-08-24T20:42:38Z",
+  "latency_ms": 18000,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read", "edit", "shell"],
+  "subagents_used": 0,
+  "verification_steps": ["node --test src/button.test.js"],
+  "evidence": [
+    "src/button.js before edit returned \"Save\"",
+    "node --test src/button.test.js: tests 1, pass 1, fail 0, duration_ms 123.211375"
+  ],
+  "outcome": "Changed buttonLabel from Save to Create and the existing unit test passed.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "inspect the current label",
+    "edit locally",
+    "run a cheap check if one exists"
+  ],
+  "notes": "Live Cursor baseline in /tmp/methodrail-live-20260824/simple-change-cursor-baseline. Generic coding agent; no Methodrail skills loaded. Honest live path was inspect-edit-check, not the recorded-example over-escalation."
 }

@@ -1,0 +1,25 @@
+{
+  "fixture_id": "human-decision",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    "references/decision-frontier.md"
+  ],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": ["none — waiting on human"],
+  "evidence": [
+    "tradeoffs: support burden if emails say Account while UI says Organization; billing/legal noun is Organization on invoices today; code churn across org.js and tests with no technical win",
+    "decision-frontier: method human — preference, policy, and language, not source or runtime",
+    "asked the human; did not rename Organization to Account"
+  ],
+  "outcome": "Presented Organization vs Account tradeoffs and asked a human. Did not implement the rename.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "present rename tradeoffs",
+    "classify the choice as a human decision",
+    "do not implement the rename"
+  ],
+  "notes": "constructed"
+}

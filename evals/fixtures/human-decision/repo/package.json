@@ -1,0 +1,8 @@
+{
+  "name": "human-decision",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test src/org.test.js"
+  }
+}

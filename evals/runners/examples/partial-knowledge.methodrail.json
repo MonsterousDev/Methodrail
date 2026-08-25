@@ -1,0 +1,33 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "methodrail",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/payments.md",
+    "repo/src/payments.js",
+    "repo/src/stripe.js",
+    "repo/src/adyen.js",
+    "skills/how/SKILL.md",
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "compared knowledge/payments.md 'all payments go through Stripe' against subscribe() and chargeInvoice() in current code"
+  ],
+  "evidence": [
+    "Stripe still owns subscriptions: subscribe() calls createSubscription in repo/src/stripe.js",
+    "Adyen charges one-time invoices: chargeInvoice() calls submitPayment in repo/src/adyen.js",
+    "stale 'all payments go through Stripe' claim is only partially true; reconciled rather than discarded or fully trusted"
+  ],
+  "outcome": "Monthly subscriptions are charged by Stripe via subscribe(); one-time invoice payments are charged by Adyen via chargeInvoice(). The payments note overgeneralizes Stripe to all customer payments.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "retain the true Stripe subscriptions fact",
+    "detect Adyen for one-time payments",
+    "reconcile partial knowledge rather than discard or fully trust it"
+  ],
+  "notes": "constructed"
+}

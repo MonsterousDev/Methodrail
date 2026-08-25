@@ -66,5 +66,5 @@ export interface ComparisonReport {
   where: string[];
   cost: string[];
   extra_complexity: string[];
-  verdict: "helped" | "mixed" | "harmed" | "incomplete";
+  verdict: "helped" | "mixed" | "harmed" | "neutral" | "incomplete";
 }

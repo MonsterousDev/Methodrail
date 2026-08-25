@@ -1,0 +1,30 @@
+{
+  "fixture_id": "init-value",
+  "condition": "baseline",
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 1,
+  "verification_steps": [
+    "npm ci",
+    "node examples/hello.js (app.listen on 3000)",
+    "curl http://localhost:3000/hello"
+  ],
+  "evidence": [
+    "README.md shows http.createServer(createApp()).listen(3000)",
+    "examples/hello.js listens on 3000 when run as main",
+    "Spawned an explorer subagent to figure out how to run the HTTP server"
+  ],
+  "outcome": "Assumed CI uses npm ci, started the hello example so it would app.listen on 3000, curled localhost, and treated helloframe as a long-running service. Did not reuse the in-process test helper.",
+  "failure_modes": [
+    "npm-ci-without-lockfile",
+    "app-listen-in-tests",
+    "treated-as-service"
+  ],
+  "behaviors_observed": [
+    "use npm ci because that is how CI usually installs",
+    "start the example server and curl localhost",
+    "treat the package as a long-running service"
+  ],
+  "notes": "Constructed comparison, not a live host run. Baseline condition: agent sees repository only (no .methodrail/PROJECT.md). Wrong assumptions: npm ci, app.listen / curl localhost, treat as service."
+}

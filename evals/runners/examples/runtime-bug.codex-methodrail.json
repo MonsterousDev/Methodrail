@@ -1,0 +1,40 @@
+{
+  "fixture_id": "runtime-bug",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "started_at": "2026-08-24T20:46:23Z",
+  "ended_at": "2026-08-24T20:48:06Z",
+  "latency_ms": 103415,
+  "skills_invoked": ["debug", "diagnosing-bugs", "verify-change", "verify-project"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    "skills/debug/SKILL.md",
+    "skills/diagnosing-bugs/SKILL.md",
+    "skills/verify-change/SKILL.md"
+  ],
+  "tools_used": ["read", "write", "edit", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "project-style expired session capture before fix",
+    "node --test test/session.test.mjs (red regression)",
+    "node --test test/session.test.mjs (green, 2 pass 0 fail)",
+    "project-style landingPath capture after fix"
+  ],
+  "evidence": [
+    "Pre-fix capture: { token: \"abc\", expiresAt: \"2000-01-01T00:00:00.000Z\" } returned /dashboard, expected /login",
+    "Red regression: node --test test/session.test.mjs failed on expired sessions land on login",
+    "Root cause from runtime: landingPath routed on token presence only and did not evaluate expiresAt",
+    "Green tests: 2 pass, 0 fail",
+    "Post-fix landingPath capture returned /login with pass: true"
+  ],
+  "outcome": "Named root cause from a red project-style capture, added regression coverage, and sent expired sessions to /login. Tests and post-fix capture passed.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "use project verification for reproduction",
+    "distinguish source inference from runtime evidence",
+    "add regression evidence",
+    "verify the fix"
+  ],
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-methodrail with -m gpt-5.5. Extra copy; canonical example remains the Cursor trace."
+}

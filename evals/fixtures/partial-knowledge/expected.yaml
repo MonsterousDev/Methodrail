@@ -1,0 +1,8 @@
+id: fixture.partial-knowledge
+required_skills: []
+forbidden_skills: [arena, swarm]
+expected_behaviors:
+  - retain the true Stripe subscriptions fact
+  - detect Adyen for one-time payments
+  - reconcile partial knowledge rather than discard or fully trust it
+max_expensive_skills: 0

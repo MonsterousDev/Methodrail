@@ -1,0 +1,31 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "methodrail",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/auth.md",
+    "repo/src/auth.js",
+    "skills/how/SKILL.md",
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "compared knowledge/auth.md JWT claim against repo/src/auth.js session cookie path"
+  ],
+  "evidence": [
+    "JWT knowledge: .methodrail/knowledge/auth.md still claims jwt.sign and Bearer tokens (revision bbb000)",
+    "session code: repo/src/auth.js establishSession sets HttpOnly sid cookie; sessionFromRequest reads sid; no jwt.sign",
+    "flagged the JWT claim as stale; did not rewrite knowledge/auth.md"
+  ],
+  "outcome": "Session is established in repo/src/auth.js establishSession via an HttpOnly sid cookie and a server-side session map, not JWT.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "detect stale knowledge",
+    "prefer repository evidence over .methodrail knowledge",
+    "refresh or flag the JWT claim"
+  ],
+  "notes": "constructed"
+}

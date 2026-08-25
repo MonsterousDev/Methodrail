@@ -1,18 +1,27 @@
 {
   "fixture_id": "simple-change",
   "condition": "methodrail",
-  "host": "recorded-example",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "started_at": "2026-08-24T20:42:55Z",
+  "ended_at": "2026-08-24T20:43:06Z",
+  "latency_ms": 11000,
   "skills_invoked": [],
-  "references_loaded": [],
-  "tools_used": ["read", "edit", "test"],
+  "references_loaded": ["rules/methodrail.mdc"],
+  "tools_used": ["read", "edit", "shell"],
   "subagents_used": 0,
-  "verification_steps": ["node --test src/button.test.js"],
-  "evidence": ["test output: 1 passed"],
-  "outcome": "Label changed and unit test passed.",
+  "verification_steps": ["npm test"],
+  "evidence": [
+    "Read methodrail.mdc: ordinary work is inspect, edit, and the cheapest honest check",
+    "src/button.js before edit returned \"Save\"",
+    "npm test: tests 1, pass 1, fail 0, duration_ms 81.119917"
+  ],
+  "outcome": "Label changed from Save to Create. npm test passed (1/1).",
   "failure_modes": [],
   "behaviors_observed": [
     "inspect the current label",
     "edit locally",
     "run a cheap check if one exists"
-  ]
+  ],
+  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/simple-change-cursor-methodrail. Loaded family invariant only. Did not load wayfinder, architect, arena, swarm, or interrogate."
 }

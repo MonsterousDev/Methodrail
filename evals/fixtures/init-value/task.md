@@ -1,0 +1,1 @@
+Add a regression test for the hello-world example HTTP behavior. Prove GET /hello still returns Hello World the way this repository already drives HTTP, and install dependencies the way CI does. Do not change library behavior.

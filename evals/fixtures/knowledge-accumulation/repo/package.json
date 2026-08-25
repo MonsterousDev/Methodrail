@@ -1,0 +1,10 @@
+{
+  "name": "tillbox",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny wallet. Processor webhook deliveries post cents onto an append-only ledger.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/webhooks.test.js"
+  }
+}

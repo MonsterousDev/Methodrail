@@ -1,0 +1,8 @@
+id: fixture.knowledge-freshness
+required_skills: []
+forbidden_skills: [arena, swarm]
+expected_behaviors:
+  - detect stale knowledge
+  - prefer repository evidence over .methodrail knowledge
+  - refresh or flag the JWT claim
+max_expensive_skills: 0

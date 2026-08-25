@@ -1,19 +1,44 @@
 {
   "fixture_id": "runtime-bug",
   "condition": "methodrail",
-  "host": "recorded-example",
-  "skills_invoked": ["debug", "diagnosing-bugs", "observe", "verify-change"],
-  "references_loaded": [".methodrail/PROJECT.md"],
-  "tools_used": ["read", "edit", "test"],
+  "host": "cursor",
+  "model": "grok-4.6",
+  "started_at": "2026-08-24T20:43:50Z",
+  "ended_at": "2026-08-24T20:44:32Z",
+  "latency_ms": 42000,
+  "skills_invoked": ["debug", "diagnosing-bugs", "verify-change", "verify-project"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".agents/skills/verify-project/SKILL.md",
+    "skills/debug/SKILL.md",
+    "skills/diagnosing-bugs/SKILL.md",
+    "skills/verify-change/SKILL.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": ["read", "write", "edit", "shell"],
   "subagents_used": 0,
-  "verification_steps": ["verify-project expired session path", "unit regression"],
-  "evidence": ["expired session landed on /login"],
-  "outcome": "Root cause named, regression added, expired sessions redirect.",
+  "verification_steps": [
+    "node scripts/drive-expired.mjs (pre-fix project verify drive)",
+    "node --test src/session.test.js (red regression)",
+    "node --test src/session.test.js (green regression)",
+    "node scripts/drive-expired.mjs (post-fix project verify drive)"
+  ],
+  "evidence": [
+    "No HTTP app in the fixture repo; verify-project adapted to a throwaway landingPath driver",
+    "pre-fix drive: expired-flag {token:live, expired:true} observed /dashboard expected /login; REPRO exit 1",
+    "pre-fix drive: expired-at-past also observed /dashboard",
+    "root cause (runtime, not source-only): landingPath returns /dashboard whenever session.token is present and never inspects expiry",
+    "red regression: 2 fail 1 pass; actual '/dashboard' expected '/login'",
+    "green regression: tests 3 pass 3 fail 0",
+    "post-fix drive: expired-flag observed /login; expired-at-past observed /login; DRIVE_EXIT 0"
+  ],
+  "outcome": "Root cause named from a red project-verify drive. Regression added, landingPath now sends expired sessions to /login, drive and unit tests pass.",
   "failure_modes": [],
   "behaviors_observed": [
     "use project verification for reproduction",
     "distinguish source inference from runtime evidence",
     "add regression evidence",
     "verify the fix"
-  ]
+  ],
+  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/runtime-bug-cursor-methodrail. Followed debug → diagnosing-bugs → verify-project → failing regression → minimal fix → verify-change. Source was read after the drive loop existed; claims labeled from observed command output."
 }
