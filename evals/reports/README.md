@@ -1,14 +1,24 @@
 # Eval reports
 
-Maintainer comparison output lives here. `npm run eval` scores recorded example runs. It does not launch an agent.
+Maintainer comparison output lives here. `npm run eval` scores recorded example runs against **artifact-backed fixture graders**. It does not launch an agent.
 
-Committed examples are under `evals/runners/examples/`. Generated files matching `*.generated.md` are ignored.
+Committed examples are under `evals/runners/examples/`. Artifact overlays, answers, and command logs live under `evals/runners/artifacts/`. Generated files matching `*.generated.md` are ignored.
 
-A report should answer:
+A report must use disjoint vocabularies:
 
-- Did Methodrail help?
-- Where?
-- At what cost?
-- What extra complexity appeared?
+- **Empirical** (live vs live): `helped` | `neutral` | `harmed` | `incomplete`
+- **Specification** (constructed vs constructed): `passed` | `failed`
+- **Guardrail** (synthetic): `caught` | `missed`
 
-Tracked cost signals: skill count, loaded references, subagents, verification steps, latency if provided. More steps can be better when they prevent an expensive miss.
+Constructed pairs must never be quoted as `helped`. Current Codex pilot JSON is `runner_captured` because raw transcripts and artifact bundles exist. Cursor pilot JSON is `operator_summary`; its artifact bundles exist but raw subagent transcripts were unavailable.
+
+`evals/pilot-t5-t10.yaml` is the executable pilot manifest. The default integrity gate rescores all listed live pairs and fails if a planned pair or required capture artifact disappears.
+
+Layers:
+
+- **Outcome** — derived from the resulting tree, patch/overlay, tests, and final answer
+- **Routing** — `appropriate` | `miss` | `violation` (Methodrail skill names never fail a baseline that did the work)
+- **Cost** — skills, references, subagents, real verification commands, latency
+- **Operational quality** — `clean` | `wasteful` | `violating`
+
+The integrity gate fails on missing pairs, missing artifacts, broken graders, specification `failed`, or guardrail `missed`. It does **not** fail on empirical `harmed`.

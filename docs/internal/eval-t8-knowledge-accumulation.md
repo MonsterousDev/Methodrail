@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T8. Date: 2026-08-25. No git commit. Constructed traces; scoring only. No Methodrail runtime.
 
+v0.6.1: this pair is a **specification** (`passed`). Task B overlays are graded by executing `invoice.paid` twice against the resulting handler.
+
 ## Purpose
 
 Prove **reflect → knowledge candidate → future leverage**, not merely that knowledge exists or can go stale. T6 already covers stale JWT notes vs current session code. T8 is the other half of the loop: a non-obvious invariant is discovered, proposed as a candidate (not silently auto-applied), then reused on a later task so the agent does not pay rediscovery cost.

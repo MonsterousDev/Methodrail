@@ -1,0 +1,20 @@
+{
+  "fixture_id": "review-risk",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["author said tests passed"],
+  "outcome": "LGTM. The author said tests passed, so this is ready to ship.",
+  "failure_modes": ["trusted-author-claim"],
+  "behaviors_observed": ["accepted author claim as verification"],
+  "notes": "constructed",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/review-risk/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/review-risk/baseline/answer.md"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "fixture_id": "init-value",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm install",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "Added an in-process regression test for the hello-world example. GET /hello still returns `Hello World`. Library behavior was not changed.",
+    "## What changed",
+    "- `repo/test/hello.test.js` \u2014 new test that `require`s `examples/hello.js` and drives the exported handler with the existing fake-request helper. Does not call `app.listen`.",
+    "- No edits to `lib/`, `index.js`, or `examples/hello.js`.",
+    "## How it was verified",
+    "- Install: `npm install` in `repo/` (no lockfile; `.npmrc` has `package-lock=false`, so not `npm ci`).",
+    "- Test: `npm test` (`node --test test/hello.test.js`)."
+  ],
+  "outcome": "Added an in-process regression test for the hello-world example. GET /hello still returns `Hello World`. Library behavior was not changed. - `repo/test/hello.test.js` \u2014 new test that `require`s `examples/hello.js` and drives the exported handler with the existing fake-request helper. Does not call `app.listen`. - No edits to `lib/`, `index.js`, or `examples/hello.js`. - Install: `npm install` in `repo/` (no lockfile; `.npmrc` has `package-lock=false`, so not `npm ci`). - Test: `npm test` (`node ",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/init-value/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/init-value/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/cursor-r1-methodrail/answer.md"
+  }
+}

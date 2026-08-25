@@ -2,6 +2,8 @@
 
 Internal maintainer record. Not a live host comparison.
 
+v0.6.1: over-rigor is guardrail `caught` (routing `violation`) even when the button patch is correct.
+
 ## What this tests
 
 Would the evaluator catch obvious over-engineering on a one-word label change?

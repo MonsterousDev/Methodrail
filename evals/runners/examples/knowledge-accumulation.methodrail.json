@@ -8,7 +8,11 @@
     "repo/src/webhooks.js",
     "repo/src/ledger.js"
   ],
-  "tools_used": ["read", "write", "shell"],
+  "tools_used": [
+    "read",
+    "write",
+    "shell"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "delivered invoice.paid evt_inv_1 twice; balanceOf stayed 900"
@@ -25,5 +29,12 @@
     "skip rediscovery of the already-learned webhook rule",
     "verify credits are not doubled"
   ],
-  "notes": "constructed Task B methodrail. Promoted candidate .methodrail/knowledge/webhooks.md loaded; eventId applied without rediscovery."
+  "notes": "constructed Task B methodrail. Promoted candidate .methodrail/knowledge/webhooks.md loaded; eventId applied without rediscovery.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/methodrail/answer.md"
+  }
 }

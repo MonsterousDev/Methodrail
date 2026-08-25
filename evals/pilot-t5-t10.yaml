@@ -1,0 +1,17 @@
+id: pilot-t5-t10-2026-08-25
+pairs:
+  - { fixture: init-value, host: cursor, repeat: 1 }
+  - { fixture: init-value, host: cursor, repeat: 2 }
+  - { fixture: init-value, host: codex, repeat: 1 }
+  - { fixture: knowledge-freshness, host: cursor, repeat: 1 }
+  - { fixture: knowledge-freshness, host: cursor, repeat: 2 }
+  - { fixture: knowledge-freshness, host: codex, repeat: 1 }
+  - { fixture: knowledge-accumulation, host: cursor, repeat: 1 }
+  - { fixture: knowledge-accumulation, host: cursor, repeat: 2 }
+  - { fixture: knowledge-accumulation, host: codex, repeat: 1 }
+  - { fixture: partial-knowledge, host: cursor, repeat: 1 }
+  - { fixture: partial-knowledge, host: cursor, repeat: 2 }
+  - { fixture: partial-knowledge, host: codex, repeat: 1 }
+  - { fixture: human-decision, host: cursor, repeat: 1 }
+  - { fixture: human-decision, host: cursor, repeat: 2 }
+  - { fixture: human-decision, host: codex, repeat: 1 }

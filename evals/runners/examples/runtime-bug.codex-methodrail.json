@@ -6,14 +6,24 @@
   "started_at": "2026-08-24T20:46:23Z",
   "ended_at": "2026-08-24T20:48:06Z",
   "latency_ms": 103415,
-  "skills_invoked": ["debug", "diagnosing-bugs", "verify-change", "verify-project"],
+  "skills_invoked": [
+    "debug",
+    "diagnosing-bugs",
+    "verify-change",
+    "verify-project"
+  ],
   "references_loaded": [
     ".methodrail/PROJECT.md",
     "skills/debug/SKILL.md",
     "skills/diagnosing-bugs/SKILL.md",
     "skills/verify-change/SKILL.md"
   ],
-  "tools_used": ["read", "write", "edit", "shell"],
+  "tools_used": [
+    "read",
+    "write",
+    "edit",
+    "shell"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "project-style expired session capture before fix",
@@ -36,5 +46,12 @@
     "add regression evidence",
     "verify the fix"
   ],
-  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-methodrail with -m gpt-5.5. Extra copy; canonical example remains the Cursor trace."
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-methodrail with -m gpt-5.5. Extra copy; canonical example remains the Cursor trace.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/runtime-bug/codex-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/runtime-bug/codex-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/runtime-bug/codex-methodrail/answer.md"
+  }
 }

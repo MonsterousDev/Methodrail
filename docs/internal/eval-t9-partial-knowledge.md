@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T9. Date: 2026-08-25. No git commit. Constructed traces; scoring only.
 
+v0.6.1: this pair is a **specification** (`passed`). The grader scores the answer against current Stripe/Adyen source.
+
 ## Purpose
 
 Would Methodrail reconcile **partially true** project knowledge instead of discarding it wholesale or trusting it wholesale?

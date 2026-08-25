@@ -1,0 +1,67 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && ls",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg --files repo | sed -n '1,200p'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/auth.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "jq . command.log.json >/dev/null",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "sed -n '1,220p' ANSWER.md",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "The authenticated API request session is established in `repo/src/auth.js` by `establishSession(user, headers)`.",
+    "Mechanism from current code:",
+    "- A session ID is generated with `Math.random()` and prefixed as `sess_`.",
+    "- The session is stored in an in-memory `Map` named `sessions`.",
+    "- The response headers get a `set-cookie` value: `sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`.",
+    "- Later authenticated requests are resolved by `sessionFromRequest(request)`, which reads `request.headers.cookie`, extracts the `sid` cookie, and looks it up in the same `sessions` Map`.",
+    "So the mechanism is an HTTP-only `sid` cookie backed by an in-memory server-side session `Map`, not JWT bearer auth."
+  ],
+  "outcome": "The authenticated API request session is established in `repo/src/auth.js` by `establishSession(user, headers)`. Mechanism from current code: - A session ID is generated with `Math.random()` and prefixed as `sess_`. - The session is stored in an in-memory `Map` named `sessions`. - The response headers get a `set-cookie` value: `sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`. - Later authenticated requests are resolved by `sessionFromRequest(request)`, which reads `request.headers.cookie`, extr",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-freshness/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-freshness/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-freshness/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-freshness/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

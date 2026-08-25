@@ -669,7 +669,8 @@ function validateProjectMdQuality(root: string): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   for (const path of walk(root, (file) => basename(file) === "PROJECT.md")) {
     const normalized = relative(root, path).split(sep).join("/");
-    if (!normalized.includes(".methodrail/") && !normalized.includes(".methodrail/")) continue;
+    if (normalized.startsWith("evals/runners/artifacts/")) continue;
+    if (!normalized.includes(".methodrail/")) continue;
     if (!normalized.endsWith("PROJECT.md")) continue;
     const quality = evaluateProjectMd(readFileSync(path, "utf8"));
     for (const message of quality.issues) {

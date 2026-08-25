@@ -1,0 +1,113 @@
+{
+  "fixture_id": "init-value",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'TASK.md' -g 'repo/**' -g 'package.json' -g 'pnpm-lock.yaml' -g 'yarn.lock' -g 'package-lock.json' -g 'bun.lockb'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' package.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' test/hello.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' examples/hello.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' lib/app.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' index.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"npm ci|npm install|pnpm|yarn|bun|node --test|actions/setup-node|ci\" -S .",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find .. -maxdepth 4 -type f \\( -name '*.yml' -o -name '*.yaml' -o -name 'package-lock.json' -o -name 'npm-shrinkwrap.json' \\) -print",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find . -maxdepth 3 -type f -print | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,120p' .npmrc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' README.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm install",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "Added a focused regression test in `repo/test/hello.test.js` for the hello-world example HTTP behavior.",
+    "The new test imports `repo/examples/hello.js` and drives it through the repository's existing in-memory HTTP request helper, proving `GET /hello` returns status `200` with body `Hello World`. No library behavior was changed.",
+    "Dependencies were installed from `repo/` with `npm install`, matching this fixture's npm setup with `.npmrc` disabling package-lock generation.",
+    "Verification:",
+    "```text",
+    "npm test",
+    "tests 2",
+    "pass 2"
+  ],
+  "outcome": "Added a focused regression test in `repo/test/hello.test.js` for the hello-world example HTTP behavior. The new test imports `repo/examples/hello.js` and drives it through the repository's existing in-memory HTTP request helper, proving `GET /hello` returns status `200` with body `Hello World`. No library behavior was changed. Dependencies were installed from `repo/` with `npm install`, matching this fixture's npm setup with `.npmrc` disabling package-lock generation. Verification: ```text npm t",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/init-value/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/init-value/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/init-value/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

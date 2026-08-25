@@ -1,0 +1,26 @@
+{
+  "fixture_id": "project-init",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["methodrail-init"],
+  "references_loaded": ["repo/AGENTS.md", "repo/README.md", "repo/package.json", "skills/methodrail-init/SKILL.md"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["pointer PROJECT.md names npm test"],
+  "outcome": "Created a pointer-oriented PROJECT.md that names npm test and leaves README/AGENTS in place.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "inspect existing AGENTS.md and README",
+    "create a pointer-oriented PROJECT.md",
+    "discover npm test as verification",
+    "do not copy README into PROJECT.md"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/project-init/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/project-init/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/project-init/methodrail/answer.md"
+  }
+}

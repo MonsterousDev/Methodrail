@@ -1,0 +1,8 @@
+[
+  {
+    "command": "node --test test/session.test.mjs",
+    "phase": "regression",
+    "exit_status": 0,
+    "stdout": "2 pass 0 fail"
+  }
+]

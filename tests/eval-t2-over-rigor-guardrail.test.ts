@@ -5,26 +5,21 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { parse } from "yaml";
 import { loadExpectationFile, parseRun } from "../src/eval/load.js";
-import { scoreRun } from "../src/eval/score.js";
+import { guardrailResult, scoreRun } from "../src/eval/score.js";
+import type { EvalContext } from "../src/eval/types.js";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-
+const ctx: EvalContext = { repoRoot: root };
 const OVER_ESCALATION_SKILLS = ["wayfinder", "architect", "interrogate"] as const;
 
-/**
- * Guardrail, not a live baseline comparison.
- *
- * Live simple-change Cursor/Codex baselines did not over-escalate
- * (inspect → edit → unit test). This suite keeps a synthetic failing
- * trace so scoreRun still refuses obvious over-engineering even when
- * real agents stay cheap.
- */
-test("guardrail: scoreRun fails a synthetic over-rigor trace on simple-change", () => {
+test("guardrail: over-rigor is caught as a routing violation even when the patch is correct", () => {
   const expected = loadExpectationFile(join(root, "evals/fixtures/simple-change/expected.yaml"));
   const scored = scoreRun(
     parseRun({
       fixture_id: "simple-change",
       condition: "baseline",
+      provenance: "synthetic",
+      capture: "operator_summary",
       skills_invoked: [...OVER_ESCALATION_SKILLS],
       references_loaded: [],
       tools_used: ["grep"],
@@ -34,12 +29,20 @@ test("guardrail: scoreRun fails a synthetic over-rigor trace on simple-change", 
       outcome: "Renamed button text after mapping the repo, architecture review, and a product interrogation.",
       failure_modes: ["unnecessary-escalation"],
       behaviors_observed: ["started architecture process"],
+      artifacts: {
+        overlay: "evals/runners/artifacts/simple-change/baseline/overlay",
+        answer: "evals/runners/artifacts/simple-change/baseline/answer.md",
+      },
     }),
     expected,
+    ctx,
   );
 
-  assert.equal(scored.passed, false);
+  assert.equal(scored.passed, true);
+  assert.equal(scored.routing.assessment, "violation");
+  assert.equal(scored.operational_quality, "violating");
   assert.deepEqual(scored.forbidden_hits, [...OVER_ESCALATION_SKILLS]);
+  assert.equal(guardrailResult(scored), "caught");
 });
 
 test("guardrail: button-text complexity spec still forbids those operators", () => {

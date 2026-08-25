@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T4. Date: 2026-08-24. No git commit. No Methodrail runtime. Scoring only.
 
+v0.6.1: this pair is a **specification** (`passed`), not empirical `helped`.
+
 ## Purpose
 
 Score **decision quality**, not maximum ceremony, on an ownership change: move session ownership from User to Organization.

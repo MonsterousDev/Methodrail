@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm install",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "up to date, audited 1 package in 239ms; found 0 vulnerabilities"
+  },
+  {
+    "command": "npm test",
+    "phase": "verify",
+    "exit_status": 0,
+    "stdout": "2 tests pass, 0 fail (hello.test.js + hello-example.test.js)"
+  }
+]

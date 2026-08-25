@@ -1,0 +1,45 @@
+{
+  "fixture_id": "human-decision",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "ls -la && find . -type f",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Decision: do not rename Organization to Account",
+    "**No.** Do not rename Organization to Account. No product files were changed.",
+    "## Why",
+    "This is a preference / policy / language choice, not an engineering fact. Methodrail classifies it as method **human**: it is not settled by reading source (`how`) or by running the code (`observe`). Mixed customer copy is not a verdict to rename the billing-owner entity.",
+    "Observed (source + project notes):",
+    "- `repo/src/org.js` treats **Organization** as the billing-owner noun. The file comments that emails sometimes say \"account\" and product copy sometimes says \"organization\", and that neither is a rename instruction.",
+    "- `.methodrail/PROJECT.md` says the same: customer-facing \"account\" copy is not a verdict to rename the entity.",
+    "- Tests assert the billing-owner noun is `Organization` (`npm test` passed, 1/1)."
+  ],
+  "outcome": "**No.** Do not rename Organization to Account. No product files were changed. This is a preference / policy / language choice, not an engineering fact. Methodrail classifies it as method **human**: it is not settled by reading source (`how`) or by running the code (`observe`). Mixed customer copy is not a verdict to rename the billing-owner entity. Observed (source + project notes): - `repo/src/org.js` treats **Organization** as the billing-owner noun. The file comments that emails sometimes say",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/human-decision/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/human-decision/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/human-decision/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/human-decision/cursor-r2-methodrail/answer.md"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [
+    "how"
+  ],
+  "references_loaded": [
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "Read TASK.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read rules/methodrail.mdc",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read .methodrail/PROJECT.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read skills/how/SKILL.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read .methodrail/knowledge/auth.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read references/knowledge/freshness.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "Read repo/src/auth.js",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "git log / git diff bbb000 -- src/auth.js",
+      "exit_status": null,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Where is the session established?",
+    "**Observed in current `repo/src/auth.js`:** an authenticated API session is established by `establishSession`, which issues an HttpOnly `sid` session cookie (`Set-Cookie: sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`) and stores the session in an in-memory `Map`. It is **not** JWT Bearer auth.",
+    "Stored note `.methodrail/knowledge/auth.md` (revision `bbb000`) claims JWT Bearer tokens and that session cookies are not used. That note is stale: this tree has no git history to compare against `bbb000`, and current `src/auth.js` contradicts it. A comment in the file says JWT Bearer login was retired.",
+    "## Overview",
+    "API auth in this repo is cookie-backed in-process sessions. Login (or equivalent) calls `establishSession(user, headers)`, which mints a `sess_*` id, records `{ userId, createdAt }` in a module-level `Map`, and writes the cookie onto the response headers. Later requests recover that session with `sessionFromRequest`, which parses `sid` from the `Cookie` header.",
+    "## Key Concepts",
+    "- **`sessions`:** in-memory `Map` keyed by session id. Authoritative session state for this process.",
+    "- **`establishSession(user, headers)`:** creates the session and sets `headers[\"set-cookie\"]`."
+  ],
+  "outcome": "**Observed in current `repo/src/auth.js`:** an authenticated API session is established by `establishSession`, which issues an HttpOnly `sid` session cookie (`Set-Cookie: sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`) and stores the session in an in-memory `Map`. It is **not** JWT Bearer auth. Stored note `.methodrail/knowledge/auth.md` (revision `bbb000`) claims JWT Bearer tokens and that session cookies are not used. That note is stale: this tree has no git history to compare against `bbb00",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-freshness/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-freshness/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-freshness/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/cursor-r2-methodrail/answer.md"
+  }
+}

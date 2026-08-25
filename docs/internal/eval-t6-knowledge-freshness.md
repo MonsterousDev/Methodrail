@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T6. Date: 2026-08-24. No git commit. Constructed traces; scoring only.
 
+v0.6.1: this pair is a **specification** (`passed`). The grader scores the answer against current `src/auth.js`, not JWT notes.
+
 ## Purpose
 
 Would Methodrail catch stale project knowledge instead of treating `.methodrail` notes as truth?

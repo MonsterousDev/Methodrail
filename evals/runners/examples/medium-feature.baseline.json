@@ -1,0 +1,21 @@
+{
+  "fixture_id": "medium-feature",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["wayfinder", "architect"],
+  "references_loaded": [],
+  "tools_used": ["read", "write"],
+  "subagents_used": 1,
+  "verification_steps": [],
+  "evidence": ["started architecture notes before implementing --greet"],
+  "outcome": "Opened an architecture review. Did not add --greet.",
+  "failure_modes": ["architecture-theater"],
+  "behaviors_observed": ["started architecture process"],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/medium-feature/baseline/overlay",
+    "command_log": "evals/runners/artifacts/medium-feature/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/medium-feature/baseline/answer.md"
+  }
+}

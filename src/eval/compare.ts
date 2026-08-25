@@ -1,21 +1,50 @@
-import type { ComparisonReport, ScoreResult } from "./types.js";
+import type {
+  CaptureQuality,
+  ComparisonKind,
+  ComparisonReport,
+  EmpiricalResult,
+  ScoreResult,
+  SpecificationResult,
+} from "./types.js";
+
+function comparisonKind(baseline: ScoreResult, methodrail: ScoreResult): ComparisonKind {
+  if (baseline.provenance === "synthetic" || methodrail.provenance === "synthetic") return "guardrail";
+  if (baseline.provenance === "constructed" || methodrail.provenance === "constructed") return "specification";
+  return "empirical";
+}
+
+function captureQuality(baseline: ScoreResult, methodrail: ScoreResult): CaptureQuality {
+  if (baseline.capture === "operator_summary" || methodrail.capture === "operator_summary") {
+    return "operator_summary";
+  }
+  return "runner_captured";
+}
+
+function empiricalResult(baseline: ScoreResult, methodrail: ScoreResult): EmpiricalResult {
+  if (baseline.outcome.incomplete || methodrail.outcome.incomplete) return "incomplete";
+  if (methodrail.outcome.passed && !baseline.outcome.passed) return "helped";
+  if (methodrail.outcome.passed && baseline.outcome.passed) return "neutral";
+  if (!methodrail.outcome.passed && baseline.outcome.passed) return "harmed";
+  return "incomplete";
+}
+
+function specificationResult(baseline: ScoreResult, methodrail: ScoreResult): SpecificationResult {
+  if (methodrail.outcome.passed && !baseline.outcome.passed) return "passed";
+  return "failed";
+}
 
 export function compareScores(baseline: ScoreResult, methodrail: ScoreResult): ComparisonReport {
   const where: string[] = [];
   const cost: string[] = [];
   const extra: string[] = [];
+  const kind = comparisonKind(baseline, methodrail);
 
-  if (methodrail.passed && !baseline.passed) where.push("Methodrail passed expected behavior that baseline missed");
-  if (baseline.forbidden_hits.length > 0 && methodrail.forbidden_hits.length === 0) {
-    where.push("Methodrail avoided forbidden expensive operators");
+  if (methodrail.outcome.passed && !baseline.outcome.passed) {
+    where.push("Methodrail outcome passed a grader check baseline missed");
   }
-  if (methodrail.behavior_hits.length > baseline.behavior_hits.length) {
-    where.push("Methodrail observed more of the expected behaviors");
+  if (!methodrail.outcome.passed && baseline.outcome.passed) {
+    extra.push("Methodrail failed an outcome check baseline passed");
   }
-  if (methodrail.metrics.verification_steps > baseline.metrics.verification_steps) {
-    where.push("Methodrail collected more verification steps");
-  }
-  if (!methodrail.passed && baseline.passed) extra.push("Methodrail failed a check baseline passed");
   if (methodrail.metrics.subagents_used > baseline.metrics.subagents_used) {
     extra.push("Methodrail used more subagents");
   }
@@ -28,60 +57,75 @@ export function compareScores(baseline: ScoreResult, methodrail: ScoreResult): C
     `references ${baseline.metrics.reference_count}→${methodrail.metrics.reference_count}`,
     `subagents ${baseline.metrics.subagents_used}→${methodrail.metrics.subagents_used}`,
     `verification steps ${baseline.metrics.verification_steps}→${methodrail.metrics.verification_steps}`,
+    `routing ${baseline.routing.assessment}→${methodrail.routing.assessment}`,
+    `operational quality ${baseline.operational_quality}→${methodrail.operational_quality}`,
   );
   if (baseline.metrics.latency_ms != null || methodrail.metrics.latency_ms != null) {
     cost.push(`latency_ms ${baseline.metrics.latency_ms ?? "n/a"}→${methodrail.metrics.latency_ms ?? "n/a"}`);
   }
 
-  let verdict: ComparisonReport["verdict"] = "incomplete";
-  const methodrailHelped =
-    methodrail.passed && (!baseline.passed || where.length > 0) && extra.length === 0
-      ? true
-      : !methodrail.passed && baseline.passed
-        ? false
-        : extra.length > 0 && where.length > 0
-          ? null
-          : methodrail.passed && extra.length > 0
-            ? null
-            : null;
-
-  if (methodrailHelped === true) verdict = extra.length > 0 ? "mixed" : "helped";
-  else if (methodrailHelped === false) verdict = "harmed";
-  else if (where.length > 0 && extra.length > 0) verdict = "mixed";
-  else if (methodrail.passed && baseline.passed && where.length === 0 && extra.length === 0) {
-    verdict = "neutral";
-  } else if (!methodrail.passed && !baseline.passed) verdict = "incomplete";
-  else verdict = extra.length > 0 ? "mixed" : "incomplete";
-
-  return {
+  const report: ComparisonReport = {
     fixture_id: methodrail.fixture_id,
+    kind,
     baseline,
     methodrail,
-    methodrail_helped: methodrailHelped,
+    methodrail_helped: null,
     where,
     cost,
     extra_complexity: extra,
-    verdict,
+    capture: captureQuality(baseline, methodrail),
   };
+
+  if (kind === "empirical") {
+    const empirical = empiricalResult(baseline, methodrail);
+    report.empirical = empirical;
+    report.methodrail_helped = empirical === "helped" ? true : empirical === "harmed" ? false : null;
+  } else if (kind === "specification") {
+    report.specification = specificationResult(baseline, methodrail);
+  } else {
+    report.guardrail = methodrail.routing.assessment === "violation" ? "caught" : "missed";
+  }
+
+  return report;
 }
 
 export function formatComparison(report: ComparisonReport): string {
-  const helped =
-    report.verdict === "neutral"
-      ? "no scored gain"
-      : report.methodrail_helped === true
-        ? "yes"
-        : report.methodrail_helped === false
-          ? "no"
-          : "unclear";
+  const kindLine =
+    report.kind === "empirical"
+      ? `Empirical result: ${report.empirical}`
+      : report.kind === "specification"
+        ? `Specification result: ${report.specification}`
+        : `Guardrail result: ${report.guardrail}`;
+  const helpLine =
+    report.kind === "empirical"
+      ? report.empirical === "neutral"
+        ? "Did Methodrail help? no scored gain"
+        : report.empirical === "helped"
+          ? "Did Methodrail help? yes"
+          : report.empirical === "harmed"
+            ? "Did Methodrail help? no"
+            : "Did Methodrail help? incomplete"
+      : report.kind === "specification"
+        ? "Did Methodrail help? not an empirical claim (specification)"
+        : "Did Methodrail help? not an empirical claim (guardrail)";
+
   return [
     `# Composition report: ${report.fixture_id}`,
     "",
-    `Did Methodrail help? ${helped}`,
-    `Verdict: ${report.verdict}`,
+    `Kind: ${report.kind}`,
+    kindLine,
+    `Capture: ${report.capture}`,
+    helpLine,
     "",
-    "## Where",
-    ...(report.where.length > 0 ? report.where.map((line) => `- ${line}`) : ["- No scored behavioral gain"]),
+    "## Outcome",
+    `- Baseline: ${report.baseline.outcome.incomplete ? "incomplete" : report.baseline.outcome.passed ? "pass" : "fail"}`,
+    `- Methodrail: ${report.methodrail.outcome.incomplete ? "incomplete" : report.methodrail.outcome.passed ? "pass" : "fail"}`,
+    ...(report.where.length > 0 ? report.where.map((line) => `- ${line}`) : ["- No outcome gain"]),
+    "",
+    "## Routing",
+    `- Baseline: ${report.baseline.routing.assessment}`,
+    `- Methodrail: ${report.methodrail.routing.assessment}`,
+    `- Operational quality: ${report.baseline.operational_quality} → ${report.methodrail.operational_quality}`,
     "",
     "## Cost",
     ...report.cost.map((line) => `- ${line}`),
@@ -91,15 +135,28 @@ export function formatComparison(report: ComparisonReport): string {
       ? report.extra_complexity.map((line) => `- ${line}`)
       : ["- None scored"]),
     "",
-    "## Baseline failures",
-    ...(report.baseline.failures.length > 0
-      ? report.baseline.failures.map((line) => `- ${line}`)
+    "## Baseline outcome failures",
+    ...(report.baseline.outcome.failures.length > 0
+      ? report.baseline.outcome.failures.map((line) => `- ${line}`)
       : ["- none"]),
     "",
-    "## Methodrail failures",
-    ...(report.methodrail.failures.length > 0
-      ? report.methodrail.failures.map((line) => `- ${line}`)
+    "## Methodrail outcome failures",
+    ...(report.methodrail.outcome.failures.length > 0
+      ? report.methodrail.outcome.failures.map((line) => `- ${line}`)
       : ["- none"]),
     "",
   ].join("\n");
+}
+
+export function integrityFailure(report: ComparisonReport): string | null {
+  if (report.baseline.outcome.incomplete || report.methodrail.outcome.incomplete) {
+    return `${report.fixture_id}: missing artifacts or incomplete grade`;
+  }
+  if (report.kind === "specification" && report.specification === "failed") {
+    return `${report.fixture_id}: specification failed`;
+  }
+  if (report.kind === "guardrail" && report.guardrail === "missed") {
+    return `${report.fixture_id}: guardrail missed`;
+  }
+  return null;
 }

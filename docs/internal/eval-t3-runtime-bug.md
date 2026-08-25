@@ -2,6 +2,8 @@
 
 Internal maintainer record. Not a public architecture document.
 
+v0.6.1: outcome is the resulting `landingPath` (expired ISO → `/login`). Required skills are routing for Methodrail only. Cursor empirical result is `helped` (`operator_summary`). Codex extras both outcome-pass → empirical `neutral`.
+
 ## What this tests
 
 Does Methodrail make a runtime/source mismatch produce composed diagnosis instead of a source-only patch?

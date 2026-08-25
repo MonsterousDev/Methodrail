@@ -1,0 +1,6 @@
+{
+  "deletions": [
+    "repo/src/org.js",
+    "repo/src/org.test.js"
+  ]
+}

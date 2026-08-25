@@ -1,0 +1,40 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# invoice.paid webhooks",
+    "Routed `invoice.paid` through the same ledger `post` path as `charge.succeeded`, keyed by Stripe `event.id`. Duplicate deliveries (retries) hit the existing row and do not add cents again.",
+    "## Files changed",
+    "- `repo/src/webhooks.js` \u2014 handle `invoice.paid` by posting `event.data.cents` to `event.data.walletId` with idempotency key `event.id`",
+    "- `repo/src/webhooks.test.js` \u2014 credit + retry tests for `invoice.paid` (replaced the previous \u201cnot routed yet\u201d assertion)",
+    "## Tests",
+    "`npm test` in `repo/` \u2014 3 passed, 0 failed, exit 0."
+  ],
+  "outcome": "Routed `invoice.paid` through the same ledger `post` path as `charge.succeeded`, keyed by Stripe `event.id`. Duplicate deliveries (retries) hit the existing row and do not add cents again. - `repo/src/webhooks.js` \u2014 handle `invoice.paid` by posting `event.data.cents` to `event.data.walletId` with idempotency key `event.id` - `repo/src/webhooks.test.js` \u2014 credit + retry tests for `invoice.paid` (replaced the previous \u201cnot routed yet\u201d assertion) `npm test` in `repo/` \u2014 3 passed, 0 failed, exit 0.",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-accumulation/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/cursor-r2-baseline/answer.md"
+  }
+}

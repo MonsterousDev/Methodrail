@@ -1,0 +1,7 @@
+[
+  {
+    "command": "ls -la && ls -la repo && ls -la repo/src && node --test repo/src/org.test.js",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

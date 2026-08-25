@@ -6,9 +6,10 @@ import test from "node:test";
 import { compareScores } from "../src/eval/compare.js";
 import { loadExpectationFile, loadRunFile } from "../src/eval/load.js";
 import { scoreRun } from "../src/eval/score.js";
-import type { EvalRun } from "../src/eval/types.js";
+import type { EvalContext, EvalRun } from "../src/eval/types.js";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const ctx: EvalContext = { repoRoot: root };
 const examplesDir = join(root, "evals/runners/examples");
 
 function example(name: string): EvalRun {
@@ -23,7 +24,7 @@ function tracesDiffer(a: EvalRun, b: EvalRun): boolean {
   );
 }
 
-test("simple-change: Cursor and Codex both pass the same expected.yaml; both compares are neutral", () => {
+test("simple-change: Cursor and Codex both outcome-pass; both compares are empirical neutral", () => {
   const expected = loadExpectationFile(join(root, "evals/fixtures/simple-change/expected.yaml"));
 
   const cursorBaseline = example("simple-change.baseline.json");
@@ -32,57 +33,44 @@ test("simple-change: Cursor and Codex both pass the same expected.yaml; both com
   const codexMethodrail = example("simple-change.codex-methodrail.json");
 
   assert.equal(cursorBaseline.host, "cursor");
-  assert.equal(cursorMethodrail.host, "cursor");
   assert.equal(codexBaseline.host, "codex");
-  assert.equal(codexMethodrail.host, "codex");
+  assert.equal(cursorBaseline.capture, "operator_summary");
 
-  const cursorBaselineScore = scoreRun(cursorBaseline, expected);
-  const cursorMethodrailScore = scoreRun(cursorMethodrail, expected);
-  const codexBaselineScore = scoreRun(codexBaseline, expected);
-  const codexMethodrailScore = scoreRun(codexMethodrail, expected);
-
-  assert.equal(cursorBaselineScore.passed, true);
-  assert.equal(cursorMethodrailScore.passed, true);
-  assert.equal(codexBaselineScore.passed, true);
-  assert.equal(codexMethodrailScore.passed, true);
-
-  const cursorCompare = compareScores(cursorBaselineScore, cursorMethodrailScore);
-  const codexCompare = compareScores(codexBaselineScore, codexMethodrailScore);
-  assert.equal(cursorCompare.verdict, "neutral");
-  assert.equal(codexCompare.verdict, "neutral");
+  const cursorCompare = compareScores(
+    scoreRun(cursorBaseline, expected, ctx),
+    scoreRun(cursorMethodrail, expected, ctx),
+  );
+  const codexCompare = compareScores(
+    scoreRun(codexBaseline, expected, ctx),
+    scoreRun(codexMethodrail, expected, ctx),
+  );
+  assert.equal(cursorCompare.kind, "empirical");
+  assert.equal(codexCompare.kind, "empirical");
+  assert.equal(cursorCompare.empirical, "neutral");
+  assert.equal(codexCompare.empirical, "neutral");
 });
 
-test("runtime-bug: both hosts baseline fail, methodrail pass, compare helped; evidence and required skills", () => {
+test("runtime-bug: Cursor empirical helped from outcome; Codex extras outcome-neutral with Methodrail routing hits", () => {
   const expected = loadExpectationFile(join(root, "evals/fixtures/runtime-bug/expected.yaml"));
   const required = expected.required_skills ?? [];
   assert.deepEqual(required, ["debug", "diagnosing-bugs", "verify-change"]);
 
-  const cursorBaseline = example("runtime-bug.baseline.json");
-  const cursorMethodrail = example("runtime-bug.methodrail.json");
-  const codexBaseline = example("runtime-bug.codex-baseline.json");
-  const codexMethodrail = example("runtime-bug.codex-methodrail.json");
+  const cursorCompare = compareScores(
+    scoreRun(example("runtime-bug.baseline.json"), expected, ctx),
+    scoreRun(example("runtime-bug.methodrail.json"), expected, ctx),
+  );
+  assert.equal(cursorCompare.kind, "empirical");
+  assert.equal(cursorCompare.empirical, "helped");
+  assert.equal(cursorCompare.baseline.passed, false);
+  assert.equal(cursorCompare.methodrail.passed, true);
 
-  const cursorBaselineScore = scoreRun(cursorBaseline, expected);
-  const cursorMethodrailScore = scoreRun(cursorMethodrail, expected);
-  const codexBaselineScore = scoreRun(codexBaseline, expected);
-  const codexMethodrailScore = scoreRun(codexMethodrail, expected);
-
-  assert.equal(cursorBaselineScore.passed, false);
-  assert.equal(codexBaselineScore.passed, false);
-  assert.equal(cursorMethodrailScore.passed, true);
-  assert.equal(codexMethodrailScore.passed, true);
-
-  assert.equal(compareScores(cursorBaselineScore, cursorMethodrailScore).verdict, "helped");
-  assert.equal(compareScores(codexBaselineScore, codexMethodrailScore).verdict, "helped");
-
-  assert.ok(cursorMethodrail.evidence.length > 0);
-  assert.ok(codexMethodrail.evidence.length > 0);
-  assert.ok(cursorMethodrail.verification_steps.length > 0);
-  assert.ok(codexMethodrail.verification_steps.length > 0);
-
+  const codexBaseline = scoreRun(example("runtime-bug.codex-baseline.json"), expected, ctx);
+  const codexMethodrail = scoreRun(example("runtime-bug.codex-methodrail.json"), expected, ctx);
+  assert.equal(codexBaseline.passed, true);
+  assert.equal(codexMethodrail.passed, true);
+  assert.equal(compareScores(codexBaseline, codexMethodrail).empirical, "neutral");
   for (const skill of required) {
-    assert.ok(cursorMethodrail.skills_invoked.includes(skill), `cursor methodrail missing ${skill}`);
-    assert.ok(codexMethodrail.skills_invoked.includes(skill), `codex methodrail missing ${skill}`);
+    assert.ok(codexMethodrail.skill_hits.includes(skill), `codex methodrail missing ${skill}`);
   }
 });
 

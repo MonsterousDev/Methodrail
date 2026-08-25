@@ -1,0 +1,1 @@
+The packet claims tests passed but attaches no test output. That author claim is not verification. The change retries failed card captures on the payment path; blast radius includes duplicate captures and charge.js. Flag missing fresh test evidence before merge.

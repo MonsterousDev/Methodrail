@@ -37,36 +37,34 @@ Commands: `npm run eval -- score <json>` and `npm run eval -- compare <baseline>
 | baseline | true | 0 | 0 | 1 | 18000 |
 | methodrail | true | 0 | 0 | 1 | 11000 |
 
-Compare verdict: **helped**. Did Methodrail help? **yes**.
+Compare verdict: **neutral**. Did Methodrail help? **no scored gain**. Capture: **operator_summary**.
 
-Where: no scored behavioral gain (both already did inspect / edit / cheap check).
+Where: no outcome gain (both already change the label and pass the fixture test).
 
 Cost: skills 0→0, references 0→1, subagents 0→0, verification steps 1→1, latency_ms 18000→11000.
 
 Extra complexity: none scored.
 
-Live miss vs the old recorded example: a generic Cursor agent did **not** invoke wayfinder/architect/interrogate. `tests/eval-runner.test.ts` still asserts `baselineScore.forbidden_hits.length > 0` on the example baseline, so that unit test now fails against honest live traces. The scorer also labels a both-passed pair as `helped` even when Where is empty.
+Live miss vs the old recorded example: a generic Cursor agent did **not** invoke wayfinder/architect/interrogate. Over-escalation is a synthetic guardrail (`caught`), not a live baseline.
 
 ### runtime-bug
 
-| Condition | passed | skill misses | verification steps | latency_ms |
+| Condition | outcome | routing | verification steps | latency_ms |
 | --- | --- | --- | --- | --- |
-| baseline | false | debug, diagnosing-bugs, verify-change | 0 | 17000 |
-| methodrail | true | none | 4 | 42000 |
+| baseline | fail (expiresAt still `/dashboard`) | appropriate (skills not required of baseline) | 0 | 17000 |
+| methodrail | pass | appropriate (`debug`, `diagnosing-bugs`, `verify-change`) | 3 real commands | 42000 |
 
-Compare verdict: **helped**. Did Methodrail help? **yes**.
+Compare verdict: **helped** (empirical, operator_summary). Did Methodrail help? **yes**.
 
 Where:
 
-- Methodrail passed expected behavior that baseline missed
-- Methodrail observed more of the expected behaviors
-- Methodrail collected more verification steps
+- Methodrail resulting `landingPath` sends expired ISO sessions to `/login`; baseline does not
 
-Cost: skills 0→4, references 0→6, subagents 0→0, verification steps 0→4, latency_ms 17000→42000.
+Cost: skills 0→4, references 0→6, subagents 0→0, verification steps 0→3, latency_ms 17000→42000.
 
 Extra complexity: none scored.
 
-Baseline failure modes: `source-as-runtime`. Methodrail used debug → diagnosing-bugs → project `verify-project` → failing regression → minimal fix → verify-change. Pre-fix drive: expired session landed on `/dashboard`. Post-fix drive and `node --test src/session.test.js`: 3 pass, 0 fail.
+Baseline reconstructed overlay only checks `session.expired`. Methodrail overlay also inspects `expiresAt`. Capture remains operator_summary.
 
 ## Codex (real, extra)
 
@@ -81,20 +79,20 @@ Retry that completed: `codex exec --ignore-user-config --skip-git-repo-check --e
 
 ### simple-change (Codex extras)
 
-Both conditions passed. Compare verdict **helped** with no scored behavioral gain. Cost: latency_ms 30985→35491. Tests actually run: `npm test` 1 pass / 0 fail on both copies.
+Both conditions passed. Compare verdict **neutral** with no outcome gain. Capture: operator_summary. Cost: latency_ms 30985→35491. Tests actually run: `npm test` 1 pass / 0 fail on both copies.
 
 ### runtime-bug (Codex extras)
 
-Baseline completed (`elapsed_ms` 84776). Codex reproduced first (`expiresAt: "2000-01-01T00:00:00.000Z"` → `/dashboard`), then patched, then re-ran node assertions. Stronger than the Cursor baseline, because the fixture prompt already asked for evidence and Codex followed it. Saved as `runtime-bug.codex-baseline.json`.
+Baseline completed (`elapsed_ms` 84776). Codex reproduced first, patched `landingPath` (including expired ISO), then re-ran node assertions. v0.6.1 outcome grade: **pass**. Routing: appropriate for a baseline (Methodrail skills are not required). Saved as `runtime-bug.codex-baseline.json`.
 
-Methodrail completed (`elapsed_ms` 103415). Codex read `debug`, `diagnosing-bugs`, `.methodrail/PROJECT.md`, `verify-project`, then `verify-change`. Red loop, red `node --test test/session.test.mjs`, minimal expiry check, green tests (2 pass), post-fix landingPath capture `/login`. Saved as `runtime-bug.codex-methodrail.json`.
+Methodrail completed (`elapsed_ms` 103415). Outcome grade: **pass**. Routing hits `debug`, `diagnosing-bugs`, `verify-change`. Empirical compare vs Codex baseline: **neutral** (both trees fix expiry). Capture: operator_summary.
 
 ## Host gaps and live misses
 
 1. **Claude Code unavailable for live work.** Binary not on PATH; npx package present; OAuth login required.
 2. **Codex CLI/model skew.** Installed 0.135.0 cannot run the configured default `gpt-5.6-sol`. Live runs needed `-m gpt-5.5 --ignore-user-config`.
 3. **simple-change does not discriminate hosts.** Cursor and Codex both inspect-edit-check with or without Methodrail. The recorded-example over-escalation did not reproduce.
-4. **runtime-bug does discriminate.** Cursor baseline inferred from source and skipped verification. Cursor methodrail and both Codex conditions collected runtime evidence. Methodrail added required skills, a project-verify drive, and a red/green regression.
+4. **runtime-bug does discriminate on Cursor outcome.** Cursor baseline overlay still misses `expiresAt`. Cursor methodrail and both Codex conditions produce a passing `landingPath`. Codex empirical extras are **neutral** on outcome; Methodrail still shows routing skill hits.
 5. **Fixture has no HTTP app.** `verify-project` says “start the app”; the repo is only `landingPath`. Both successful methodrail hosts used a throwaway Node driver. That is honest for this fixture, not a hidden server.
 6. **Example-unit-test drift, then fixed.** Live Cursor `simple-change` baseline no longer has forbidden skill hits. Traces were not falsified. Follow-up: the recorded-pair test now expects both conditions to pass with verdict `neutral`; over-escalation is a synthetic `scoreRun` case. `npm run eval` loads only `<fixture>.(baseline|methodrail).json` so Codex extras cannot last-write-win.
 7. **No Claude traces.** Do not treat any JSON here as Claude Code.

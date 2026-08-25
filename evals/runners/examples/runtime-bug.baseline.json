@@ -8,12 +8,26 @@
   "latency_ms": 17000,
   "skills_invoked": [],
   "references_loaded": [],
-  "tools_used": ["read", "edit"],
+  "tools_used": [
+    "read",
+    "edit"
+  ],
   "subagents_used": 0,
   "verification_steps": [],
   "evidence": [],
   "outcome": "Patched landingPath to treat session.expired as logged out after reading src/session.js. No pre-fix runtime capture, no project verify skill, no regression test.",
-  "failure_modes": ["source-as-runtime"],
-  "behaviors_observed": ["inferred runtime from source"],
-  "notes": "Live Cursor baseline in /tmp/methodrail-live-20260824/runtime-bug-cursor-baseline. Generic agent inferred expiry from source shape and edited. Did not start a red-capable loop or distinguish inference from observation."
+  "failure_modes": [
+    "source-as-runtime"
+  ],
+  "behaviors_observed": [
+    "inferred runtime from source"
+  ],
+  "notes": "Live Cursor baseline in /tmp/methodrail-live-20260824/runtime-bug-cursor-baseline. Generic agent inferred expiry from source shape and edited. Did not start a red-capable loop or distinguish inference from observation.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/runtime-bug/baseline/overlay",
+    "command_log": "evals/runners/artifacts/runtime-bug/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/runtime-bug/baseline/answer.md"
+  }
 }

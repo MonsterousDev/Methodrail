@@ -1,7 +1,9 @@
 {
   "fixture_id": "partial-knowledge",
   "condition": "methodrail",
-  "skills_invoked": ["how"],
+  "skills_invoked": [
+    "how"
+  ],
   "references_loaded": [
     ".methodrail/PROJECT.md",
     ".methodrail/knowledge/payments.md",
@@ -12,7 +14,9 @@
     "references/knowledge/freshness.md",
     "rules/methodrail.mdc"
   ],
-  "tools_used": ["read"],
+  "tools_used": [
+    "read"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "compared knowledge/payments.md 'all payments go through Stripe' against subscribe() and chargeInvoice() in current code"
@@ -29,5 +33,11 @@
     "detect Adyen for one-time payments",
     "reconcile partial knowledge rather than discard or fully trust it"
   ],
-  "notes": "constructed"
+  "notes": "constructed",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/partial-knowledge/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/methodrail/answer.md"
+  }
 }

@@ -4,12 +4,28 @@
   "host": "constructed",
   "skills_invoked": [],
   "references_loaded": [],
-  "tools_used": ["read", "write"],
+  "tools_used": [
+    "read",
+    "write"
+  ],
   "subagents_used": 0,
   "verification_steps": [],
   "evidence": [],
   "outcome": "Rewrote src/session.js to key sessions by orgId and sketched a multi-service session platform. Did not walk the current User-keyed implementation, did not treat Session as a domain owner, and did not record a decision.",
-  "failure_modes": ["skipped-grounding", "unrecorded-decision", "jumped-to-rewrite"],
-  "behaviors_observed": ["rewrote session storage without a decision"],
-  "notes": "Constructed example trace, not live. Baseline skips how and domain-modeling, jumps to a rewrite, and skips recording a decision."
+  "failure_modes": [
+    "skipped-grounding",
+    "unrecorded-decision",
+    "jumped-to-rewrite"
+  ],
+  "behaviors_observed": [
+    "rewrote session storage without a decision"
+  ],
+  "notes": "Constructed example trace, not live. Baseline skips how and domain-modeling, jumps to a rewrite, and skips recording a decision.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-decision/baseline/overlay",
+    "command_log": "evals/runners/artifacts/architecture-decision/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-decision/baseline/answer.md"
+  }
 }

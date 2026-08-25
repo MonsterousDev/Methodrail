@@ -1,0 +1,12 @@
+[
+  {
+    "command": "git log --oneline -20 && echo '---' && git status && echo '---' && git log --all --oneline -20 && echo '---' && git rev-parse HEAD && echo '---' && git log -- src/auth.js 2>/dev/null; ls -la",
+    "phase": "other",
+    "exit_status": 0
+  },
+  {
+    "command": "git rev-parse --show-toplevel 2>/dev/null; ls -la; find . -type f | head -50",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

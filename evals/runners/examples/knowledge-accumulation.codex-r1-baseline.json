@@ -1,0 +1,93 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg --files",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/webhooks.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/ledger.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,320p' repo/src/webhooks.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "cat repo/package.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,200p' repo/index.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "repro"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "Implemented `invoice.paid` webhook handling by routing it through the same ledger posting path used by `charge.succeeded`.",
+    "The ledger already deduplicates by idempotency key, and the webhook handler passes `event.id` as that key, so Stripe retries for the same `invoice.paid` event return the existing ledger row instead of posting a second credit.",
+    "Updated tests cover:",
+    "- `invoice.paid` credits the wallet.",
+    "- Duplicate `invoice.paid` delivery does not double-credit.",
+    "- Existing `charge.succeeded` duplicate behavior still passes.",
+    "Verification:",
+    "- `npm test` passed with 3 tests."
+  ],
+  "outcome": "Implemented `invoice.paid` webhook handling by routing it through the same ledger posting path used by `charge.succeeded`. The ledger already deduplicates by idempotency key, and the webhook handler passes `event.id` as that key, so Stripe retries for the same `invoice.paid` event return the existing ledger row instead of posting a second credit. Updated tests cover: - `invoice.paid` credits the wallet. - Duplicate `invoice.paid` delivery does not double-credit. - Existing `charge.succeeded` dup",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-accumulation/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-accumulation/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

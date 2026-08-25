@@ -1,0 +1,7 @@
+[
+  {
+    "command": "read TASK.md, RUN.json, repo/package.json, repo/src/org.js, repo/src/org.test.js",
+    "phase": "other",
+    "exit_status": null
+  }
+]

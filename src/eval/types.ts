@@ -7,12 +7,49 @@ export const EXPENSIVE_SKILLS = [
 ] as const;
 
 export type EvalCondition = "baseline" | "methodrail";
+export type Provenance = "live" | "constructed" | "synthetic";
+export type CaptureQuality = "runner_captured" | "operator_summary";
+export type RoutingAssessment = "appropriate" | "miss" | "violation";
+export type OperationalQuality = "clean" | "wasteful" | "violating";
+export type EmpiricalResult = "helped" | "neutral" | "harmed" | "incomplete";
+export type SpecificationResult = "passed" | "failed";
+export type GuardrailResult = "caught" | "missed";
+export type ComparisonKind = "empirical" | "specification" | "guardrail";
+
+export interface VerificationRecord {
+  command: string;
+  phase?: "repro" | "regression" | "verify" | "other";
+  exit_status: number | null;
+  artifact?: string;
+}
+
+export type VerificationStep = string | VerificationRecord;
+
+export interface RunArtifacts {
+  transcript?: string;
+  patch?: string;
+  command_log?: string;
+  answer?: string;
+  overlay?: string;
+  worktree?: string;
+}
+
+export interface CommandLogEntry {
+  command: string;
+  phase?: string;
+  exit_status: number | null;
+  stdout?: string;
+  stderr?: string;
+}
 
 export interface EvalRun {
   fixture_id: string;
   condition: EvalCondition;
+  provenance: Provenance;
+  capture: CaptureQuality;
   host?: string;
   model?: string;
+  repeat?: number;
   started_at?: string;
   ended_at?: string;
   latency_ms?: number | null;
@@ -20,12 +57,13 @@ export interface EvalRun {
   references_loaded: string[];
   tools_used: string[];
   subagents_used: number;
-  verification_steps: string[];
+  verification_steps: VerificationStep[];
   evidence: string[];
   outcome: string;
   failure_modes: string[];
   behaviors_observed?: string[];
   notes?: string;
+  artifacts?: RunArtifacts;
 }
 
 export interface FixtureExpectation {
@@ -38,10 +76,37 @@ export interface FixtureExpectation {
   expensive_skills?: string[];
 }
 
+export interface OutcomeCheck {
+  id: string;
+  passed: boolean;
+  detail: string;
+}
+
+export interface OutcomeGrade {
+  passed: boolean;
+  incomplete: boolean;
+  checks: OutcomeCheck[];
+  failures: string[];
+}
+
+export interface RoutingGrade {
+  assessment: RoutingAssessment;
+  skill_hits: string[];
+  skill_misses: string[];
+  forbidden_hits: string[];
+  notes: string[];
+}
+
 export interface ScoreResult {
   fixture_id: string;
   condition: EvalCondition;
+  provenance: Provenance;
+  capture: CaptureQuality;
+  /** Outcome layer only. Routing violations do not clear this. */
   passed: boolean;
+  outcome: OutcomeGrade;
+  routing: RoutingGrade;
+  operational_quality: OperationalQuality;
   skill_hits: string[];
   skill_misses: string[];
   forbidden_hits: string[];
@@ -60,11 +125,19 @@ export interface ScoreResult {
 
 export interface ComparisonReport {
   fixture_id: string;
+  kind: ComparisonKind;
   baseline: ScoreResult;
   methodrail: ScoreResult;
   methodrail_helped: boolean | null;
   where: string[];
   cost: string[];
   extra_complexity: string[];
-  verdict: "helped" | "mixed" | "harmed" | "neutral" | "incomplete";
+  empirical?: EmpiricalResult;
+  specification?: SpecificationResult;
+  guardrail?: GuardrailResult;
+  capture: CaptureQuality;
+}
+
+export interface EvalContext {
+  repoRoot: string;
 }

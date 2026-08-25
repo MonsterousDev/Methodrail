@@ -1,0 +1,41 @@
+{
+  "fixture_id": "human-decision",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "read TASK.md, RUN.json, repo/package.json, repo/src/org.js, repo/src/org.test.js",
+      "exit_status": null,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Decision: do not rename Organization to Account",
+    "**No.** Do not rename Organization to Account. No product files were changed.",
+    "## Why",
+    "The billing-owner entity is already named Organization. That is encoded in `organizationType()`, the exported helpers in `repo/src/org.js`, and the test `\"billing owner noun is Organization\"`.",
+    "Customer emails sometimes say \"account\" and product copy sometimes says \"organization\". The source comment on the billing-owner module states that neither of those is a rename instruction. Mixed wording is a copy inconsistency, not a product decision.",
+    "Renaming across the product would be a branding and API change (noun, function names, likely `org_*` ids). That needs an explicit human/product call. Inferring it from informal customer language would be guessing.",
+    "## What I did",
+    "- Read `TASK.md`, `repo/src/org.js`, `repo/src/org.test.js`, and `repo/package.json`."
+  ],
+  "outcome": "**No.** Do not rename Organization to Account. No product files were changed. The billing-owner entity is already named Organization. That is encoded in `organizationType()`, the exported helpers in `repo/src/org.js`, and the test `\"billing owner noun is Organization\"`. Customer emails sometimes say \"account\" and product copy sometimes says \"organization\". The source comment on the billing-owner module states that neither of those is a rename instruction. Mixed wording is a copy inconsistency, n",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/human-decision/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/human-decision/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/human-decision/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/human-decision/cursor-r2-baseline/answer.md"
+  }
+}

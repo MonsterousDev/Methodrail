@@ -1,0 +1,110 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && ls",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"invoice|subscription|monthly|one-time|one time|processor|stripe|paypal|charge\" .",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg --files",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,200p' src/payments.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,200p' src/adyen.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,200p' src/stripe.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find .. -maxdepth 2 -type f -name '*knowledge*' -o -name '*.md' -o -name '*.txt' -o -name '*.json'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' ../.methodrail/PROJECT.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,160p' ../CODEX_PROMPT.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,160p' ../RUN.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' ../.methodrail/knowledge/payments.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "node --input-type=module -e 'import { subscribe, chargeInvoice } from \"./src/payments.js\"; console.log(JSON.stringify({invoice: chargeInvoice({id:\"inv_1\", cents:1234, customerId:\"cus_1\"}), subscription: subscribe({id:\"cus_1\"}, {priceId:\"price_monthly\"})}, null, 2))'",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e 'JSON.parse(require(\"fs\").readFileSync(\"command.log.json\", \"utf8\")); console.log(\"valid json\");' && ls ANSWER.md command.log.json",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "Freshness check: I read the current code in `repo/src/payments.js`, `repo/src/adyen.js`, and `repo/src/stripe.js` before using project knowledge. The project knowledge file says all payments go through Stripe, but it is stale relative to the current code.",
+    "Current-code answer:",
+    "- One-time invoice payments are charged by Adyen. `chargeInvoice(invoice)` in `repo/src/payments.js` calls `submitPayment(invoice)` from `repo/src/adyen.js`, which returns an Adyen-style `pspReference`.",
+    "- Monthly subscriptions are charged by Stripe. `subscribe(customer, plan)` in `repo/src/payments.js` calls `createSubscription(customer, plan)` from `repo/src/stripe.js`, which returns `provider: \"stripe\"` and `object: \"subscription\"`.",
+    "I also verified this by importing the current module with Node and calling both exported functions."
+  ],
+  "outcome": "Freshness check: I read the current code in `repo/src/payments.js`, `repo/src/adyen.js`, and `repo/src/stripe.js` before using project knowledge. The project knowledge file says all payments go through Stripe, but it is stale relative to the current code. Current-code answer: - One-time invoice payments are charged by Adyen. `chargeInvoice(invoice)` in `repo/src/payments.js` calls `submitPayment(invoice)` from `repo/src/adyen.js`, which returns an Adyen-style `pspReference`. - Monthly subscripti",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/partial-knowledge/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "\n> tillbox@1.0.0 test\n> node --test src/webhooks.test.js\n\n\u2714 charge.succeeded duplicate delivery does not double the wallet (0.620459ms)\n\u2714 invoice.paid duplicate delivery does not double the wallet (0.063875ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 83.755375\n"
+  }
+]

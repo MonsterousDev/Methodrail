@@ -1,0 +1,41 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# invoice.paid webhook handling",
+    "Routed `invoice.paid` through the same ledger credit path as `charge.succeeded`. Credits key on `event.id`, so Stripe retries with the same event id no-op instead of double-posting.",
+    "Observed in `src/ledger.js`: `post()` returns the existing row when `key` is already in `byKey`. Test-confirmed: duplicate `invoice.paid` deliveries leave wallet balance unchanged.",
+    "## Files changed",
+    "- `repo/src/webhooks.js` \u2014 handle `invoice.paid` via `post(walletId, cents, event.id)`",
+    "- `repo/src/webhooks.test.js` \u2014 replaced the \u201cnot routed yet\u201d case with a duplicate-delivery balance check",
+    "## Test results",
+    "```"
+  ],
+  "outcome": "Routed `invoice.paid` through the same ledger credit path as `charge.succeeded`. Credits key on `event.id`, so Stripe retries with the same event id no-op instead of double-posting. Observed in `src/ledger.js`: `post()` returns the existing row when `key` is already in `byKey`. Test-confirmed: duplicate `invoice.paid` deliveries leave wallet balance unchanged. - `repo/src/webhooks.js` \u2014 handle `invoice.paid` via `post(walletId, cents, event.id)` - `repo/src/webhooks.test.js` \u2014 replaced the \u201cnot ",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-accumulation/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-methodrail/answer.md"
+  }
+}

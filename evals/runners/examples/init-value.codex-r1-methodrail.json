@@ -1,0 +1,140 @@
+{
+  "fixture_id": "init-value",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'TASK.md' -g '.methodrail/**' -g 'skills/**' -g 'rules/**' -g 'references/**' -g 'repo/**' | sed -n '1,160p'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/package.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/test/hello.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/examples/hello.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/lib/app.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "ls -la repo",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/README.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/index.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,120p' repo/.npmrc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/PROJECT.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm install",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "diff -u repo/test/hello.test.js.orig repo/test/hello.test.js",
+      "exit_status": 2,
+      "phase": "other"
+    },
+    {
+      "command": "find repo -maxdepth 1 -name 'package-lock.json' -print",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "nl -ba repo/test/hello.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "node -e \"JSON.parse(require('node:fs').readFileSync('command.log.json', 'utf8')); console.log('valid json')\"",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "Added a regression test for the hello-world example HTTP behavior in `repo/test/hello.test.js`.",
+    "The new test requires `examples/hello.js` and drives it through the repository's existing in-process request helper, proving `GET /hello` returns status `200` with body `Hello World` without starting a listening server. No library behavior was changed.",
+    "Verification run:",
+    "```sh",
+    "npm install",
+    "npm test",
+    "```",
+    "Result: `npm test` passed with 2 tests passing."
+  ],
+  "outcome": "Added a regression test for the hello-world example HTTP behavior in `repo/test/hello.test.js`. The new test requires `examples/hello.js` and drives it through the repository's existing in-process request helper, proving `GET /hello` returns status `200` with body `Hello World` without starting a listening server. No library behavior was changed. Verification run: ```sh npm install npm test",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/init-value/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/init-value/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/init-value/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

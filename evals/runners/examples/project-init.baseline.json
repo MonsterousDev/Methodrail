@@ -1,0 +1,21 @@
+{
+  "fixture_id": "project-init",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": [],
+  "references_loaded": ["repo/README.md"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["copied README into PROJECT.md"],
+  "outcome": "Copied README into PROJECT.md.",
+  "failure_modes": ["readme-copy"],
+  "behaviors_observed": ["copied README"],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/project-init/baseline/overlay",
+    "command_log": "evals/runners/artifacts/project-init/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/project-init/baseline/answer.md"
+  }
+}

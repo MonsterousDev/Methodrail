@@ -1,0 +1,7 @@
+[
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

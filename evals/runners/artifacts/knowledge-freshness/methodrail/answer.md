@@ -1,0 +1,1 @@
+Session is established in repo/src/auth.js establishSession via an HttpOnly sid cookie and a server-side session map, not JWT. The JWT claim in knowledge/auth.md is stale and should be flagged, not trusted.

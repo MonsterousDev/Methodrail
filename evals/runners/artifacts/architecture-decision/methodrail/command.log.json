@@ -1,0 +1,7 @@
+[
+  {
+    "command": "read src/session.js sessionOwnerKey",
+    "phase": "verify",
+    "exit_status": 0
+  }
+]

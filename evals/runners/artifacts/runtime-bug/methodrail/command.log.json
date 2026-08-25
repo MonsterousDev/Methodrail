@@ -1,0 +1,20 @@
+[
+  {
+    "command": "node scripts/drive-expired.mjs",
+    "phase": "repro",
+    "exit_status": 1,
+    "stdout": "expired session observed /dashboard expected /login"
+  },
+  {
+    "command": "node --test src/session.test.js",
+    "phase": "regression",
+    "exit_status": 1,
+    "stdout": "red regression"
+  },
+  {
+    "command": "node --test src/session.test.js",
+    "phase": "verify",
+    "exit_status": 0,
+    "stdout": "green regression"
+  }
+]

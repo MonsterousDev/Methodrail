@@ -1,0 +1,12 @@
+[
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short && git diff --stat",
+    "phase": "other",
+    "exit_status": 128
+  }
+]

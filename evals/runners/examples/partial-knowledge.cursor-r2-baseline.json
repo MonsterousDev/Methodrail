@@ -1,0 +1,76 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "read TASK.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "read repo/src/payments.js",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "read repo/src/stripe.js",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "read repo/src/adyen.js",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "read .methodrail/knowledge/payments.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "read .methodrail/PROJECT.md",
+      "exit_status": null,
+      "phase": "other"
+    },
+    {
+      "command": "git rev-parse HEAD && git log -5 --oneline && git status && ls -la",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "ls -la && git rev-parse HEAD",
+      "exit_status": null,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "**Stripe** charges the monthly subscription. **Adyen** charges the one-time invoice payment.",
+    "## Freshness check",
+    "Project knowledge (`.methodrail/knowledge/payments.md`) records revision `ccc111` and claims all customer payments go through Stripe, including subscriptions, invoices, and one-time charges.",
+    "This tree has no git history, so that revision could not be verified. Comparing the knowledge to current source shows it is stale.",
+    "## Current code",
+    "`repo/src/payments.js`:",
+    "- `subscribe(customer, plan)` calls `createSubscription` from `stripe.js`. That path returns a Stripe subscription (`provider: \"stripe\"`, `collection_method: \"charge_automatically\"`)."
+  ],
+  "outcome": "**Stripe** charges the monthly subscription. **Adyen** charges the one-time invoice payment. Project knowledge (`.methodrail/knowledge/payments.md`) records revision `ccc111` and claims all customer payments go through Stripe, including subscriptions, invoices, and one-time charges. This tree has no git history, so that revision could not be verified. Comparing the knowledge to current source shows it is stale. `repo/src/payments.js`: - `subscribe(customer, plan)` calls `createSubscription` from",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/cursor-r2-baseline/answer.md"
+  }
+}

@@ -1,0 +1,5 @@
+enabled: false
+# Optional release threshold. Must be predeclared before a live battery
+# and must not be edited after seeing results. Off for 0.6.1.
+empirical:
+  must_not_harm: []

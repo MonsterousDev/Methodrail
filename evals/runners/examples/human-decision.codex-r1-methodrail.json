@@ -1,0 +1,92 @@
+{
+  "fixture_id": "human-decision",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [
+    "references/decision-frontier.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'TASK.md' -g '.methodrail/**' -g 'skills/**' -g 'rules/**' -g 'references/**' -g 'repo/**'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' references/decision-frontier.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' src/org.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' src/org.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' package.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"Organization|organization|org\\b|Account|account\" .",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e \"JSON.parse(require('node:fs').readFileSync('command.log.json', 'utf8')); console.log('command.log.json valid JSON')\"",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "No. I would not rename Organization to Account across the product based on the evidence in this repo.",
+    "Reason: the only product source says this is a billing owner entity and explicitly notes that customer emails sometimes say \"account\" while product copy sometimes says \"organization\"; it also says neither wording is a rename instruction. That makes this a product-language/domain decision without enough evidence to justify a global rename. Changing the code would make the test pass only by overwriting the current documented terminology, not by resolving the underlying ambiguity.",
+    "I left the product files unchanged.",
+    "Verification run: `npm test` passed."
+  ],
+  "outcome": "No. I would not rename Organization to Account across the product based on the evidence in this repo. Reason: the only product source says this is a billing owner entity and explicitly notes that customer emails sometimes say \"account\" while product copy sometimes says \"organization\"; it also says neither wording is a rename instruction. That makes this a product-language/domain decision without enough evidence to justify a global rename. Changing the code would make the test pass only by overwr",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/human-decision/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/human-decision/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/human-decision/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/human-decision/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/human-decision/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "command": "git log --oneline && git rev-parse HEAD && git log --oneline -- src/ && git status && git log --oneline ccc111..HEAD -- src/ && git diff ccc111 -- src/ && git log --all --oneline && git show ccc111 --stat",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "fatal: not a git repository (or any of the parent directories): .git\n---LOG ALL---\nfatal: not a git repository (or any of the parent directories): .git\nccc111 not found\n"
+  }
+]

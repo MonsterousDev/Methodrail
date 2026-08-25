@@ -1,0 +1,46 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short && git diff --stat",
+      "exit_status": 128,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "## What I did",
+    "Routed `invoice.paid` through the same ledger path as `charge.succeeded`. `handle()` now posts cents for both event types using `event.id` as the ledger key.",
+    "The ledger already treats `key` as idempotent (`post` returns the existing row if the key was seen). Stripe retries that replay the same event id therefore do not double-credit the wallet.",
+    "Updated the placeholder test (`invoice.paid is not routed yet`) to assert that a paid invoice credits once and a second delivery of the same event leaves the balance unchanged.",
+    "## Files changed",
+    "- `repo/src/webhooks.js` \u2014 accept `invoice.paid` and credit via `post(..., event.id)`",
+    "- `repo/src/webhooks.test.js` \u2014 duplicate-delivery coverage for `invoice.paid`"
+  ],
+  "outcome": "Routed `invoice.paid` through the same ledger path as `charge.succeeded`. `handle()` now posts cents for both event types using `event.id` as the ledger key. The ledger already treats `key` as idempotent (`post` returns the existing row if the key was seen). Stripe retries that replay the same event id therefore do not double-credit the wallet. Updated the placeholder test (`invoice.paid is not routed yet`) to assert that a paid invoice credits once and a second delivery of the same event leaves",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-accumulation/cursor-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/cursor-r1-baseline/answer.md"
+  }
+}

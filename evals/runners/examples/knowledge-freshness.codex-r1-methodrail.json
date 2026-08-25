@@ -1,0 +1,132 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [
+    "how"
+  ],
+  "references_loaded": [
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'TASK.md' -g '.methodrail/**' -g 'skills/**' -g 'rules/**' -g 'references/**' -g 'repo/**'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' references/knowledge/freshness.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' skills/how/SKILL.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/auth.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"session|auth|authenticate|login|cookie|token|request|req\\.\" repo",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/PROJECT.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/knowledge/auth.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo rev-parse HEAD",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "find repo -maxdepth 3 -type d -name .git -o -type f -maxdepth 3 | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "nl -ba repo/src/auth.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"jwt|Bearer|Authorization|set-cookie|sid=|establishSession|sessionFromRequest\" .",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' ANSWER.md",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e \"const fs=require('fs'); const data=JSON.parse(fs.readFileSync('command.log.json','utf8')); console.log(Array.isArray(data), data.length);\"",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "The session is established in `repo/src/auth.js` by `establishSession(user, headers)`.",
+    "Observed from current code:",
+    "- Mechanism: an in-memory `Map` named `sessions`, keyed by a generated `sess_...` session id.",
+    "- Establishment point: `establishSession` creates the session id, stores `{ userId: user.id, createdAt: Date.now() }` in `sessions`, and writes a `Set-Cookie` header.",
+    "- Transport: cookie named `sid`, set as `sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`.",
+    "- Authenticated request lookup: `sessionFromRequest(request)` reads `request.headers.cookie`, extracts `sid`, and returns `sessions.get(sid)` if present.",
+    "So the current mechanism is cookie-based server-side session storage, not JWT Bearer auth. The stored Methodrail auth note says JWT Bearer tokens are used, but current code explicitly says JWT Bearer login was retired and no git metadata was available to freshness-check that note by revision, so I treated the source file as authoritative."
+  ],
+  "outcome": "The session is established in `repo/src/auth.js` by `establishSession(user, headers)`. Observed from current code: - Mechanism: an in-memory `Map` named `sessions`, keyed by a generated `sess_...` session id. - Establishment point: `establishSession` creates the session id, stores `{ userId: user.id, createdAt: Date.now() }` in `sessions`, and writes a `Set-Cookie` header. - Transport: cookie named `sid`, set as `sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`. - Authenticated request lookup: `",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-freshness/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-freshness/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-freshness/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-freshness/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

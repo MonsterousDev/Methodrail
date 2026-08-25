@@ -1,0 +1,40 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git log --oneline -20 && echo '---' && git status && echo '---' && git log --all --oneline -20 && echo '---' && git rev-parse HEAD && echo '---' && git log -- src/auth.js 2>/dev/null; ls -la",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git rev-parse --show-toplevel 2>/dev/null; ls -la; find . -type f | head -50",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "The session is established in `establishSession` in `repo/src/auth.js`.",
+    "Mechanism from current code: an in-memory session (`sessions` Map) plus an HttpOnly `sid` cookie. `establishSession` creates a `sess_*` id, stores `{ userId, createdAt }` in the map, and sets `Set-Cookie: sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`. Authenticated requests recover that session via `sessionFromRequest`, which parses the `sid` cookie.",
+    "JWT Bearer tokens are not the current mechanism. The stored note `.methodrail/knowledge/auth.md` (revision `bbb000`) still says JWT Bearer login; that is stale. Current `src/auth.js` has no `jwt.sign` and comments that JWT Bearer login was retired. Git history could not be checked here (this copy is not a git repo), so freshness was decided by reading the current source."
+  ],
+  "outcome": "The session is established in `establishSession` in `repo/src/auth.js`. Mechanism from current code: an in-memory session (`sessions` Map) plus an HttpOnly `sid` cookie. `establishSession` creates a `sess_*` id, stores `{ userId, createdAt }` in the map, and sets `Set-Cookie: sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`. Authenticated requests recover that session via `sessionFromRequest`, which parses the `sid` cookie. JWT Bearer tokens are not the current mechanism. The stored note `.metho",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-freshness/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-freshness/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-freshness/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/cursor-r1-methodrail/answer.md"
+  }
+}

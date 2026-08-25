@@ -1,0 +1,45 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [
+    "how"
+  ],
+  "references_loaded": [
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git log --oneline && git rev-parse HEAD && git log --oneline -- src/ && git status && git log --oneline ccc111..HEAD -- src/ && git diff ccc111 -- src/ && git log --all --oneline && git show ccc111 --stat",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "**Adyen charges the one-time invoice. Stripe charges the monthly subscription.**",
+    "Observed in current source. The project knowledge note is stale and was not reused.",
+    "## Freshness check",
+    "`.methodrail/PROJECT.md` points at `.methodrail/knowledge/payments.md`. That note records revision `ccc111` and path `src/payments.js`, and claims all customer payments (subscriptions, invoices, one-time charges) go through Stripe.",
+    "This worktree has no git history, so revision `ccc111` could not be compared. Per the freshness procedure, provenance could not be confirmed and the note was treated as reduced-confidence until re-validated against current files.",
+    "Current `repo/src/payments.js` contradicts the note:",
+    "- `subscribe(customer, plan)` calls Stripe `createSubscription`"
+  ],
+  "outcome": "**Adyen charges the one-time invoice. Stripe charges the monthly subscription.** Observed in current source. The project knowledge note is stale and was not reused. `.methodrail/PROJECT.md` points at `.methodrail/knowledge/payments.md`. That note records revision `ccc111` and path `src/payments.js`, and claims all customer payments (subscriptions, invoices, one-time charges) go through Stripe. This worktree has no git history, so revision `ccc111` could not be compared. Per the freshness procedu",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/cursor-r1-methodrail/answer.md"
+  }
+}

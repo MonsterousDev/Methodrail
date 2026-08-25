@@ -10,5 +10,6 @@ Use fixtures in a native-harness evaluation:
 
 1. Run the prompt without the skill to establish a baseline when evaluating behavior.
 2. Make the candidate skill available, then run the same prompt in a fresh context.
-3. Judge skill selection and output against the fixture's expectations.
-4. Record the harness and model version with the result.
+3. Record overlay/patch, command log, and the final answer. Graders inspect those artifacts, not `behaviors_observed`.
+4. Record provenance (`live` | `constructed` | `synthetic`) and capture quality. `runner_captured` requires a raw transcript plus answer, command log, and reproducible overlay/patch; otherwise use `operator_summary`.
+5. List repeated live pairs in an executable pilot manifest so the integrity gate rescores them instead of trusting a hand-maintained table.

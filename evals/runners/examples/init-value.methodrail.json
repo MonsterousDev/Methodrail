@@ -2,8 +2,14 @@
   "fixture_id": "init-value",
   "condition": "methodrail",
   "skills_invoked": [],
-  "references_loaded": [".methodrail/PROJECT.md"],
-  "tools_used": ["read", "write", "shell"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md"
+  ],
+  "tools_used": [
+    "read",
+    "write",
+    "shell"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "npm install",
@@ -23,5 +29,12 @@
     "drive HTTP in-process without app.listen",
     "treat the package as a library not a long-running service"
   ],
-  "notes": "Constructed comparison, not a live host run. Methodrail condition: agent sees repository + .methodrail/PROJECT.md. Correct commands and library classification from the pointer index. Did not invoke wayfinder, architect, arena, swarm, or interrogate."
+  "notes": "Constructed comparison, not a live host run. Methodrail condition: agent sees repository + .methodrail/PROJECT.md. Correct commands and library classification from the pointer index. Did not invoke wayfinder, architect, arena, swarm, or interrogate.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/init-value/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/methodrail/answer.md"
+  }
 }

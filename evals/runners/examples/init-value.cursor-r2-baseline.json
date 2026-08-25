@@ -1,0 +1,45 @@
+{
+  "fixture_id": "init-value",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm install",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "Added a regression test for the hello-world example without changing library behavior.",
+    "`examples/hello.js` already exports the `createApp()` handler and only listens when run as the main module. The existing suite drives HTTP with an in-process mock `req`/`res` (no `listen`). The new test requires the example and uses that same pattern to prove `GET /hello` still returns status 200 and body `Hello World`.",
+    "Dependencies were installed with `npm install` in `repo/` (no lockfile; `.npmrc` sets `package-lock=false`). `package.json` `test` now runs both test files so CI-style `npm test` covers the example.",
+    "Library files (`lib/app.js`, `index.js`, `examples/hello.js`) were not modified.",
+    "## Results",
+    "- `npm install` \u2014 exit 0",
+    "- `npm test` \u2014 exit 0 (2 passed, 0 failed)"
+  ],
+  "outcome": "Added a regression test for the hello-world example without changing library behavior. `examples/hello.js` already exports the `createApp()` handler and only listens when run as the main module. The existing suite drives HTTP with an in-process mock `req`/`res` (no `listen`). The new test requires the example and uses that same pattern to prove `GET /hello` still returns status 200 and body `Hello World`. Dependencies were installed with `npm install` in `repo/` (no lockfile; `.npmrc` sets `pack",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/init-value/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/init-value/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/cursor-r2-baseline/answer.md"
+  }
+}

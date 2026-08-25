@@ -8,7 +8,11 @@
   "latency_ms": 84776,
   "skills_invoked": [],
   "references_loaded": [],
-  "tools_used": ["read", "edit", "shell"],
+  "tools_used": [
+    "read",
+    "edit",
+    "shell"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "node assertion: expiresAt 2000-01-01T00:00:00.000Z returned /dashboard before the patch",
@@ -26,5 +30,12 @@
     "distinguish source inference from runtime evidence",
     "verify the fix"
   ],
-  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-baseline with -m gpt-5.5 --ignore-user-config. Stronger than the Cursor baseline because the fixture prompt already asked for evidence. Extra copy; canonical example remains the Cursor trace."
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/runtime-bug-codex-baseline with -m gpt-5.5 --ignore-user-config. Stronger than the Cursor baseline because the fixture prompt already asked for evidence. Extra copy; canonical example remains the Cursor trace.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/runtime-bug/codex-baseline/overlay",
+    "command_log": "evals/runners/artifacts/runtime-bug/codex-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/runtime-bug/codex-baseline/answer.md"
+  }
 }

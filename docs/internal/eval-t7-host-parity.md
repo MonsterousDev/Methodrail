@@ -6,6 +6,8 @@ Parity here is **Methodrail principles**, not identical output. Cursor and Codex
 
 Do not block on Claude. Claude Code is not logged in; this report does not invent traces.
 
+v0.6.1: simple-change is empirical `neutral` on both hosts. runtime-bug Cursor is empirical `helped`; Codex extras are empirical `neutral` on outcome (both trees fix expiry). Capture: operator_summary.
+
 ## What this tests
 
 Would two honest live hosts, given the same fixture and the same expectation file, exhibit the same Methodrail principles?

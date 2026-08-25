@@ -2,7 +2,11 @@
   "fixture_id": "architecture-decision",
   "condition": "methodrail",
   "host": "constructed",
-  "skills_invoked": ["how", "domain-modeling", "architect"],
+  "skills_invoked": [
+    "how",
+    "domain-modeling",
+    "architect"
+  ],
   "references_loaded": [
     ".methodrail/PROJECT.md",
     ".methodrail/knowledge/domain.md",
@@ -11,7 +15,10 @@
     "skills/domain-modeling/SKILL.md",
     "skills/architect/SKILL.md"
   ],
-  "tools_used": ["read", "write"],
+  "tools_used": [
+    "read",
+    "write"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "read src/session.js sessionOwnerKey (current User key)",
@@ -31,5 +38,12 @@
     "record a decision",
     "prototype only if empirical uncertainty remains"
   ],
-  "notes": "Constructed example trace, not live. Methodrail invokes how, domain-modeling, and architect; records the session-ownership decision; skips prototype because no empirical uncertainty remains; does not invoke wayfinder, arena, swarm, or interrogate."
+  "notes": "Constructed example trace, not live. Methodrail invokes how, domain-modeling, and architect; records the session-ownership decision; skips prototype because no empirical uncertainty remains; does not invoke wayfinder, arena, swarm, or interrogate.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-decision/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/architecture-decision/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-decision/methodrail/answer.md"
+  }
 }

@@ -8,9 +8,15 @@
   "latency_ms": 30985,
   "skills_invoked": [],
   "references_loaded": [],
-  "tools_used": ["rg", "sed", "npm"],
+  "tools_used": [
+    "rg",
+    "sed",
+    "npm"
+  ],
   "subagents_used": 0,
-  "verification_steps": ["npm test"],
+  "verification_steps": [
+    "npm test"
+  ],
   "evidence": [
     "rg found return \"Save\" in src/button.js",
     "npm test: tests 1, pass 1, fail 0, duration_ms 82.979041"
@@ -22,5 +28,12 @@
     "edit locally",
     "run a cheap check if one exists"
   ],
-  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/simple-change-codex-baseline. First attempt with default model gpt-5.6-sol failed (CLI too old). Retry used --ignore-user-config -m gpt-5.5. Extra copy; canonical example remains the Cursor trace."
+  "notes": "Live Codex exec 0.135.0 in /tmp/methodrail-live-20260824/simple-change-codex-baseline. First attempt with default model gpt-5.6-sol failed (CLI too old). Retry used --ignore-user-config -m gpt-5.5. Extra copy; canonical example remains the Cursor trace.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/simple-change/codex-baseline/overlay",
+    "command_log": "evals/runners/artifacts/simple-change/codex-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/simple-change/codex-baseline/answer.md"
+  }
 }

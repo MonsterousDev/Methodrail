@@ -1,0 +1,3 @@
+[
+  { "command": "npm ci", "phase": "other", "exit_status": 1 }
+]

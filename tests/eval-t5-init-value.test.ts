@@ -6,60 +6,34 @@ import test from "node:test";
 import { compareScores } from "../src/eval/compare.js";
 import { loadExpectationFile, loadRunFile } from "../src/eval/load.js";
 import { scoreRun } from "../src/eval/score.js";
+import type { EvalContext } from "../src/eval/types.js";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const ctx: EvalContext = { repoRoot: root };
 const fixtureDir = join(root, "evals/fixtures/init-value");
 const examplesDir = join(root, "evals/runners/examples");
 const FORBIDDEN = ["wayfinder", "architect", "arena", "swarm", "interrogate"] as const;
 
-function mentionsWrongAssumption(outcome: string, failureModes: string[]): boolean {
-  const text = [outcome, ...failureModes].join("\n");
-  return /npm ci|wrong install|app\.listen|listen|service/i.test(text);
-}
-
-test("T5 init-value: PROJECT.md helps later work; baseline fails, methodrail passes, verdict helped", () => {
+test("T5 init-value is a specification that PROJECT.md prevents bad install/listen assumptions", () => {
   const expected = loadExpectationFile(join(fixtureDir, "expected.yaml"));
-  assert.deepEqual(expected.required_skills, []);
-  assert.equal(expected.max_expensive_skills, 0);
-
   const baselineRun = loadRunFile(join(examplesDir, "init-value.baseline.json"));
   const methodrailRun = loadRunFile(join(examplesDir, "init-value.methodrail.json"));
 
-  assert.match(baselineRun.notes ?? "", /constructed/i);
-  assert.match(methodrailRun.notes ?? "", /constructed/i);
-
-  const baseline = scoreRun(baselineRun, expected);
-  const methodrail = scoreRun(methodrailRun, expected);
+  assert.equal(baselineRun.provenance, "constructed");
+  const baseline = scoreRun(baselineRun, expected, ctx);
+  const methodrail = scoreRun(methodrailRun, expected, ctx);
 
   assert.equal(baseline.passed, false);
   assert.equal(methodrail.passed, true);
-
-  assert.ok(
-    mentionsWrongAssumption(baselineRun.outcome, baselineRun.failure_modes),
-    "baseline outcome/failure_modes must mention wrong install, listen, or service",
-  );
-
-  assert.ok(
-    methodrailRun.references_loaded.some((path) => path.includes("PROJECT.md")),
-    "methodrail must load .methodrail/PROJECT.md",
-  );
-
-  assert.ok(
-    methodrailRun.skills_invoked.length <= baselineRun.skills_invoked.length,
-    "methodrail must not invoke more skills than baseline",
-  );
-  assert.ok(
-    methodrailRun.subagents_used <= baselineRun.subagents_used,
-    "methodrail must not use more subagents than baseline",
-  );
   assert.deepEqual(methodrail.forbidden_hits, []);
   for (const skill of FORBIDDEN) {
     assert.ok(!methodrailRun.skills_invoked.includes(skill), `methodrail invoked forbidden skill ${skill}`);
   }
 
   const comparison = compareScores(baseline, methodrail);
-  assert.equal(comparison.verdict, "helped");
-  assert.equal(comparison.methodrail_helped, true);
+  assert.equal(comparison.kind, "specification");
+  assert.equal(comparison.specification, "passed");
+  assert.equal(comparison.methodrail_helped, null);
 });
 
 test("T5 PROJECT.md stays a short pointer index and names the durable facts", () => {
@@ -71,4 +45,21 @@ test("T5 PROJECT.md stays a short pointer index and names the durable facts", ()
   assert.match(source, /app\.listen/);
   assert.match(source, /library/i);
   assert.doesNotMatch(source, /```/);
+});
+
+test("T5 live Codex baseline is not failed by an rg query mentioning npm ci", () => {
+  const expected = loadExpectationFile(join(root, "evals/fixtures/init-value/expected.yaml"));
+  const baseline = scoreRun(
+    loadRunFile(join(root, "evals/runners/examples/init-value.codex-r1-baseline.json")),
+    expected,
+    ctx,
+  );
+  const methodrail = scoreRun(
+    loadRunFile(join(root, "evals/runners/examples/init-value.codex-r1-methodrail.json")),
+    expected,
+    ctx,
+  );
+  assert.equal(baseline.passed, true);
+  assert.equal(methodrail.passed, true);
+  assert.equal(compareScores(baseline, methodrail).empirical, "neutral");
 });

@@ -1,0 +1,41 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse HEAD && git log --oneline -10 && git status && git log -1 --format='%H %s'",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "ls -la /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-baseline && ls -la /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-baseline/repo && (test -d /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-baseline/.git && git -C /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-baseline log -1 || echo \"no git at worktree root\")",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "**Adyen** charges a one-time invoice payment. **Stripe** charges a monthly subscription.",
+    "Freshness check: project knowledge (`knowledge/payments.md`, recorded revision `ccc111`) claims all customer payments go through Stripe. That is stale. Current `src/payments.js` routes `chargeInvoice` to Adyen (`submitPayment`) and `subscribe` to Stripe (`createSubscription`). No git history is present to confirm `ccc111`, so the recorded note was discarded in favor of the live code.",
+    "- One-time invoice: `chargeInvoice` \u2192 Adyen `submitPayment` (amount in cents, `resultCode: \"Authorised\"`).",
+    "- Monthly subscription: `subscribe` \u2192 Stripe `createSubscription` (`object: \"subscription\"`, `collection_method: \"charge_automatically\"`)."
+  ],
+  "outcome": "**Adyen** charges a one-time invoice payment. **Stripe** charges a monthly subscription. Freshness check: project knowledge (`knowledge/payments.md`, recorded revision `ccc111`) claims all customer payments go through Stripe. That is stale. Current `src/payments.js` routes `chargeInvoice` to Adyen (`submitPayment`) and `subscribe` to Stripe (`createSubscription`). No git history is present to confirm `ccc111`, so the recorded note was discarded in favor of the live code. - One-time invoice: `cha",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/cursor-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/cursor-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/cursor-r1-baseline/answer.md"
+  }
+}

@@ -6,7 +6,12 @@
   "started_at": "2026-08-24T20:43:50Z",
   "ended_at": "2026-08-24T20:44:32Z",
   "latency_ms": 42000,
-  "skills_invoked": ["debug", "diagnosing-bugs", "verify-change", "verify-project"],
+  "skills_invoked": [
+    "debug",
+    "diagnosing-bugs",
+    "verify-change",
+    "verify-project"
+  ],
   "references_loaded": [
     ".methodrail/PROJECT.md",
     ".agents/skills/verify-project/SKILL.md",
@@ -15,7 +20,12 @@
     "skills/verify-change/SKILL.md",
     "rules/methodrail.mdc"
   ],
-  "tools_used": ["read", "write", "edit", "shell"],
+  "tools_used": [
+    "read",
+    "write",
+    "edit",
+    "shell"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "node scripts/drive-expired.mjs (pre-fix project verify drive)",
@@ -40,5 +50,12 @@
     "add regression evidence",
     "verify the fix"
   ],
-  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/runtime-bug-cursor-methodrail. Followed debug → diagnosing-bugs → verify-project → failing regression → minimal fix → verify-change. Source was read after the drive loop existed; claims labeled from observed command output."
+  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/runtime-bug-cursor-methodrail. Followed debug → diagnosing-bugs → verify-project → failing regression → minimal fix → verify-change. Source was read after the drive loop existed; claims labeled from observed command output.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/runtime-bug/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/runtime-bug/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/runtime-bug/methodrail/answer.md"
+  }
 }

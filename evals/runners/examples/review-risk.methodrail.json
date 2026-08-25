@@ -1,0 +1,25 @@
+{
+  "fixture_id": "review-risk",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["review", "code-review"],
+  "references_loaded": ["evals/fixtures/review-risk/PACKET.md", "skills/review/SKILL.md", "skills/code-review/SKILL.md"],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["packet has no test output", "charge.js retries payment captures"],
+  "outcome": "The packet claims tests passed but attaches no test output. That author claim is not verification. Payment-path blast radius includes duplicate captures.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "inspect the supplied evidence packet",
+    "do not treat an author claim as verification",
+    "flag missing fresh test evidence",
+    "note payment-path blast radius"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/review-risk/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/review-risk/methodrail/answer.md"
+  }
+}

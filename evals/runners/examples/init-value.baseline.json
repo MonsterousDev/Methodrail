@@ -3,7 +3,11 @@
   "condition": "baseline",
   "skills_invoked": [],
   "references_loaded": [],
-  "tools_used": ["read", "write", "shell"],
+  "tools_used": [
+    "read",
+    "write",
+    "shell"
+  ],
   "subagents_used": 1,
   "verification_steps": [
     "npm ci",
@@ -26,5 +30,12 @@
     "start the example server and curl localhost",
     "treat the package as a long-running service"
   ],
-  "notes": "Constructed comparison, not a live host run. Baseline condition: agent sees repository only (no .methodrail/PROJECT.md). Wrong assumptions: npm ci, app.listen / curl localhost, treat as service."
+  "notes": "Constructed comparison, not a live host run. Baseline condition: agent sees repository only (no .methodrail/PROJECT.md). Wrong assumptions: npm ci, app.listen / curl localhost, treat as service.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/init-value/baseline/overlay",
+    "command_log": "evals/runners/artifacts/init-value/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/init-value/baseline/answer.md"
+  }
 }

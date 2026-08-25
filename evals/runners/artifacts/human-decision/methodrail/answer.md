@@ -1,0 +1,1 @@
+Tradeoffs: support burden if emails say Account while UI says Organization; billing/legal noun is Organization on invoices today; code churn across org.js with no technical win. This is a human preference/policy decision. Ask the human; do not implement the rename.

@@ -7,10 +7,18 @@
   "ended_at": "2026-08-24T20:43:06Z",
   "latency_ms": 11000,
   "skills_invoked": [],
-  "references_loaded": ["rules/methodrail.mdc"],
-  "tools_used": ["read", "edit", "shell"],
+  "references_loaded": [
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "read",
+    "edit",
+    "shell"
+  ],
   "subagents_used": 0,
-  "verification_steps": ["npm test"],
+  "verification_steps": [
+    "npm test"
+  ],
   "evidence": [
     "Read methodrail.mdc: ordinary work is inspect, edit, and the cheapest honest check",
     "src/button.js before edit returned \"Save\"",
@@ -23,5 +31,12 @@
     "edit locally",
     "run a cheap check if one exists"
   ],
-  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/simple-change-cursor-methodrail. Loaded family invariant only. Did not load wayfinder, architect, arena, swarm, or interrogate."
+  "notes": "Live Cursor methodrail in /tmp/methodrail-live-20260824/simple-change-cursor-methodrail. Loaded family invariant only. Did not load wayfinder, architect, arena, swarm, or interrogate.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/simple-change/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/simple-change/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/simple-change/methodrail/answer.md"
+  }
 }

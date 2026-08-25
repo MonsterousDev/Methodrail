@@ -1,0 +1,45 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [
+    "how"
+  ],
+  "references_loaded": [
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git log --oneline -20 && git status && git rev-parse HEAD && git log --oneline -- src/payments.js src/stripe.js src/adyen.js && git log ccc111..HEAD --oneline -- src/payments.js src/stripe.js src/adyen.js && git rev-parse ccc111 && git log --all --oneline && ls -la",
+      "exit_status": 0,
+      "phase": "other"
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "**Stripe** charges the monthly subscription. **Adyen** charges the one-time invoice payment.",
+    "## Freshness check",
+    "`.methodrail/PROJECT.md` points at `.methodrail/knowledge/payments.md`, which records revision `ccc111` and path `src/payments.js`, and claims all customer payments (subscriptions, invoices, and one-time charges) go through Stripe.",
+    "That note was **not** reused as current:",
+    "- `repo/` is not a git repository, so revision `ccc111` could not be resolved and diffs since that revision could not be inspected.",
+    "- Per the freshness protocol, missing provenance means reduced confidence until the claim is re-validated against current sources.",
+    "Re-validation against current code shows the note is **stale**. Invoices no longer go through Stripe."
+  ],
+  "outcome": "**Stripe** charges the monthly subscription. **Adyen** charges the one-time invoice payment. `.methodrail/PROJECT.md` points at `.methodrail/knowledge/payments.md`, which records revision `ccc111` and path `src/payments.js`, and claims all customer payments (subscriptions, invoices, and one-time charges) go through Stripe. That note was **not** reused as current: - `repo/` is not a git repository, so revision `ccc111` could not be resolved and diffs since that revision could not be inspected. - ",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/cursor-r2-methodrail/answer.md"
+  }
+}

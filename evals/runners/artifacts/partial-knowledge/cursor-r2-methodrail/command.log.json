@@ -1,0 +1,7 @@
+[
+  {
+    "command": "git log --oneline -20 && git status && git rev-parse HEAD && git log --oneline -- src/payments.js src/stripe.js src/adyen.js && git log ccc111..HEAD --oneline -- src/payments.js src/stripe.js src/adyen.js && git rev-parse ccc111 && git log --all --oneline && ls -la",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

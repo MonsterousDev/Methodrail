@@ -1,0 +1,28 @@
+{
+  "fixture_id": "knowledge-freshness",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "read"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "The session is established in `repo/src/auth.js` by `establishSession`. It creates an in-memory session id (`sess_\u2026`), stores it in a `Map`, and sets an HttpOnly `sid` cookie via the `Set-Cookie` header (`sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`). Incoming authenticated requests are resolved by `sessionFromRequest`, which reads the `sid` cookie.",
+    "Mechanism: cookie-based session (`sid` cookie). JWT Bearer login is retired (comment in that file: do not restore `jwt.sign`)."
+  ],
+  "outcome": "The session is established in `repo/src/auth.js` by `establishSession`. It creates an in-memory session id (`sess_\u2026`), stores it in a `Map`, and sets an HttpOnly `sid` cookie via the `Set-Cookie` header (`sid=<sessionId>; HttpOnly; Path=/; SameSite=Lax`). Incoming authenticated requests are resolved by `sessionFromRequest`, which reads the `sid` cookie. Mechanism: cookie-based session (`sid` cookie). JWT Bearer login is retired (comment in that file: do not restore `jwt.sign`).",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-freshness/cursor-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-freshness/cursor-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-freshness/cursor-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/cursor-r1-baseline/answer.md"
+  }
+}

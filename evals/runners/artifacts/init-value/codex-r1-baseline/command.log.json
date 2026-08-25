@@ -1,0 +1,92 @@
+[
+  {
+    "command": "pwd && rg --files -g 'TASK.md' -g 'repo/**' -g 'package.json' -g 'pnpm-lock.yaml' -g 'yarn.lock' -g 'package-lock.json' -g 'bun.lockb'",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "/tmp/methodrail-pilot-20260825/init-value/codex-r1-baseline; found TASK.md and repo files including package.json, examples/hello.js, lib/app.js, test/hello.test.js"
+  },
+  {
+    "command": "git status --short",
+    "phase": "other",
+    "exit_status": 128,
+    "stdout": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  {
+    "command": "sed -n '1,220p' TASK.md",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Task: add regression test for hello-world example HTTP behavior; install dependencies the way CI does; do not change library behavior."
+  },
+  {
+    "command": "sed -n '1,220p' package.json",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Package helloframe; test script is node --test test/hello.test.js; node >=18."
+  },
+  {
+    "command": "sed -n '1,220p' test/hello.test.js",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Existing node:test file with in-memory request helper and GET /hello library test."
+  },
+  {
+    "command": "sed -n '1,220p' examples/hello.js",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Example exports createApp() handler and only listens on port 3000 when run directly."
+  },
+  {
+    "command": "sed -n '1,220p' lib/app.js",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "createApp handles GET /hello with status 200, text/plain, and body Hello World; otherwise 404."
+  },
+  {
+    "command": "sed -n '1,220p' index.js",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "index.js re-exports ./lib/app."
+  },
+  {
+    "command": "rg -n \"npm ci|npm install|pnpm|yarn|bun|node --test|actions/setup-node|ci\" -S .",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Only package.json test script matched: node --test test/hello.test.js."
+  },
+  {
+    "command": "find .. -maxdepth 4 -type f \\( -name '*.yml' -o -name '*.yaml' -o -name 'package-lock.json' -o -name 'npm-shrinkwrap.json' \\) -print",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "No workflow files or npm lockfiles found."
+  },
+  {
+    "command": "find . -maxdepth 3 -type f -print | sort",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "Listed repo files: .npmrc, README.md, examples/hello.js, index.js, lib/app.js, package.json, test/hello.test.js."
+  },
+  {
+    "command": "sed -n '1,120p' .npmrc",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "package-lock=false"
+  },
+  {
+    "command": "sed -n '1,220p' README.md",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "README shows consumers create an HTTP server with createApp(); see examples/hello.js."
+  },
+  {
+    "command": "npm install",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "up to date, audited 1 package; found 0 vulnerabilities"
+  },
+  {
+    "command": "npm test",
+    "phase": "verify",
+    "exit_status": 0,
+    "stdout": "node --test test/hello.test.js; 2 tests passed, 0 failed"
+  }
+]

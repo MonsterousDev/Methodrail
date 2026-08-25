@@ -6,9 +6,11 @@
     ".methodrail/PROJECT.md",
     "references/decision-frontier.md"
   ],
-  "tools_used": ["read"],
+  "tools_used": [
+    "read"
+  ],
   "subagents_used": 0,
-  "verification_steps": ["none — waiting on human"],
+  "verification_steps": [],
   "evidence": [
     "tradeoffs: support burden if emails say Account while UI says Organization; billing/legal noun is Organization on invoices today; code churn across org.js and tests with no technical win",
     "decision-frontier: method human — preference, policy, and language, not source or runtime",
@@ -21,5 +23,11 @@
     "classify the choice as a human decision",
     "do not implement the rename"
   ],
-  "notes": "constructed"
+  "notes": "constructed",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/human-decision/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/human-decision/methodrail/answer.md"
+  }
 }

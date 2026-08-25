@@ -6,14 +6,26 @@
     ".methodrail/PROJECT.md",
     ".methodrail/knowledge/auth.md"
   ],
-  "tools_used": ["read"],
+  "tools_used": [
+    "read"
+  ],
   "subagents_used": 0,
   "verification_steps": [],
   "evidence": [
     ".methodrail/knowledge/auth.md says authenticated APIs use JWT Bearer tokens and jwt.sign"
   ],
   "outcome": "Session is established by jwt.sign; clients authenticate with Authorization: Bearer <token>.",
-  "failure_modes": ["stale-knowledge-trusted"],
-  "behaviors_observed": ["trusted stored JWT knowledge"],
-  "notes": "constructed"
+  "failure_modes": [
+    "stale-knowledge-trusted"
+  ],
+  "behaviors_observed": [
+    "trusted stored JWT knowledge"
+  ],
+  "notes": "constructed",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/knowledge-freshness/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/baseline/answer.md"
+  }
 }

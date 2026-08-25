@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm install",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "\nup to date, audited 1 package in 226ms\n\nfound 0 vulnerabilities\n"
+  },
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0,
+    "stdout": "\n> helloframe@1.0.0 test\n> node --test test/hello.test.js test/hello-example.test.js\n\n\u2714 hello-world example GET /hello returns Hello World without listening (0.761458ms)\n\u2714 GET /hello returns Hello World without listening (0.872708ms)\n\u2139 tests 2\n\u2139 suites 0\n\u2139 pass 2\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 87.300167\n"
+  }
+]

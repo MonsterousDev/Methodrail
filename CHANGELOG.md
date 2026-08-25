@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.1 — 2026-08-25
+
+Eval Integrity: artifact-backed outcome graders, disjoint empirical/specification/guardrail vocabularies, and an integrity gate that demands completeness rather than favorable verdicts.
+
+- Grade patches, tests, command logs, and final answers; ignore `behaviors_observed` as ground truth
+- Keep Methodrail skill names on the routing layer so baselines are not failed for missing skills
+- Count empty/`none` verification as zero; over-rigor is a routing violation, not a fake outcome fail
+- Treat constructed pairs as specification `passed`/`failed`, never empirical `helped`
+- Require a canonical pair and artifacts for every composition fixture; do not fail CI on live `harmed`
+- Relabel summary-only live JSON honestly and preserve raw Codex transcripts where available
+- Add a manifest-gated T5–T10 live pilot: 14 neutral pairs and one promising Codex human-boundary benefit
+- Calibrate graders against preserved pilot artifacts and count only repro/regression/verify commands as verification
+- Preserve overlay deletions explicitly so artifact worktrees reproduce removed files
+
 ## 0.6.0 — 2026-08-24
 
 Demonstrated Composition: one family invariant, restored upstream `how` behavior, project-verification reuse, and a maintainer eval harness that can compare baseline vs Methodrail.

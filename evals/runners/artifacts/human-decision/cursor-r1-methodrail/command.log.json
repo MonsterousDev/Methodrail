@@ -1,0 +1,12 @@
+[
+  {
+    "command": "ls -la && ls -la .methodrail && ls -la repo && ls -la skills && ls -la rules && ls -la references",
+    "phase": "other",
+    "exit_status": 0
+  },
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

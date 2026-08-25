@@ -1,0 +1,12 @@
+[
+  {
+    "command": "npm install",
+    "phase": "other",
+    "exit_status": 0
+  },
+  {
+    "command": "npm test",
+    "phase": "other",
+    "exit_status": 0
+  }
+]

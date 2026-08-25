@@ -137,4 +137,4 @@ See `references/` for the methodology and `adapters/` for thin host-specific ins
 
 ## Status
 
-v0.6.0 is Demonstrated Composition. The skill family shares one invariant across Cursor, Claude, and Codex. Maintainer evals can compare baseline agent behavior with Methodrail. Simple work is still required to stay cheap; harder work may cost more when that cost prevents an expensive miss. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
+v0.6.1 is Eval Integrity. Graders derive outcomes from artifacts; constructed examples are specifications, not empirical `helped`. Simple work is still required to stay cheap; harder work may cost more when that cost prevents an expensive miss. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.

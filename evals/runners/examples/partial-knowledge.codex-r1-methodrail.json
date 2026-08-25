@@ -1,0 +1,165 @@
+{
+  "fixture_id": "partial-knowledge",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [
+    "references/knowledge/freshness.md",
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg --files -g 'TASK.md' -g '.methodrail/**' -g 'skills/**' -g 'rules/**' -g 'references/**' -g 'repo/**'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' references/knowledge/freshness.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find repo -maxdepth 3 -type f | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "ls -la",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo rev-parse HEAD",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/payments.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/stripe.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/adyen.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find .methodrail -maxdepth 3 -type f | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find repo -maxdepth 3 -type f -name '.git' -o -name 'package.json' -o -name '*.md' | sort",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg -n \"stripe|adyen|subscription|invoice|chargeInvoice|subscribe|fresh|Relevant revision|Relevant paths\" .methodrail references skills rules repo",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/PROJECT.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/knowledge/payments.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "find repo -maxdepth 3 -type d -name .git -print",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "ls -la repo repo/src",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "nl -ba repo/src/payments.js",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "nl -ba repo/src/stripe.js",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "nl -ba repo/src/adyen.js",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e \"const fs=require('fs'); const data=JSON.parse(fs.readFileSync('command.log.json','utf8')); if(!Array.isArray(data)) process.exit(2); console.log(data.length)\"",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "sed -n '1,220p' ANSWER.md",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e \"const fs=require('fs'); const data=JSON.parse(fs.readFileSync('command.log.json','utf8')); if(!Array.isArray(data)) process.exit(2); console.log(data.length)\"",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "The current code shows that Adyen charges a one-time invoice payment, while Stripe creates the monthly subscription.",
+    "Freshness check: I found stored Methodrail payment knowledge in `.methodrail/knowledge/payments.md`, recorded at revision `ccc111` for `src/payments.js`, claiming all customer payments go through Stripe. This workspace does not include `.git` history, so I could not compare changes since `ccc111`. I treated the stored note as stale/reduced-confidence and answered from the current source instead.",
+    "Current-code evidence:",
+    "- `repo/src/payments.js` imports `createSubscription` from `./stripe.js` and `submitPayment` from `./adyen.js`.",
+    "- `subscribe(customer, plan)` returns `createSubscription(customer, plan)`, and `repo/src/stripe.js` returns an object with `provider: \"stripe\"` and `object: \"subscription\"`.",
+    "- `chargeInvoice(invoice)` returns `submitPayment(invoice)`, and `repo/src/adyen.js` returns an Adyen-style payment response with `pspReference: adyen_<invoice.id>`.",
+    "Conclusion: one-time invoice payment = Adyen; monthly subscription = Stripe."
+  ],
+  "outcome": "The current code shows that Adyen charges a one-time invoice payment, while Stripe creates the monthly subscription. Freshness check: I found stored Methodrail payment knowledge in `.methodrail/knowledge/payments.md`, recorded at revision `ccc111` for `src/payments.js`, claiming all customer payments go through Stripe. This workspace does not include `.git` history, so I could not compare changes since `ccc111`. I treated the stored note as stale/reduced-confidence and answered from the current ",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/partial-knowledge/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/partial-knowledge/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/partial-knowledge/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/partial-knowledge/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/partial-knowledge/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

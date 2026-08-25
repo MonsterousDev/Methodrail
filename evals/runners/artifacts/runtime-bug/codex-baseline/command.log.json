@@ -1,0 +1,14 @@
+[
+  {
+    "command": "node -e landingPath expired ISO",
+    "phase": "repro",
+    "exit_status": 0,
+    "stdout": "expiresAt 2000-01-01 returned /dashboard before patch"
+  },
+  {
+    "command": "node -e landingPath cases after patch",
+    "phase": "verify",
+    "exit_status": 0,
+    "stdout": "expired ISO /login"
+  }
+]

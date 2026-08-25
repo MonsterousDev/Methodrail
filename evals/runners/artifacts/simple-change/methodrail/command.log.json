@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm test",
+    "phase": "verify",
+    "exit_status": 0,
+    "stdout": "tests 1, pass 1, fail 0"
+  }
+]

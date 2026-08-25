@@ -1,0 +1,100 @@
+{
+  "fixture_id": "knowledge-accumulation",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [
+    "rules/methodrail.mdc"
+  ],
+  "tools_used": [
+    "edit",
+    "read",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'TASK.md' -g '.methodrail/**' -g 'skills/**' -g 'rules/**' -g 'references/**'",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "rg --files repo | sed 's#^#/#' | head -200",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/webhooks.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/ledger.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/webhooks.test.js",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "cat repo/package.json",
+      "exit_status": 0,
+      "phase": "other"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "repro"
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0,
+      "phase": "verify"
+    },
+    {
+      "command": "node -e \"JSON.parse(require('node:fs').readFileSync('command.log.json','utf8')); console.log('command.log.json valid')\"",
+      "exit_status": 0,
+      "phase": "verify"
+    }
+  ],
+  "evidence": [
+    "Implemented `invoice.paid` webhook handling.",
+    "What changed:",
+    "- `repo/src/webhooks.js` now routes `invoice.paid` events to the ledger posting path.",
+    "- `repo/src/webhooks.test.js` now verifies that duplicate `invoice.paid` deliveries only credit the wallet once.",
+    "Why Stripe retries do not double-credit:",
+    "- The webhook handler posts ledger entries with `event.id` as the idempotency key.",
+    "- `repo/src/ledger.js` already de-duplicates posts by key, so retrying the same Stripe event returns the existing row instead of appending another credit.",
+    "Verification:"
+  ],
+  "outcome": "Implemented `invoice.paid` webhook handling. What changed: - `repo/src/webhooks.js` now routes `invoice.paid` events to the ledger posting path. - `repo/src/webhooks.test.js` now verifies that duplicate `invoice.paid` deliveries only credit the wallet once. Why Stripe retries do not double-credit: - The webhook handler posts ledger entries with `event.id` as the idempotency key.",
+  "failure_modes": [],
+  "notes": "Live pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825/knowledge-accumulation/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies of the fixture; they are still Cursor Grok in this product. Codex used `codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5`. Claude Code was not logged in; no Claude traces. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-accumulation/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-accumulation/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-accumulation/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-accumulation/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

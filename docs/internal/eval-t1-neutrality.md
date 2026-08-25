@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T1. Date: 2026-08-24. No git commit. No Methodrail runtime. Scoring only.
 
+v0.6.1: empirical result is `neutral` (`operator_summary`). Graders inspect the resulting `button.js` and run the fixture test.
+
 ## Purpose
 
 Ensure Methodrail does not add unnecessary process on a tiny copy change. Fixture: `evals/fixtures/simple-change`. Task: change button label Save → Create. Do not change behavior.

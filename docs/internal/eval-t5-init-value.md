@@ -2,6 +2,8 @@
 
 Internal maintainer record. Operator: Grok Bot T5. Date: 2026-08-24. No git commit. Traces are **constructed**, not live host runs.
 
+v0.6.1: specification `passed`, never empirical `helped`. Live pilot protocol: `evals/reports/pilot-t5-t10-protocol.md`.
+
 ## What this tests
 
 Does `.methodrail/PROJECT.md` improve later work that needs project knowledge?

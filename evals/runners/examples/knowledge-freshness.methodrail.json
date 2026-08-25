@@ -1,7 +1,9 @@
 {
   "fixture_id": "knowledge-freshness",
   "condition": "methodrail",
-  "skills_invoked": ["how"],
+  "skills_invoked": [
+    "how"
+  ],
   "references_loaded": [
     ".methodrail/PROJECT.md",
     ".methodrail/knowledge/auth.md",
@@ -10,7 +12,9 @@
     "references/knowledge/freshness.md",
     "rules/methodrail.mdc"
   ],
-  "tools_used": ["read"],
+  "tools_used": [
+    "read"
+  ],
   "subagents_used": 0,
   "verification_steps": [
     "compared knowledge/auth.md JWT claim against repo/src/auth.js session cookie path"
@@ -27,5 +31,11 @@
     "prefer repository evidence over .methodrail knowledge",
     "refresh or flag the JWT claim"
   ],
-  "notes": "constructed"
+  "notes": "constructed",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/knowledge-freshness/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-freshness/methodrail/answer.md"
+  }
 }
