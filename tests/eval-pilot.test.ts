@@ -23,3 +23,19 @@ test("live T5-T10 pilot is complete and rescored from its artifact manifest", ()
   ]);
   assert.equal(results.some((item) => item.result === "harmed" || item.result === "incomplete"), false);
 });
+
+test("live v0.7 knowledge pilot is complete and rescored from its artifact manifest", () => {
+  const grade = gradePilotManifest(join(root, "evals/pilot-v0.7-knowledge.yaml"), ctx);
+  assert.deepEqual(grade.integrity_errors, []);
+  assert.equal(grade.pairs.length, 6);
+
+  const results = Object.fromEntries(
+    grade.pairs.map((pair) => [`${pair.fixture}:${pair.host}:r${pair.repeat}`, pair.report.empirical]),
+  );
+  assert.equal(results["knowledge-reuse:cursor:r1"], "neutral");
+  assert.equal(results["knowledge-reuse:cursor:r2"], "neutral");
+  assert.equal(results["knowledge-reuse:codex:r1"], "neutral");
+  assert.equal(results["knowledge-refresh:cursor:r1"], "helped");
+  assert.equal(results["knowledge-refresh:cursor:r2"], "helped");
+  assert.equal(results["knowledge-refresh:codex:r1"], "helped");
+});

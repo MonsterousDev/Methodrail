@@ -1,0 +1,21 @@
+{
+  "fixture_id": "knowledge-refresh",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": ["repo/src/mailer.js"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["added ticket.resolved through sendDirect"],
+  "outcome": "Added ticket.resolved with a direct send. Did not check stored mail knowledge.",
+  "failure_modes": ["knowledge-discarded", "missed-event-id"],
+  "behaviors_observed": ["add a parallel send path"],
+  "notes": "constructed baseline. Discarded the still-true event-id claim.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-refresh/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-refresh/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-refresh/baseline/answer.md"
+  }
+}

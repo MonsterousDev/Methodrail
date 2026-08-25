@@ -29,7 +29,7 @@ Promote knowledge when it is:
 - a non-obvious invariant
 - a consequential decision
 
-Classify it using the [knowledge model](model.md) before promoting. A hypothesis can be recorded as a hypothesis; it must not be filed as a fact.
+Classify it using the [knowledge model](model.md) before promoting. A hypothesis can be recorded as a hypothesis; it must not be filed as a fact. Reflect proposes a typed note and waits for explicit approval. Initialization does not create typed notes.
 
 ## What not to persist
 
@@ -61,4 +61,4 @@ Do not persist ordinary source summaries, one-off local behavior, temporary hypo
 
 ## After promotion
 
-Durable notes live under `.methodrail/knowledge/` and are indexed from `.methodrail/PROJECT.md`. They remain candidates for refresh or removal when [freshness](freshness.md) fails.
+Durable typed notes live under `.methodrail/knowledge/` using the [note contract](note-contract.md) and are indexed from `.methodrail/PROJECT.md`. Later sessions follow [reuse](reuse.md). They remain candidates for refresh or removal when [freshness](freshness.md) fails. Do not persist a candidate queue.

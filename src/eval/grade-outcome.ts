@@ -320,6 +320,99 @@ function gradeHumanDecision(run: EvalRun, ctx: EvalContext): OutcomeGrade {
   });
 }
 
+function gradeKnowledgeReuse(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("knowledge-reuse requires an overlay artifact");
+  return withWorktree(fixtureDir(ctx, "knowledge-reuse"), overlay, (root) => {
+    const driver = `
+      const { handle, countFor } = require("./repo/src/notify.js");
+      const delayed = { id: "evt_delay_grade", type: "shipment.delayed", data: { shipmentId: "s_grade", to: "ops@x.test" } };
+      const first = handle(delayed);
+      handle(delayed);
+      if (!first) { console.error("shipment.delayed not routed"); process.exit(1); }
+      if (countFor("shipment.delayed") !== 1) {
+        console.error("double notify or miss", countFor("shipment.delayed"));
+        process.exit(1);
+      }
+      const created = { id: "evt_created_grade", type: "shipment.created", data: { shipmentId: "s_created_grade", to: "ops@x.test" } };
+      handle(created);
+      handle(created);
+      if (countFor("shipment.created") !== 1) {
+        console.error("shipment.created broken", countFor("shipment.created"));
+        process.exit(1);
+      }
+    `;
+    const result = runNode(["--input-type=commonjs", "-e", driver], root);
+    return gradeFrom([
+      check(
+        "idempotent-delayed",
+        result.ok,
+        result.ok ? "shipment.delayed is keyed on event id" : `event-id driver failed: ${result.output.slice(0, 500)}`,
+      ),
+    ]);
+  });
+}
+
+function proposesNoteUpdate(answer: string): boolean {
+  return (
+    /propos(?:e|ed|ing).{0,80}(?:note update|updat(?:e|ing).{0,40}(?:note|mail\.md|\.methodrail\/knowledge))/is.test(answer) ||
+    /(?:note|mail\.md|\.methodrail\/knowledge).{0,60}(?:should|must|needs? to).{0,40}(?:update|refresh|revise|correct|amend)/is.test(
+      answer,
+    ) ||
+    /(?:update|refresh|revise|correct|amend).{0,50}(?:the )?(?:stored )?(?:mail )?(?:knowledge )?note/is.test(answer)
+  );
+}
+
+function gradeKnowledgeRefresh(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("knowledge-refresh requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("knowledge-refresh requires an overlay artifact");
+  const fixture = fixtureDir(ctx, "knowledge-refresh");
+  const originalNote = readFileSync(join(fixture, ".methodrail/knowledge/mail.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const driver = `
+      const mailer = require("./repo/src/mailer.js");
+      const outbox = require("./repo/src/outbox.js");
+      const event = { id: "evt_res_grade", type: "ticket.resolved", data: { ticketId: "t_grade", to: "user@x.test" } };
+      const first = mailer.handle(event);
+      mailer.handle(event);
+      const count = typeof mailer.countFor === "function"
+        ? mailer.countFor("ticket.resolved")
+        : outbox.deliveries().filter((row) => row.channel === "ticket.resolved").length;
+      if (!first) { console.error("ticket.resolved not routed"); process.exit(1); }
+      if (count !== 1) { console.error("double mail or miss", count); process.exit(1); }
+      const fail = mailer.failSend || outbox.markFailed;
+      if (typeof fail !== "function") { console.error("no failSend/markFailed"); process.exit(1); }
+      fail(event.id);
+      const row = outbox.deliveries().find((item) => item.eventId === event.id);
+      if (!row) { console.error("failed send deleted the outbox row"); process.exit(1); }
+      console.log("ok");
+    `;
+    const result = runNode(["--input-type=commonjs", "-e", driver], root);
+    const output = result.output;
+    const notRouted = /not routed/i.test(output);
+    const doubled = /double mail or miss/i.test(output);
+    const deleted = /deleted the outbox row/i.test(output);
+    const missingFailureApi = /no failSend\/markFailed/i.test(output);
+    const completed = result.ok && /(?:^|\n)ok(?:\r?\n|$)/.test(output);
+    const keyed = completed || (!notRouted && !doubled && (missingFailureApi || deleted));
+    const keptRow = completed;
+    const noteUnchanged = filesUnchanged(root, ".methodrail/knowledge/mail.md", originalNote);
+    const proposed = proposesNoteUpdate(answer);
+    return gradeFrom([
+      check("event-id-key", keyed, keyed ? "ticket.resolved is keyed on event id" : `event-id driver failed: ${output.slice(0, 500)}`),
+      check(
+        "kept-row",
+        keptRow,
+        keptRow ? "failed send kept the outbox row" : `refresh driver did not complete successfully: ${output.slice(0, 500)}`,
+      ),
+      check("propose-update", proposed, proposed ? "answer proposes a note update" : "answer did not propose a note update"),
+      check("note-untouched", noteUnchanged, noteUnchanged ? "mail.md was not rewritten" : "silently rewrote the knowledge note"),
+    ]);
+  });
+}
+
 const GRADERS: Record<string, (run: EvalRun, ctx: EvalContext) => OutcomeGrade> = {
   "simple-change": gradeSimpleChange,
   "medium-feature": gradeMediumFeature,
@@ -332,6 +425,8 @@ const GRADERS: Record<string, (run: EvalRun, ctx: EvalContext) => OutcomeGrade> 
   "knowledge-accumulation": gradeKnowledgeAccumulation,
   "partial-knowledge": gradePartialKnowledge,
   "human-decision": gradeHumanDecision,
+  "knowledge-reuse": gradeKnowledgeReuse,
+  "knowledge-refresh": gradeKnowledgeRefresh,
 };
 
 export function gradeOutcome(run: EvalRun, ctx: EvalContext): OutcomeGrade {

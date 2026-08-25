@@ -1,0 +1,117 @@
+{
+  "fixture_id": "knowledge-refresh",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files -g 'TASK.md' -g '.methodrail/PROJECT.md' -g 'rules/methodrail.mdc' -g 'references/knowledge/reuse.md' -g 'repo/**'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' rules/methodrail.mdc",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' references/knowledge/reuse.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/mailer.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/outbox.js",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f .methodrail/PROJECT.md && sed -n '1,220p' .methodrail/PROJECT.md || true",
+      "exit_status": 0
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "git log --oneline -- repo/src/mailer.js repo/src/mailer.test.js repo/src/outbox.js",
+      "exit_status": 128
+    },
+    {
+      "command": "sed -n '1,220p' repo/package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/index.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' .methodrail/knowledge/mail.md",
+      "exit_status": 0
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "git -C repo log --oneline -- src/mailer.js src/mailer.test.js src/outbox.js index.js package.json",
+      "exit_status": 128
+    },
+    {
+      "command": "node --test src/mailer.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,120p' repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,180p' repo/src/mailer.test.js",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "Implemented support for `ticket.resolved` customer emails.",
+    "## Changed",
+    "- Updated `repo/src/mailer.js` so `ticket.resolved` routes through `dispatchOnce(event.id, event.type, event.data)`, matching the existing idempotent `ticket.opened` path.",
+    "- Updated `repo/src/mailer.test.js` by replacing the old unsupported `ticket.resolved` test with a duplicate-delivery test that confirms only one resolved email is counted for repeated handling of the same provider event ID.",
+    "## Verification",
+    "- Ran `node --test src/mailer.test.js` in `repo/`.",
+    "- Result: 3 passing tests.",
+    "## Project Knowledge",
+    "Used `.methodrail/PROJECT.md` and the relevant pointer `.methodrail/knowledge/mail.md`.",
+    "Freshness check:",
+    "- No Git repository was available at the workspace root or `repo/`, so I could not inspect git history for the note's `validated_at` SHA or `relevant_paths`."
+  ],
+  "outcome": "# Answer Implemented support for `ticket.resolved` customer emails. ## Changed - Updated `repo/src/mailer.js` so `ticket.resolved` routes through `dispatchOnce(event.id, event.type, event.data)`, matching the existing idempotent `ticket.opened` path. - Updated `repo/src/mailer.test.js` by replacing the old unsupported `ticket.resolved` test with a duplicate-delivery test that confirms only one resolved email is counted for repeated handling of the same provider event ID. ## Verification - Ran `n",
+  "failure_modes": [],
+  "notes": "Live v0.7 pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825-v07/knowledge-refresh/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-refresh/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-refresh/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-refresh/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-refresh/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

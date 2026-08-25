@@ -1,0 +1,8 @@
+id: pilot-v0.7-knowledge-2026-08-25
+pairs:
+  - { fixture: knowledge-reuse, host: cursor, repeat: 1 }
+  - { fixture: knowledge-reuse, host: cursor, repeat: 2 }
+  - { fixture: knowledge-reuse, host: codex, repeat: 1 }
+  - { fixture: knowledge-refresh, host: cursor, repeat: 1 }
+  - { fixture: knowledge-refresh, host: cursor, repeat: 2 }
+  - { fixture: knowledge-refresh, host: codex, repeat: 1 }

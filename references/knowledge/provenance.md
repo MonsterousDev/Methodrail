@@ -21,4 +21,4 @@ Possible provenance:
 
 Unknown provenance should reduce confidence. A precise claim with no locator is weaker than a narrower claim with a path, test, or revision.
 
-Record provenance lightly next to the claim. See [evidence records](../protocols/evidence-record.md) and [freshness](freshness.md).
+Typed notes record provenance as `validated_at` plus `relevant_paths`. Git-less repositories use `unversioned:<reason>` and reduced confidence. See [note contract](note-contract.md), [evidence records](../protocols/evidence-record.md), and [freshness](freshness.md).

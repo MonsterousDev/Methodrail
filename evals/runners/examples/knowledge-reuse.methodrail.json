@@ -1,0 +1,36 @@
+{
+  "fixture_id": "knowledge-reuse",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/notifications.md",
+    "repo/src/notify.js",
+    "repo/src/outbox.js"
+  ],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "delivered shipment.delayed evt_delay_grade twice; countFor stayed 1"
+  ],
+  "evidence": [
+    ".methodrail/knowledge/notifications.md: customer-visible shipment mail uses the provider event ID",
+    "routed shipment.delayed through dispatchOnce(event.id)",
+    "duplicate delivery returned the same outbox row"
+  ],
+  "outcome": "Loaded the promoted notifications note and routed shipment.delayed through dispatchOnce(event.id). Verified a repeated event did not double-notify.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "apply the event-id dispatch invariant",
+    "skip rediscovery of the already-learned notification rule",
+    "verify a repeated event does not double-notify"
+  ],
+  "notes": "constructed Task B methodrail. Promoted typed note loaded; event id applied without rediscovery.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reuse/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reuse/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reuse/methodrail/answer.md"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "inkwell",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny support mailer. Provider events dispatch customer ticket emails through an outbox.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/mailer.test.js"
+  }
+}

@@ -26,7 +26,7 @@ Do not run multiple expensive reviewers for trivial changes. Give the reviewer a
 
 ## Workflow
 
-1. Establish the review target, base revision, request, acceptance criteria, and repository guidance. Read `.methodrail/PROJECT.md` if present. Assemble the packet. Consume existing verification evidence rather than rerunning unrelated exploration.
+1. Establish the review target, base revision, request, acceptance criteria, and repository guidance. Read `.methodrail/PROJECT.md` if present. If a knowledge pointer is relevant, follow [knowledge reuse](../../references/knowledge/reuse.md). Assemble the packet. Consume existing verification evidence rather than rerunning unrelated exploration.
 2. Invoke `code-review` for Standards vs Spec on the complete requested range.
 3. Use `blast-radius` when boundaries, schemas, or public contracts changed, or when a small diff is untrusted.
 4. Do not substitute review for verification. Note verification gaps; run or request `verify-change` when claims of correctness lack fresh evidence.

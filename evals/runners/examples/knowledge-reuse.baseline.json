@@ -1,0 +1,24 @@
+{
+  "fixture_id": "knowledge-reuse",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": ["repo/src/notify.js", "repo/src/outbox.js"],
+  "tools_used": ["grep", "read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "grep shipment.delayed found no handler",
+    "added shipment.delayed through sendDirect"
+  ],
+  "outcome": "Added shipment.delayed by calling sendDirect on every delivery. Repeated events double-notified.",
+  "failure_modes": ["rediscovery", "missed-event-id"],
+  "behaviors_observed": ["grep the repo for shipment.delayed", "add a parallel send path"],
+  "notes": "constructed Task B baseline. No typed notifications note loaded. Missed dispatchOnce(event.id).",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reuse/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reuse/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reuse/baseline/answer.md"
+  }
+}

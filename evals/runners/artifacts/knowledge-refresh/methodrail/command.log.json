@@ -1,0 +1,4 @@
+[
+  { "command": "git diff cccccccccccccccccccccccccccccccccccccccc -- repo/src/outbox.js repo/src/mailer.js", "phase": "other", "exit_status": 0 },
+  { "command": "node --test repo/src/mailer.test.js", "phase": "verify", "exit_status": 0 }
+]

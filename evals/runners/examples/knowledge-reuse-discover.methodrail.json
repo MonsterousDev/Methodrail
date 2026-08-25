@@ -1,0 +1,24 @@
+{
+  "fixture_id": "knowledge-reuse",
+  "condition": "methodrail",
+  "skills_invoked": ["diagnosing-bugs", "reflect"],
+  "references_loaded": ["repo/src/notify.js", "repo/src/outbox.js"],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "shipment.created already uses dispatchOnce(event.id)",
+    "sendDirect would double-notify",
+    "proposed typed invariant candidate; waiting for approval"
+  ],
+  "outcome": "Root cause is an unkeyed send path. Reflect proposed a knowledge candidate for event-id dispatch. Did not auto-promote.",
+  "failure_modes": [],
+  "notes": "constructed Task A. Knowledge candidate proposed without writing the note.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reuse/discover-preapproval/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reuse/discover-preapproval/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reuse/discover-preapproval/answer.md"
+  }
+}

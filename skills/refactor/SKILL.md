@@ -29,7 +29,7 @@ blast-radius/review proportional to risk
 ## Workflow
 
 1. Name the friction. Prefer refactors that support current work, reduce repeated mistakes, improve high-churn areas, clarify ownership, remove recurring agent/human confusion, or improve testability.
-2. Read `.methodrail/PROJECT.md` if present. Use `how` to understand current structure and `codebase-design` for depth/seam vocabulary.
+2. Read `.methodrail/PROJECT.md` if present. If a knowledge pointer is relevant, follow [knowledge reuse](../../references/knowledge/reuse.md). Use `how` to understand current structure and `codebase-design` for depth/seam vocabulary.
 3. Establish a behavioral baseline with existing tests or `observe` when behavior is not already characterized.
 4. Stop if the code is quiet, unused, or unrelated to current work. Use `improve-codebase-architecture` only when the user wants a structured hunt across hot spots.
 5. Add characterization coverage when existing checks would not catch an accidental behavior change.

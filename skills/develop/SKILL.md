@@ -50,7 +50,7 @@ Do not auto-invoke `wayfinder`, `architect`, `prototype`, `arena`, `swarm`, or `
 
 ## Workflow
 
-1. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Check [freshness](../../references/knowledge/freshness.md) before relying on stored notes.
+1. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Before relying on a stored note, follow [knowledge reuse](../../references/knowledge/reuse.md).
 2. Classify uncertainty with the [decision frontier](../../references/decision-frontier.md). Resolve only currently actionable questions. Use the cheapest reliable method: deterministic tool, source/`how`, `observe`, `why`, `research`, `prototype`, `domain-modeling`, or a human.
 3. Define observable success and a verification strategy before editing. Ask only when a missing choice is product/taste/preference and the repository cannot answer it.
 4. Implement in focused increments with `tdd` at agreed seams when that is the honest strategy. Follow established project patterns. Use `refactor` when the request is structural rather than a feature.

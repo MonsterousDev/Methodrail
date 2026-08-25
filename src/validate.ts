@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { parse } from "yaml";
 import { REQUIRED_COMPOSITION_FIXTURES } from "./eval/load.js";
 import { hostProjections, readCanonicalInvariant } from "./family-invariant.js";
+import { evaluateRepositoryKnowledge } from "./knowledge/report.js";
 import { evaluateProjectMd } from "./project-md.js";
 
 export interface ValidationIssue {
@@ -99,6 +100,8 @@ const REQUIRED_REFERENCES = [
   "references/knowledge/lifecycle.md",
   "references/knowledge/freshness.md",
   "references/knowledge/provenance.md",
+  "references/knowledge/note-contract.md",
+  "references/knowledge/reuse.md",
   "references/evidence.md",
   "references/protocols/task-packet.md",
   "references/protocols/review-packet.md",
@@ -393,6 +396,20 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
     }
   }
 
+  const lockPath = join(root, "package-lock.json");
+  if (existsSync(lockPath) && typeof packageJson.version === "string") {
+    try {
+      const lock: unknown = JSON.parse(readFileSync(lockPath, "utf8"));
+      const lockPackages = isRecord(lock) && isRecord(lock.packages) ? lock.packages : undefined;
+      const lockRoot = lockPackages && isRecord(lockPackages[""]) ? lockPackages[""] : undefined;
+      if (!isRecord(lock) || lock.version !== packageJson.version || lockRoot?.version !== packageJson.version) {
+        issues.push(issue(lockPath, "Package lock and package versions must agree"));
+      }
+    } catch {
+      issues.push(issue(lockPath, "package-lock.json is not valid JSON"));
+    }
+  }
+
   for (const obsolete of ["workflows", "protocols", "rigor"]) {
     const path = join(root, obsolete);
     if (walk(path, () => true).length > 0) {
@@ -454,6 +471,7 @@ function validateMethodrailStructure(root: string, skillPaths: string[]): Valida
   issues.push(...validateFamilyInvariant(root));
   issues.push(...validateObsoleteTerms(root));
   issues.push(...validateProjectMdQuality(root));
+  issues.push(...validateKnowledgeNotes(root));
   issues.push(...validateEvalHarness(root));
 
   const obsoleteSkill = join(root, "skills", "writing-great-skills");
@@ -678,6 +696,11 @@ function validateProjectMdQuality(root: string): ValidationIssue[] {
     }
   }
   return issues;
+}
+
+function validateKnowledgeNotes(root: string): ValidationIssue[] {
+  const report = evaluateRepositoryKnowledge(root);
+  return report.errors.map((item) => issue(item.path, item.message));
 }
 
 function validateEvalHarness(root: string): ValidationIssue[] {

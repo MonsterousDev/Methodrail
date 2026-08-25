@@ -136,6 +136,8 @@ export const REQUIRED_COMPOSITION_FIXTURES = [
   "knowledge-accumulation",
   "partial-knowledge",
   "human-decision",
+  "knowledge-reuse",
+  "knowledge-refresh",
 ] as const;
 
 /** Canonical example names: `<fixture>.baseline.json` / `<fixture>.methodrail.json` for required fixtures only. Host extras and Task A traces (e.g. `knowledge-accumulation-discover.methodrail.json`) are not loaded by `npm run eval`. */

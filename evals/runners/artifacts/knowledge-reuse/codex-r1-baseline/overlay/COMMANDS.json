@@ -1,0 +1,46 @@
+[
+  {
+    "command": "pwd && rg --files -g 'TASK.md' -g 'repo/**' -g '!repo/node_modules/**'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/notify.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/outbox.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/notify.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,160p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,160p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "node --test src/notify.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "git diff -- repo/src/notify.js repo/src/notify.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git diff -- src/notify.js src/notify.test.js",
+    "exit_status": 1
+  }
+]

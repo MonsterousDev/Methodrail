@@ -112,8 +112,10 @@ function examples(): void {
     ? readdirSync(exampleDir).filter((name) => isCanonicalExampleFile(name))
     : [];
   if (extras.length === 0 && integrityErrors.length === 0) fail("No example runs found under evals/runners/examples");
-  const pilotManifest = join(repoRoot, "evals/pilot-t5-t10.yaml");
-  if (existsSync(pilotManifest)) integrityErrors.push(...pilot(pilotManifest));
+  for (const manifest of ["evals/pilot-t5-t10.yaml", "evals/pilot-v0.7-knowledge.yaml"]) {
+    const path = join(repoRoot, manifest);
+    if (existsSync(path)) integrityErrors.push(...pilot(path));
+  }
   if (integrityErrors.length > 0) fail(`Integrity gate failed:\n${integrityErrors.join("\n")}`);
 }
 

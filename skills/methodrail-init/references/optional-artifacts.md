@@ -16,7 +16,7 @@ knowledge/operations.md
 knowledge/decisions/
 ```
 
-Create those only when useful. Prefer a single focused note over a tree of stubs.
+Create those only when useful. Prefer a single focused note over a tree of stubs. Do not create typed notes during init; those are promoted by Reflect after real work using [note.md](../../../templates/project/knowledge/note.md). Existing architecture/domain/behavior/operations files remain valid legacy notes.
 
 Cite source paths or decisions, record a relevant revision when the claim is code-derived, and label uncertain claims. See [knowledge lifecycle](../../../references/knowledge/lifecycle.md).
 

@@ -1,0 +1,48 @@
+{
+  "fixture_id": "knowledge-reuse",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse --is-inside-work-tree 2>/dev/null; git log --oneline -5 2>/dev/null; echo \"---STATUS---\"; git status --short 2>/dev/null; echo \"---SHA---\"; git rev-parse HEAD 2>/dev/null; echo \"---DIFF vs validated_at---\"; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/notify.js repo/src/outbox.js 2>&1 | head -100; echo \"---LOG relevant_paths---\"; git log --oneline bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..HEAD -- repo/src/notify.js repo/src/outbox.js 2>&1",
+      "exit_status": 128
+    },
+    {
+      "command": "node --test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "## Change",
+    "Routed `shipment.delayed` through `dispatchOnce(event.id, event.type, event.data)` in `repo/src/notify.js`, matching `shipment.created`. Updated `repo/src/notify.test.js` so a duplicate delayed event does not enqueue a second mail. `node --test` passed (2 tests).",
+    "## Project knowledge",
+    "Used `.methodrail/PROJECT.md` → `.methodrail/knowledge/notifications.md`.",
+    "The note claims every customer-visible shipment notification must use the provider event ID as the outbox key, and reuse guidance says new events should call `dispatchOnce` rather than `sendDirect`.",
+    "`validated_at` is SHA `bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`, but this worktree is not a git repository, so that revision could not be resolved. Confidence was reduced and the claim was checked against current source instead:",
+    "- Observed: `handle` already called `dispatchOnce(event.id, event.type, event.data)` for `shipment.created`.",
+    "- Observed: `dispatchOnce` in `outbox.js` returns the existing row when the same event ID is seen again; `sendDirect` exists but is unused by `notify.js`.",
+    "- Test-confirmed: existing `shipment.created` duplicate test; after the change, the delayed duplicate test also passes.",
+    "The claim still applies. Implementation followed the note’s reuse guidance.",
+    "## Proposed note update (not applied)"
+  ],
+  "outcome": "# Answer ## Change Routed `shipment.delayed` through `dispatchOnce(event.id, event.type, event.data)` in `repo/src/notify.js`, matching `shipment.created`. Updated `repo/src/notify.test.js` so a duplicate delayed event does not enqueue a second mail. `node --test` passed (2 tests). ## Project knowledge Used `.methodrail/PROJECT.md` → `.methodrail/knowledge/notifications.md`. The note claims every customer-visible shipment notification must use the provider event ID as the outbox key, and reuse g",
+  "failure_modes": [],
+  "notes": "Live v0.7 pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825-v07/knowledge-reuse/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reuse/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reuse/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reuse/cursor-r2-methodrail/answer.md"
+  }
+}

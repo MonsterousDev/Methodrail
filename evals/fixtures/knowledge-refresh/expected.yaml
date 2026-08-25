@@ -1,0 +1,8 @@
+id: fixture.knowledge-refresh
+required_skills: []
+forbidden_skills: [arena, swarm, interrogate]
+expected_behaviors:
+  - retain the event-id dispatch key
+  - reject delete-on-fail against current outbox code
+  - propose a note update without rewriting the note
+max_expensive_skills: 0

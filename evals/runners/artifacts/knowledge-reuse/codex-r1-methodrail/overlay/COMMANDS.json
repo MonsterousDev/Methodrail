@@ -1,0 +1,82 @@
+[
+  {
+    "command": "pwd",
+    "exit_status": 0
+  },
+  {
+    "command": "ls",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f TASK.md && sed -n '1,220p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f .methodrail/PROJECT.md && sed -n '1,220p' .methodrail/PROJECT.md || true",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f rules/methodrail.mdc && sed -n '1,220p' rules/methodrail.mdc || true",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f references/knowledge/reuse.md && sed -n '1,220p' references/knowledge/reuse.md || true",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' .methodrail/knowledge/notifications.md",
+    "exit_status": 0
+  },
+  {
+    "command": "git -C repo status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "rg --files repo",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/notify.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/outbox.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/notify.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "node --test src/notify.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "git diff -- repo/src/notify.js repo/src/notify.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "find . -maxdepth 3 -name .git -type d -print",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,120p' repo/src/notify.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,160p' repo/src/notify.test.js",
+    "exit_status": 0
+  }
+]

@@ -1,0 +1,1 @@
+Loaded the mail note, kept event-id keying, and rejected delete-on-fail against current markFailed. The event-id claim is still true; the delete-on-fail claim is stale. Propose updating `.methodrail/knowledge/mail.md` to describe markFailed plus retryFailed. Did not rewrite the note.

@@ -105,6 +105,10 @@ test("validator reports native skill, link, legacy file, plugin, and rule errors
   const root = mkdtempSync(join(tmpdir(), "methodrail-invalid-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   writeFileSync(join(root, "package.json"), '{"name":"methodrail","version":"0.2.0"}');
+  writeFileSync(
+    join(root, "package-lock.json"),
+    '{"name":"methodrail","version":"0.1.0","packages":{"":{"name":"methodrail","version":"0.1.0"}}}',
+  );
 
   const skill = join(root, ".agents", "skills", "right-name");
   mkdirSync(skill, { recursive: true });
@@ -138,4 +142,5 @@ test("validator reports native skill, link, legacy file, plugin, and rule errors
   assert.ok(messages.some((message) => message.includes("semantic version")));
   assert.ok(messages.some((message) => message.includes("alwaysApply")));
   assert.ok(messages.some((message) => message.includes("Missing required Methodrail skill")));
+  assert.ok(messages.some((message) => message.includes("Package lock and package versions must agree")));
 });

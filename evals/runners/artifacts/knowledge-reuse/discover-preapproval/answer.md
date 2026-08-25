@@ -1,0 +1,1 @@
+Root cause: the unkeyed notification path can send twice for the same provider event. Reflect proposes an invariant knowledge candidate and is waiting for explicit approval; no knowledge note or PROJECT pointer was written.

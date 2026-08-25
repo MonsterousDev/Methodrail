@@ -35,7 +35,7 @@ Do not automatically profile or trace every bug.
 ## Workflow
 
 1. Capture the symptom, expected behavior, environment, revision, and available reproduction.
-2. Read `.methodrail/PROJECT.md` and control guidance when present. Prefer documented start/doctor/drive commands and the project verification skill over asking how the project runs.
+2. Read `.methodrail/PROJECT.md` and control guidance when present. If a knowledge pointer is relevant, follow [knowledge reuse](../../references/knowledge/reuse.md). Prefer documented start/doctor/drive commands and the project verification skill over asking how the project runs.
 3. Invoke `diagnosing-bugs`: build a red-capable loop, minimise, hypothesise, instrument, then fix. Do not repeat that procedure here.
 4. Escalate only when the loop is not enough: `observe` / `runtime-forensics` for live mechanism, `trace-forensics` for an existing capture, `performance` / `hillclimb` when the work is metric-driven.
 5. Name the root cause with evidence. If the root cause remains unknown, do not disguise a guess as a fix.

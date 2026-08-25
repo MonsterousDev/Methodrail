@@ -53,3 +53,19 @@ Retry count may explain duplicate charges.
 These can all be true at once. Mixing them produces false confidence: agents treat desired policy as implemented fact, or treat a one-run observation as an invariant.
 
 Keep records lightweight. Use the templates in `templates/project/` when a durable note is justified. Do not force a database schema.
+
+## Typed notes vs records
+
+These five kinds may become typed Markdown notes under `.methodrail/knowledge/<slug>.md` after explicit human approval:
+
+```text
+fact
+invariant
+convention
+known-failure
+hypothesis
+```
+
+**Decision** stays on the decision-record template in `.methodrail/knowledge/decisions/`. **Rationale** and **observation** stay records. Do not file them as typed notes.
+
+Typed notes use the [note contract](note-contract.md). Existing untyped files remain legacy notes with reduced confidence.

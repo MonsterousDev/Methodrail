@@ -46,7 +46,7 @@ information ROI = ────────────────────�
                   context + staleness + upkeep
 ```
 
-High-value: important domain invariants, unexpected ownership boundaries, non-obvious runtime behavior, deployment traps, known failure modes, consequential architectural rationale.
+High-value: important domain invariants, unexpected ownership boundaries, non-obvious runtime behavior, deployment traps, known failure modes, consequential architectural rationale. Typed notes use the [note contract](knowledge/note-contract.md). Init does not invent them; Reflect proposes them after real work.
 
 Low-value: copied package.json, obvious directory listings, stale API inventories, generic framework documentation.
 
@@ -66,7 +66,7 @@ knowledge proposals
 durable project knowledge
 ```
 
-Do not fully document a repository during init. Grow the harness around actual engineering work.
+Do not fully document a repository during init. Do not create typed knowledge notes during init. Grow the harness around actual engineering work. Later sessions reuse notes through [knowledge reuse](knowledge/reuse.md).
 
 ## Existing instructions outrank Methodrail
 

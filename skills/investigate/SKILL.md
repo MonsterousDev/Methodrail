@@ -27,7 +27,7 @@ optional durable learning
 ## Workflow
 
 1. Restate the question and define what evidence would answer it.
-2. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Check [freshness](../../references/knowledge/freshness.md) before relying on stored notes.
+2. Read `.methodrail/PROJECT.md` if present. Follow pointers only when relevant. Before relying on a stored note, follow [knowledge reuse](../../references/knowledge/reuse.md).
 3. Choose the cheapest reliable evidence source, then the matching leaf skill:
 
 ```text

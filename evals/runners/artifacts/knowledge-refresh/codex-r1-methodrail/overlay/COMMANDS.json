@@ -1,0 +1,78 @@
+[
+  {
+    "command": "pwd",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files -g 'TASK.md' -g '.methodrail/PROJECT.md' -g 'rules/methodrail.mdc' -g 'references/knowledge/reuse.md' -g 'repo/**'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' rules/methodrail.mdc",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' references/knowledge/reuse.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/mailer.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/mailer.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/outbox.js",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f .methodrail/PROJECT.md && sed -n '1,220p' .methodrail/PROJECT.md || true",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git log --oneline -- repo/src/mailer.js repo/src/mailer.test.js repo/src/outbox.js",
+    "exit_status": 128
+  },
+  {
+    "command": "sed -n '1,220p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' .methodrail/knowledge/mail.md",
+    "exit_status": 0
+  },
+  {
+    "command": "git -C repo status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git -C repo log --oneline -- src/mailer.js src/mailer.test.js src/outbox.js index.js package.json",
+    "exit_status": 128
+  },
+  {
+    "command": "node --test src/mailer.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,120p' repo/src/mailer.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,180p' repo/src/mailer.test.js",
+    "exit_status": 0
+  }
+]

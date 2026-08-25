@@ -1,0 +1,10 @@
+{
+  "name": "parcelwire",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny shipment notifier. Provider events dispatch customer emails through an outbox.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/notify.test.js"
+  }
+}

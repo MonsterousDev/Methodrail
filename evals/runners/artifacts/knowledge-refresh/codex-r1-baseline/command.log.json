@@ -1,0 +1,58 @@
+[
+  {
+    "command": "pwd",
+    "exit_status": 0
+  },
+  {
+    "command": "ls",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files",
+    "exit_status": 0
+  },
+  {
+    "command": "rg -n \"ticket\\.|resolved|email|customer\" .",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 2 -type f -name 'package.json' -o -name '*.js' -o -name '*.mjs'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' src/mailer.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' src/outbox.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' src/mailer.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,200p' index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,200p' package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "node --test",
+    "exit_status": 0
+  },
+  {
+    "command": "git diff -- src/mailer.js src/mailer.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "fixture_id": "knowledge-refresh",
+  "condition": "methodrail",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/mail.md",
+    "repo/src/mailer.js",
+    "repo/src/outbox.js",
+    "references/knowledge/reuse.md"
+  ],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "delivered ticket.resolved evt_res_grade twice; countFor stayed 1",
+    "failSend kept the outbox row"
+  ],
+  "evidence": [
+    "mail.md event-id claim still matches dispatchOnce",
+    "mail.md delete-on-fail contradicts markFailed",
+    "routed ticket.resolved through dispatchOnce(event.id)",
+    "proposed note update; did not rewrite mail.md"
+  ],
+  "outcome": "Kept event-id keying, rejected delete-on-fail, and proposed updating the mail note without rewriting it.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "retain the event-id dispatch key",
+    "reject delete-on-fail against current outbox code",
+    "propose a note update without rewriting the note"
+  ],
+  "notes": "constructed methodrail. Mixed note reconciled against current source.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-refresh/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-refresh/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-refresh/methodrail/answer.md"
+  }
+}

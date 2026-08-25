@@ -2,14 +2,9 @@
 
 Code-derived knowledge becomes stale.
 
-Knowledge should ideally carry lightweight provenance:
+Typed notes carry provenance in frontmatter (`validated_at`, `relevant_paths`). Legacy notes may still record revision and paths in prose.
 
-```text
-Relevant revision: <commit>
-Relevant paths:
-- src/billing/*
-- src/subscriptions/*
-```
+Executable freshness is `fresh`, `review-required`, or `unknown`. A relevant-path change means review the claim, not that the repository is invalid.
 
 When reused later:
 
@@ -25,11 +20,13 @@ reuse or selectively refresh
 
 ## How to check
 
-1. Read the recorded revision and paths.
-2. Inspect git history or diffs for those paths since that revision.
-3. If nothing relevant changed, reuse the note and say so.
-4. If relevant sources changed, re-validate the claim against current evidence before relying on it.
-5. If provenance is missing, treat confidence as reduced until checked.
+1. Read `validated_at` (or the recorded revision) and `relevant_paths`.
+2. If `validated_at` is a 40-character Git SHA, inspect git history or diffs for those paths since that revision.
+3. If nothing relevant changed, reuse the note and say so (`fresh`).
+4. If relevant sources changed, re-validate the claim against current evidence (`review-required`).
+5. If provenance is missing, `unversioned:`, or the SHA cannot be resolved, treat confidence as reduced (`unknown`) until checked against current source.
+
+See [reuse](reuse.md).
 
 Do not require a database. Do not build a full invalidation engine. Check freshness intelligently: a comment-only change in an unrelated file does not stale a billing invariant.
 

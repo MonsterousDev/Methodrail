@@ -1,0 +1,48 @@
+{
+  "fixture_id": "knowledge-refresh",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse --is-inside-work-tree && git log --oneline -20 && echo \"---\" && git log --oneline cccccccccccccccccccccccccccccccccccccccc..HEAD -- repo/src/mailer.js repo/src/outbox.js 2>&1; echo \"---STATUS---\"; git status; echo \"---DIFF---\"; git diff cccccccccccccccccccccccccccccccccccccccc -- repo/src/mailer.js repo/src/outbox.js 2>&1; echo \"---LOG PATHS---\"; git log --oneline -- repo/src/mailer.js repo/src/outbox.js",
+      "exit_status": 128
+    },
+    {
+      "command": "node --test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Answer",
+    "## Change",
+    "Routed `ticket.resolved` the same way as `ticket.opened`: `handle` now calls `dispatchOnce(event.id, event.type, event.data)` for both event types. Updated `repo/src/mailer.test.js` so resolved mail is asserted as a one-shot keyed send, and a failed send still keeps the outbox row.",
+    "Files:",
+    "- `repo/src/mailer.js`",
+    "- `repo/src/mailer.test.js`",
+    "Verification: `node --test` in `repo/` — 4 passed.",
+    "## Project knowledge",
+    "Used `.methodrail/PROJECT.md` → `.methodrail/knowledge/mail.md` (kind: invariant, status: verified).",
+    "There is no git history in this worktree, so `validated_at` (`cccccccccccccccccccccccccccccccccccccccc`) could not be resolved. Freshness is **unknown**; the claim was checked against current `repo/src/mailer.js` and `repo/src/outbox.js`.",
+    "**Still valid:** customer ticket emails are keyed on the provider event ID (`dispatchOnce(event.id, …)`). Used this for `ticket.resolved`.",
+    "**Stale:** “a failed send deletes the outbox row so the next attempt is a clean insert.” Current `markFailed` keeps the keyed row and sets `status: \"failed\"`. Tests already require that. Did **not** follow the note’s delete-on-fail reuse guidance. Did **not** rewrite the note."
+  ],
+  "outcome": "# Answer ## Change Routed `ticket.resolved` the same way as `ticket.opened`: `handle` now calls `dispatchOnce(event.id, event.type, event.data)` for both event types. Updated `repo/src/mailer.test.js` so resolved mail is asserted as a one-shot keyed send, and a failed send still keeps the outbox row. Files: - `repo/src/mailer.js` - `repo/src/mailer.test.js` Verification: `node --test` in `repo/` — 4 passed. ## Project knowledge Used `.methodrail/PROJECT.md` → `.methodrail/knowledge/mail.md` (kin",
+  "failure_modes": [],
+  "notes": "Live v0.7 pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825-v07/knowledge-refresh/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-refresh/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-refresh/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-refresh/cursor-r2-methodrail/answer.md"
+  }
+}

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.0 — 2026-08-25
+
+Harness Intelligence, first slice: verified knowledge reuse. Typed, approval-gated project notes with executable freshness diagnostics. Constructed specs pass. Live reuse was outcome-neutral; live refresh helped on proposed note updates, not on mail routing.
+
+- Add a typed Markdown contract (`kind`, `status`, `validated_at`, `relevant_paths`) with maintainer parsing, validation, and `fresh` / `review-required` / `unknown` diagnostics
+- Keep decisions on the existing decision template; leave rationale/observation as records; load legacy untyped notes with reduced confidence
+- Make Reflect propose at most one note and wait for approval; init recognizes and warns, and does not create typed notes
+- Point investigate/develop/debug/refactor/review at one shared reuse procedure
+- Add `knowledge-reuse` and `knowledge-refresh` constructed specs (hidden graders; Task B does not leak retries)
+- Record a 6-pair live pilot: reuse neutral on all hosts; refresh helped when Methodrail proposed a note update
+- Do not rewrite T6 / T8 / T9 history
+
 ## 0.6.1 — 2026-08-25
 
 Eval Integrity: artifact-backed outcome graders, disjoint empirical/specification/guardrail vocabularies, and an integrity gate that demands completeness rather than favorable verdicts.

@@ -1,0 +1,10 @@
+[
+  {
+    "command": "git rev-parse --is-inside-work-tree 2>/dev/null; git log --oneline -5 2>/dev/null; echo \"---STATUS---\"; git status --short 2>/dev/null; echo \"---SHA---\"; git rev-parse HEAD 2>/dev/null; echo \"---DIFF vs validated_at---\"; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/notify.js repo/src/outbox.js 2>&1 | head -100; echo \"---LOG relevant_paths---\"; git log --oneline bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..HEAD -- repo/src/notify.js repo/src/outbox.js 2>&1",
+    "exit_status": 128
+  },
+  {
+    "command": "node --test",
+    "exit_status": 0
+  }
+]

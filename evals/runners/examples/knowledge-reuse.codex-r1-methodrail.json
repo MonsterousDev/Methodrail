@@ -1,0 +1,121 @@
+{
+  "fixture_id": "knowledge-reuse",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd",
+      "exit_status": 0
+    },
+    {
+      "command": "ls",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f TASK.md && sed -n '1,220p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f .methodrail/PROJECT.md && sed -n '1,220p' .methodrail/PROJECT.md || true",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f rules/methodrail.mdc && sed -n '1,220p' rules/methodrail.mdc || true",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f references/knowledge/reuse.md && sed -n '1,220p' references/knowledge/reuse.md || true",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/knowledge/notifications.md",
+      "exit_status": 0
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "rg --files repo",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notify.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/outbox.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/notify.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/index.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "node --test src/notify.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "git diff -- repo/src/notify.js repo/src/notify.test.js",
+      "exit_status": 1
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "find . -maxdepth 3 -name .git -type d -print",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,120p' repo/src/notify.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,160p' repo/src/notify.test.js",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented support for `shipment.delayed` notifications in `repo/`.",
+    "Changes:",
+    "- Updated `repo/src/notify.js` so `shipment.delayed` routes through `dispatchOnce(event.id, event.type, event.data)`, matching the existing idempotent shipment notification path.",
+    "- Updated `repo/src/notify.test.js` so `shipment.delayed` is expected to notify once and suppress duplicate deliveries.",
+    "Verification:",
+    "- Ran `node --test src/notify.test.js` in `repo/`; all 2 tests passed.",
+    "Project knowledge used:",
+    "- Read `.methodrail/PROJECT.md` and followed its relevant pointer to `.methodrail/knowledge/notifications.md`.",
+    "- The note says customer-visible shipment notifications must use the provider event ID as the outbox key via `dispatchOnce`.",
+    "- I could not verify the note against git history because there is no `.git` directory under this workspace and `repo/` is not a git worktree.",
+    "- I checked the current source instead. The still-valid part is that `shipment.created` uses `dispatchOnce(event.id, event.type, event.data)` and the outbox deduplicates by event ID.",
+    "Proposed note update:"
+  ],
+  "outcome": "Implemented support for `shipment.delayed` notifications in `repo/`. Changes: - Updated `repo/src/notify.js` so `shipment.delayed` routes through `dispatchOnce(event.id, event.type, event.data)`, matching the existing idempotent shipment notification path. - Updated `repo/src/notify.test.js` so `shipment.delayed` is expected to notify once and suppress duplicate deliveries. Verification: - Ran `node --test src/notify.test.js` in `repo/`; all 2 tests passed. Project knowledge used: - Read `.metho",
+  "failure_modes": [],
+  "notes": "Live v0.7 pilot 2026-08-25. Worktree /tmp/methodrail-pilot-20260825-v07/knowledge-reuse/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reuse/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reuse/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reuse/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-reuse/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

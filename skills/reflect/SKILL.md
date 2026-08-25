@@ -16,7 +16,7 @@ skill candidate
 structural-enforcement candidate
 ```
 
-See [knowledge lifecycle](../../references/knowledge/lifecycle.md) and [structural enforcement](../../references/structural-enforcement.md).
+See [knowledge lifecycle](../../references/knowledge/lifecycle.md), [note contract](../../references/knowledge/note-contract.md), and [structural enforcement](../../references/structural-enforcement.md).
 
 ## Process
 
@@ -40,6 +40,22 @@ Use [synthesizer.md](references/synthesizer.md). Produce Accepted / Rejected / B
 
 Move anything a mechanical check would enforce more reliably than a skill onto the structural-enforcement list.
 
+A knowledge candidate is earned only from this work's evidence. Ordinary implementation detail is not a note. At most one typed note per approval. Include:
+
+- proposed `kind` and `status`
+- concise claim
+- evidence
+- `validated_at` (current Git SHA, or `unversioned:<reason>`)
+- `relevant_paths`
+- how a future task would reuse it
+- estimated rediscovery cost
+- staleness risk and refresh triggers
+- duplication check against existing knowledge and canonical docs
+- whether a test, type, or lint rule is a better destination
+- proposed `.methodrail/PROJECT.md` index entry
+
+“Accepted for proposal” is not approval to persist. “No candidate earned promotion” is a valid result.
+
 After evaluation failures, classify the miss before writing more instructions:
 
 ```text
@@ -54,7 +70,19 @@ Prefer a stronger check, test, type, or fixture over another paragraph. Do not a
 
 ### 5. Present and wait
 
-Show the full Accepted / Rejected / Backlog list. Wait for explicit approval before writing any knowledge note or skill edit. Skill changes affect future agents; do not auto-apply.
+Show the full Accepted / Rejected / Backlog list. Wait for explicit approval before writing any knowledge note or skill edit. Skill changes affect future agents; do not auto-apply. Do not silently create, modify, merge, or delete a knowledge note.
+
+### 6. Promotion transaction after approval
+
+1. Recheck that the evidence still supports the claim.
+2. Confirm that another canonical document does not already own the information.
+3. Confirm that structural enforcement is not the better destination.
+4. Create or update exactly one typed note using [templates/project/knowledge/note.md](../../templates/project/knowledge/note.md).
+5. Add or update one concise PROJECT.md pointer.
+6. Validate the note (kind, status, evidence, index, size). Report freshness scope.
+7. Verify that an unchanged rerun produces no diff.
+
+Do not keep a candidate queue on disk.
 
 Do not file tracker issues unless the user asks. Do not treat Methodrail global skills as an org-wide dump for project-local lessons.
 

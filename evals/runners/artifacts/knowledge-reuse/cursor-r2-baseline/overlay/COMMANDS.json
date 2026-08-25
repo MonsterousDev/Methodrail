@@ -1,0 +1,6 @@
+[
+  {
+    "command": "node --test",
+    "exit_status": 0
+  }
+]

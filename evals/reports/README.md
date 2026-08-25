@@ -12,7 +12,7 @@ A report must use disjoint vocabularies:
 
 Constructed pairs must never be quoted as `helped`. Current Codex pilot JSON is `runner_captured` because raw transcripts and artifact bundles exist. Cursor pilot JSON is `operator_summary`; its artifact bundles exist but raw subagent transcripts were unavailable.
 
-`evals/pilot-t5-t10.yaml` is the executable pilot manifest. The default integrity gate rescores all listed live pairs and fails if a planned pair or required capture artifact disappears.
+`evals/pilot-t5-t10.yaml` is the executable v0.6.1 live-pilot manifest. `evals/pilot-v0.7-knowledge.yaml` is the executable v0.7 knowledge-reuse/refresh live-pilot manifest. The default integrity gate rescores both and fails if a planned pair or required capture artifact disappears.
 
 Layers:
 

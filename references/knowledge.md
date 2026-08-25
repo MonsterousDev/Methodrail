@@ -6,6 +6,8 @@ Read as needed:
 
 - [model](knowledge/model.md) — types that must not be conflated
 - [lifecycle](knowledge/lifecycle.md) — when a note is worth persisting
+- [note contract](knowledge/note-contract.md) — typed frontmatter, identity, and legacy notes
+- [reuse](knowledge/reuse.md) — how later sessions find, freshness-check, and reconcile notes
 - [freshness](knowledge/freshness.md) — how code-derived claims go stale
 - [provenance](knowledge/provenance.md) — how we know a claim
 

@@ -1,0 +1,8 @@
+id: fixture.knowledge-reuse
+required_skills: []
+forbidden_skills: [arena, swarm, interrogate]
+expected_behaviors:
+  - apply the event-id dispatch invariant
+  - skip rediscovery of the already-learned notification rule
+  - verify a repeated event does not double-notify
+max_expensive_skills: 0
