@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.1 — 2026-08-27
+
+Linked-external harness packaging for Harness Intelligence. Repository-bound sibling storage stays out of commits and PR review while agents still open git-root `.methodrail/`.
+
+- Support repository-bound linked-external `.methodrail` storage with `HARNESS.yaml` binding validation
+- Ignore the repository-root link only through Git’s local `.git/info/exclude` (not the tracked `.gitignore`)
+- Keep create/inspect idempotent and fail closed on missing exclude, wrong-repo manifests, non-link paths, unbound targets, and in-repo storage
+- Share one `HARNESS.yaml` parser between create and inspect so a decoy `path` key cannot rebind create
+- Cover linked-storage knowledge freshness against the repository root (not the external storage directory)
+- Dogfood on Darwin only; Windows junctions were not tested
+
 ## 0.7.0 — 2026-08-25
 
 Harness Intelligence, first slice: verified knowledge reuse. Typed, approval-gated project notes with executable freshness diagnostics. Constructed specs pass. Live reuse was outcome-neutral; live refresh helped on proposed note updates, not on mail routing.
