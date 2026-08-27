@@ -2,7 +2,7 @@
 
 Inspect evidence in this order, stopping when the project is understood well enough to generate a useful harness. Do not ask humans questions the repository can answer.
 
-1. Existing AI guidance: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursor/skills/`, `.claude/`, `.codex/`, `.agents/skills/`, `.github/copilot-instructions.md`, other local skills, and `.methodrail/`.
+1. Existing AI guidance: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursor/skills/`, `.claude/`, `.codex/`, `.agents/skills/`, `.github/copilot-instructions.md`, other local skills, and `.methodrail/` at the git root. If `.methodrail` is linked, validate its `HARNESS.yaml`; do not search arbitrary sibling folders.
 2. Project identity: README, contribution guide, manifests, lockfiles, workspace definitions, and directory shape.
 3. Supported operations: package scripts, Makefiles, task runners, CI jobs, container configuration, deployment configuration, and test configuration.
 4. Representative implementation: runtime entrypoints, source layout, one core module, one test, and architecture docs or ADRs when relevant.
@@ -22,4 +22,4 @@ Infer:
 
 For monorepos, sample each distinct package kind. Do not inspect every package when conventions are shared.
 
-Ask the user only about unresolved intent, credentials, unavailable environments, or mutually exclusive integration choices.
+Ask the user only about unresolved intent, credentials, unavailable environments, mutually exclusive integration choices, or where Methodrail files should live when that has not already been decided.

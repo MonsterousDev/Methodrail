@@ -1,6 +1,8 @@
 # Completion checklist
 
 - Repository and existing AI guidance were inspected before questions.
+- Harness placement is resolved (in-repository directory or linked external storage). The user was asked only when the request did not already choose.
+- A linked harness has a matching `HARNESS.yaml`, is ignored through Git's local exclude file, and creates no tracked change.
 - Project type, boundaries, and commands came from evidence.
 - `.methodrail/PROJECT.md` is a useful index, not a dump of the tree.
 - PROJECT.md is pointer-oriented: links, small durable facts, and paths to verification/control/runtime docs.

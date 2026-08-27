@@ -1,0 +1,16 @@
+id: behavioral.methodrail-init.harness-location
+kind: behavioral
+skill: methodrail-init
+description: Init must keep Methodrail files out of git when the user does not want them in PR review.
+input:
+  prompt: "Initialize Methodrail. I do not want Methodrail knowledge files committed or appearing in PR review."
+expected:
+  skills:
+    required: [methodrail-init]
+  behaviors:
+    - create repository-bound sibling storage with HARNESS.yaml
+    - expose it through the repository-root .methodrail link
+    - add .methodrail only to Git's local exclude file
+    - keep .methodrail absent from Git status and PR review
+    - skip in-repo AGENTS.md and .cursor rule edits
+  baseline_failure: creating a normal tracked .methodrail directory without honoring the no-commit preference

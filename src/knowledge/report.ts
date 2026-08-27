@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
+import { inspectHarnessBinding } from "../harness.js";
 import { evaluateFreshness } from "./freshness.js";
 import { knowledgeIndexEntries, loadKnowledgeNotes, loadProjectMd } from "./load.js";
 import { validateNote } from "./validate.js";
@@ -28,6 +29,11 @@ export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
   const projectMd = loadProjectMd(projectRoot);
   const errors: KnowledgeDiagnostic[] = [];
   const warnings: KnowledgeDiagnostic[] = [];
+  const harness = inspectHarnessBinding(projectRoot);
+  for (const diagnostic of harness.diagnostics) {
+    if (diagnostic.level === "error") errors.push(diagnostic);
+    else warnings.push(diagnostic);
+  }
   if (projectMd) {
     const methodrailRoot = resolve(projectRoot, ".methodrail");
     for (const entry of knowledgeIndexEntries(projectMd)) {

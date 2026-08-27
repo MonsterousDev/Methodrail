@@ -10,6 +10,7 @@ expected:
     required: [methodrail-init]
   behaviors:
     - inspect the repository before asking routine questions
+    - ask where the harness should live only when the user has not already chosen
     - create a concise PROJECT.md index
     - preserve existing AGENTS.md and CLAUDE.md
     - write pointer-oriented agent-facing files

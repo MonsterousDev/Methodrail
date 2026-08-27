@@ -1,6 +1,6 @@
 # Control maintenance
 
-`methodrail-init` is idempotent refresh as well as first-time setup. When `.methodrail/` already exists:
+`methodrail-init` is idempotent refresh as well as first-time setup. When `.methodrail/` already exists at the git root as a directory or repository-bound link:
 
 ```text
 check existing project harness
@@ -13,6 +13,8 @@ update stale generated knowledge
 ↓
 preserve curated human content
 ```
+
+Reuse the canonical path. For a linked harness, validate `HARNESS.yaml` before writing. Do not move or relink it unless the user asks.
 
 ## Detect change
 

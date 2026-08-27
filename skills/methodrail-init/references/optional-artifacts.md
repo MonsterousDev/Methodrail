@@ -47,13 +47,13 @@ only when:
 
 Do not create a skill for every command.
 
-Place a new skill in the repository's established native skill location (`.agents/skills/`, `.cursor/skills/`, or `.claude/skills/`). Preserve an existing skill with the same name unless the user approves a merge.
+For an in-repository harness, place a new skill in the repository's established native skill location (`.agents/skills/`, `.cursor/skills/`, or `.claude/skills/`). Preserve an existing skill with the same name unless the user approves a merge. For linked external storage, do not create a host-native skill outside its discovery root; keep the reusable verification procedure under `.methodrail/control/`.
 
 ## verify-project
 
 When the project has a meaningful executable surface, prefer `create-verification-skill` over hand-writing a stub. That path interviews the repository and produces launch/doctor/drive/evidence/cleanup plus a feature map.
 
-Create `.agents/skills/verify-project/SKILL.md` (or the established native skill location) only when project verification requires a reusable decision tree that agents cannot infer cheaply. A static command map is enough when there is no user-facing runtime.
+Create `.agents/skills/verify-project/SKILL.md` (or the established native skill location) only for an in-repository harness when project verification requires a reusable decision tree that agents cannot infer cheaply. A static command map is enough when there is no user-facing runtime. Linked external placement uses `.methodrail/control/` instead.
 
 Required frontmatter:
 

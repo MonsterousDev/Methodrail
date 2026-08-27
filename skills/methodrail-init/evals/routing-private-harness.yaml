@@ -1,0 +1,9 @@
+id: skill.methodrail-init.routing-positive-private-harness
+kind: routing
+skill: methodrail-init
+description: "Init still owns setup when the user wants Methodrail files kept out of git."
+input:
+  prompt: "Run methodrail-init but keep the knowledge base out of this repo so it does not show up in PR review."
+expected:
+  skills:
+    required: [methodrail-init]

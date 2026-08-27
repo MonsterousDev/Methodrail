@@ -26,6 +26,8 @@ A mature service may need:
 
 Do not generate files merely to satisfy a template. Create richer artifacts when they materially improve future agent performance.
 
+The harness is always addressed at the git root as `.methodrail/`. It may be a normal directory or an ignored repository-bound link to sibling storage. The linked layout keeps its contents out of commits and PR review without making agents search arbitrary workspace folders. `HARNESS.yaml` binds external storage to exactly one repository.
+
 ## PROJECT.md is an index
 
 Keep it short. Point to canonical source, docs, ADRs, knowledge notes, and control procedures. It is not the entire knowledge base.

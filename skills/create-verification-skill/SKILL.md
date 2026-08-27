@@ -33,7 +33,7 @@ Write the skill in the repository's established native skill location, preferrin
 .agents/skills/verify-<app>/SKILL.md
 ```
 
-Fall back to `.cursor/skills/verify-<app>/` or `.claude/skills/verify-<app>/` only when that is already the project's convention. YAML frontmatter is required (`name: verify-<app>` and a description that names the app, the surface, and when to reach for it).
+Fall back to `.cursor/skills/verify-<app>/` or `.claude/skills/verify-<app>/` only when that is already the project's convention. YAML frontmatter is required (`name: verify-<app>` and a description that names the app, the surface, and when to reach for it). If `methodrail-init` selected linked external storage, it records verification under `.methodrail/control/` instead of invoking this skill.
 
 Sections, each grounded in what the interview actually found (no placeholders):
 

@@ -65,7 +65,7 @@ Cursor, Claude Code, Codex, and other native harnesses execute tools, manage con
 
 **Global plugin:** portable Agent Skills, one small rule, reusable methodology references, and `/methodrail-init`.
 
-**Project harness:** a concise `.methodrail/PROJECT.md` index plus only the knowledge, control procedures, thin host integration, and project-specific skills that the repository actually justifies.
+**Project harness:** a concise `.methodrail/PROJECT.md` index plus only the knowledge, control procedures, thin host integration, and project-specific skills that the repository actually justifies. Init can keep `.methodrail/` in the repository or link that canonical path to repository-bound sibling storage when knowledge should stay out of commits and PR review.
 
 Global skills such as `how`, `tdd`, and `wayfinder` stay globally installed. Init does not copy them into each project.
 

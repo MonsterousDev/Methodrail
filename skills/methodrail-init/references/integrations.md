@@ -30,3 +30,5 @@ Inspect existing AI instruction surfaces before adding a pointer:
 - `.github/copilot-instructions.md`
 
 Never overwrite them. Prefer the existing source of truth plus a thin Methodrail pointer. Detect contradictions; repository-specific instructions outrank generic Methodrail assumptions.
+
+For linked external storage, the globally installed Methodrail integration discovers the canonical repository-root `.methodrail` link. Do not put a host rule in an arbitrary sibling folder or edit tracked project instructions solely to expose Methodrail. If the global integration is unavailable, report that limitation instead of claiming discovery works. See [harness location](harness-location.md).

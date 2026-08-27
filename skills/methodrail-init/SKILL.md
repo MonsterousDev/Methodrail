@@ -30,6 +30,8 @@ Do not copy global Methodrail skills (`how`, `tdd`, `wayfinder`, …) into the p
 ```text
 inspect repository
 ↓
+resolve harness placement (directory vs linked external storage)
+↓
 establish high-value project knowledge
 ↓
 determine whether the project has a meaningful executable surface
@@ -39,24 +41,26 @@ determine whether the project has a meaningful executable surface
                  → project-local verify skill / feature map
 ```
 
-1. Interview the repository before asking the user. Load [repository interview](references/repository-interview.md).
-2. If `.methodrail/` already exists, refresh rather than recreate. Load [control maintenance](references/control-maintenance.md).
-3. Resolve only choices the repository cannot answer. Ask a focused question only when the answer materially changes the generated files.
-4. Plan proportionally using [information ROI](references/information-roi.md) and [optional artifacts](references/optional-artifacts.md):
+1. Interview the repository before asking the user. Load [repository interview](references/repository-interview.md). Inspect the canonical `.methodrail` path at the git root, including whether it is a linked external harness.
+2. If a harness already exists, refresh it through that canonical path rather than recreate or move it. Load [control maintenance](references/control-maintenance.md).
+3. If none exists, resolve [harness location](references/harness-location.md) before writing files. Ask whether Methodrail knowledge should live in the repository or in repository-bound external storage. Honor a preference already stated in the request. This choice decides git/PR visibility.
+4. Resolve only remaining choices the repository cannot answer. Ask a focused question only when the answer materially changes the generated files.
+5. Plan proportionally using [information ROI](references/information-roi.md) and [optional artifacts](references/optional-artifacts.md):
    - always consider `.methodrail/PROJECT.md` as a short index pointing at canonical sources (`AGENTS.md`, ADRs, runbooks) rather than copying them;
    - add knowledge, control, or a project-local skill only when it removes real recurring uncertainty;
    - in a monorepo, document shared conventions once and add package-specific detail only where commands or constraints differ.
-5. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md). If the surface is meaningful, invoke `create-verification-skill` — this is one of init's highest-value outputs. If not, document static verification and do not invent runtime infrastructure.
-6. Preview conflicts. Never overwrite existing instructions or curated prose.
-7. Generate or merge files using [merge semantics](references/merge-semantics.md). Prefer templates in `templates/project/` as skeletons to fill from evidence, not as files to copy blindly.
-8. Install exactly one thin, supported integration described in [integrations](references/integrations.md). If a supported integration already exists, update only the Methodrail-owned pointer or leave it intact.
-9. Validate paths, commands, frontmatter, links, and idempotency. A second run with unchanged inputs must produce no diff.
-10. Report what was created, preserved, skipped, refreshed, and still needs a human decision.
+6. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md). For an in-repository harness, invoke `create-verification-skill` when the surface warrants it. For a linked external harness, record the verified procedure under `.methodrail/control/` instead; do not claim a host-native skill outside the host's discovery root. If the surface is not meaningful, document static verification and do not invent runtime infrastructure.
+7. Preview conflicts. Never overwrite existing instructions or curated prose.
+8. Generate or merge files through the git root's canonical `.methodrail/` path using [merge semantics](references/merge-semantics.md). Prefer templates in `templates/project/` as skeletons to fill from evidence, not as files to copy blindly. The link routes external writes to sibling storage.
+9. Install exactly one thin, supported integration described in [integrations](references/integrations.md). A linked external harness relies on the globally installed Methodrail integration plus the canonical repository-root link; do not edit tracked instruction files merely to advertise it. If a supported integration already exists, update only the Methodrail-owned pointer or leave it intact.
+10. Validate paths, commands, frontmatter, links, and idempotency. A second run with unchanged inputs must produce no diff.
+11. Report the harness location, what was created, preserved, skipped, refreshed, and still needs a human decision.
 
 ## Output constraints
 
 - `.methodrail/PROJECT.md` is a concise index, not the entire knowledge base.
 - Keep PROJECT.md pointer-oriented: links, durable facts, and paths. Do not clone the README or generate a giant summary.
+- For linked external placement, use the bundled deterministic script from [harness location](references/harness-location.md). The only repository entry is the locally ignored `.methodrail` link; all harness contents live outside the repository, and `HARNESS.yaml` owns the binding.
 - Recognize typed notes and legacy untyped notes. Validate that typed notes are indexed. Report potentially stale notes. Do not rewrite them automatically. Do not create typed notes during init.
 - Record commands the repository already supports; do not invent infrastructure.
 - Preserve existing `AGENTS.md`, `CLAUDE.md`, Cursor rules, copilot instructions, and local skills. Repository-specific instructions outrank generic Methodrail assumptions.
@@ -71,6 +75,7 @@ determine whether the project has a meaningful executable surface
 Load only the reference needed for the current phase:
 
 - [repository interview](references/repository-interview.md)
+- [harness location](references/harness-location.md)
 - [information ROI](references/information-roi.md)
 - [PROJECT.md template](references/project-template.md)
 - [optional artifacts](references/optional-artifacts.md)
@@ -92,4 +97,4 @@ Do not copy global Methodrail operators into the project.
 
 ## Completion
 
-Initialization or refresh is complete when generated guidance reflects observed repository facts, existing instructions remain intact, control procedures were investigated when applicable, a project-local verification skill exists when the surface warrants it, one supported integration exposes Methodrail, and another unchanged run would be a no-op.
+Initialization or refresh is complete when harness location is resolved, generated guidance reflects observed repository facts, existing instructions remain intact, control procedures were investigated when applicable, verification is discoverable in the supported location for that placement, one supported integration exposes Methodrail without tracked changes when external storage was chosen, binding validation passes, and another unchanged run would be a no-op.
