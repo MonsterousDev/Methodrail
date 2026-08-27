@@ -12,10 +12,12 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { parse as parseYaml } from "yaml";
 import { inspectHarnessBinding } from "../src/harness.js";
 import { evaluateFreshness } from "../src/knowledge/freshness.js";
 import { loadKnowledgeNotes, loadProjectMd } from "../src/knowledge/load.js";
 import { evaluateProjectKnowledge } from "../src/knowledge/report.js";
+import { parseLinkedHarnessManifest } from "../skills/methodrail-init/scripts/harness-manifest.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const script = join(root, "skills/methodrail-init/scripts/linked-harness.mjs");
@@ -158,4 +160,65 @@ test("linked external creation refuses storage inside the repository", (t) => {
     () => create(item.repository, join(item.repository, "private-methodrail")),
     /outside the repository/i,
   );
+});
+
+const MANIFESTS = {
+  scriptForm: `schema_version: 1
+placement: linked-external
+repository:
+  path: "../../my-app"
+`,
+  decoyPath: `notes:
+  path: "../../wrong-app"
+schema_version: 1
+placement: linked-external
+repository:
+  path: "../../my-app"
+`,
+  comment: `schema_version: 1 # comment
+placement: linked-external
+repository:
+  path: "../../my-app"
+`,
+  floatVersion: `schema_version: 1.0
+placement: linked-external
+repository:
+  path: "../../my-app"
+`,
+};
+
+test("create and inspect share one parser that reads repository.path", () => {
+  for (const [name, source] of Object.entries(MANIFESTS)) {
+    const yamlValue = parseYaml(source) as { schema_version: unknown; repository?: { path?: unknown } };
+    const parsed = parseLinkedHarnessManifest(source);
+    assert.equal(yamlValue.schema_version, 1, name);
+    assert.equal(parsed.repositoryPath, yamlValue.repository?.path, name);
+  }
+});
+
+test("a decoy path key does not rebind create or inspect", (t) => {
+  const item = fixture();
+  t.after(() => rmSync(item.base, { recursive: true, force: true }));
+  const created = create(item.repository, item.storage);
+  mkdirSync(join(item.base, "wrong-app"));
+  writeFileSync(
+    created.manifestPath!,
+    `notes:
+  path: "../../wrong-app"
+schema_version: 1
+placement: linked-external
+repository:
+  path: "../../my-app"
+`,
+  );
+
+  const binding = inspectHarnessBinding(item.repository);
+  assert.deepEqual(binding.diagnostics, []);
+  assert.equal(binding.binding?.placement, "linked-external");
+  assert.equal(binding.binding?.storageHarnessRoot, created.storageHarnessRoot);
+
+  execFileSync("node", [script, "create", "--repo", item.repository], { encoding: "utf8" });
+  const after = inspectHarnessBinding(item.repository);
+  assert.deepEqual(after.diagnostics, []);
+  assert.equal(after.binding?.storageHarnessRoot, created.storageHarnessRoot);
 });

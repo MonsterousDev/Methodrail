@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
-import { parse } from "yaml";
+import { join, relative, resolve, sep } from "node:path";
+import { parseLinkedHarnessManifest } from "../skills/methodrail-init/scripts/harness-manifest.mjs";
 
 export const HARNESS_MANIFEST = "HARNESS.yaml";
 
@@ -24,10 +24,6 @@ export interface HarnessBindingDiagnostic {
 export interface HarnessBindingResult {
   binding?: HarnessBinding;
   diagnostics: HarnessBindingDiagnostic[];
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function inside(parent: string, child: string): boolean {
@@ -100,31 +96,14 @@ export function inspectHarnessBinding(repositoryRoot: string): HarnessBindingRes
     return { diagnostics };
   }
 
-  let value: unknown;
+  let repositoryPath: string;
   try {
-    value = parse(readFileSync(manifestPath, "utf8"));
+    ({ repositoryPath } = parseLinkedHarnessManifest(readFileSync(manifestPath, "utf8")));
   } catch (error) {
     diagnostics.push({
       level: "error",
       path: manifestPath,
-      message: `HARNESS.yaml is invalid YAML: ${(error as Error).message}`,
-    });
-    return { diagnostics };
-  }
-  const repositoryRecord = isRecord(value) && isRecord(value.repository) ? value.repository : undefined;
-  const repositoryPath = repositoryRecord?.path;
-  if (
-    !isRecord(value) ||
-    value.schema_version !== 1 ||
-    value.placement !== "linked-external" ||
-    typeof repositoryPath !== "string" ||
-    repositoryPath.trim() === "" ||
-    isAbsolute(repositoryPath)
-  ) {
-    diagnostics.push({
-      level: "error",
-      path: manifestPath,
-      message: "HARNESS.yaml requires schema_version: 1, placement: linked-external, and a relative repository.path",
+      message: (error as Error).message,
     });
     return { diagnostics };
   }

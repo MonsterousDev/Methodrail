@@ -54,6 +54,7 @@ The script:
 - refuses storage inside the repository;
 - creates sibling `.methodrail/` storage and `HARNESS.yaml`;
 - binds that manifest to the repository with a relative path;
+- parses `HARNESS.yaml` through [harness-manifest.mjs](../scripts/harness-manifest.mjs), the same `repository.path` rules knowledge validation uses;
 - creates the repository-root link;
 - adds `/.methodrail` only to Git's local `info/exclude`;
 - verifies Git ignores the link;

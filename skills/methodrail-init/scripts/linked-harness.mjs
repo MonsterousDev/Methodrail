@@ -13,6 +13,7 @@ import {
 } from "node:fs";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveBoundRepository } from "./harness-manifest.mjs";
 
 const EXCLUDE_PATTERN = "/.methodrail";
 
@@ -79,24 +80,6 @@ function linkTarget(repositoryRoot, storageHarnessRoot) {
   return relative(repositoryRoot, storageHarnessRoot) || ".";
 }
 
-function parseBoundRepository(manifestPath) {
-  const source = readFileSync(manifestPath, "utf8");
-  const schema = /^schema_version:\s*1\s*$/m.test(source);
-  const placement = /^placement:\s*linked-external\s*$/m.test(source);
-  const pathMatch = /^\s*path:\s*(.+?)\s*$/m.exec(source);
-  if (!schema || !placement || !pathMatch?.[1]) throw new Error(`Invalid linked harness manifest: ${manifestPath}`);
-  let repositoryPath;
-  try {
-    repositoryPath = JSON.parse(pathMatch[1]);
-  } catch {
-    repositoryPath = pathMatch[1];
-  }
-  if (typeof repositoryPath !== "string" || repositoryPath.length === 0 || isAbsolute(repositoryPath)) {
-    throw new Error(`Manifest repository.path must be relative: ${manifestPath}`);
-  }
-  return realpathSync(resolve(dirname(manifestPath), repositoryPath));
-}
-
 function assertUntracked(repositoryRoot) {
   try {
     git(repositoryRoot, ["ls-files", "--error-unmatch", ".methodrail"]);
@@ -148,7 +131,7 @@ export function createLinkedHarness(repositoryPath, storagePath) {
     }
     mkdirSync(storageHarnessRoot, { recursive: true });
     if (existsSync(manifestPath)) {
-      const bound = parseBoundRepository(manifestPath);
+      const bound = resolveBoundRepository(manifestPath);
       if (bound !== realpathSync(repositoryRoot)) throw new Error("Existing HARNESS.yaml is bound to a different repository");
     } else {
       writeFileSync(manifestPath, manifestSource(storageHarnessRoot, repositoryRoot), { flag: "wx" });
@@ -156,7 +139,7 @@ export function createLinkedHarness(repositoryPath, storagePath) {
     symlinkSync(linkTarget(repositoryRoot, storageHarnessRoot), logicalHarnessRoot, process.platform === "win32" ? "junction" : "dir");
   }
 
-  const boundRepository = parseBoundRepository(manifestPath);
+  const boundRepository = resolveBoundRepository(manifestPath);
   if (boundRepository !== realpathSync(repositoryRoot)) throw new Error("HARNESS.yaml binding does not match the repository");
   const exclude = ensureExcluded(repositoryRoot);
   try {
