@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,6 +64,8 @@ test("the canonical template parses as a typed note", () => {
   assert.equal(note.classification, "typed");
   assert.equal(note.frontmatter?.kind, "invariant");
   assert.equal(note.frontmatter?.status, "verified");
+  assert.equal(note.frontmatter?.lifecycle, "active");
+  assert.equal(note.frontmatter?.scope, undefined);
   assert.match(note.claim, /later agent/i);
   assert.ok(note.evidence.length > 0);
 });
@@ -485,3 +487,263 @@ test("validateNote reports no errors for a well-formed typed note", () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+function withGovernance(extra: string, extraBody = ""): string {
+  return TYPED.replace(
+    "relevant_paths:\n  - src/webhooks.js\n",
+    `relevant_paths:\n  - src/webhooks.js\n${extra}`,
+  ) + extraBody;
+}
+
+function writeNotes(
+  dir: string,
+  entries: { name: string; source: string; title: string }[],
+): void {
+  for (const entry of entries) {
+    writeFileSync(join(dir, ".methodrail", "knowledge", entry.name), entry.source);
+  }
+  writeFileSync(
+    join(dir, ".methodrail", "PROJECT.md"),
+    `# Project\n\n${entries.map((entry) => `- [${entry.title}](knowledge/${entry.name})`).join("\n")}\n`,
+  );
+}
+
+test("a v0.7 typed note parses as active and unbounded", () => {
+  const dir = tempProject();
+  try {
+    writeNote(dir, "webhooks.md", TYPED);
+    const note = loadKnowledgeNotes(dir)[0];
+    assert.equal(note?.frontmatter?.lifecycle, "active");
+    assert.equal(note?.frontmatter?.scope, undefined);
+    const report = evaluateProjectKnowledge(dir);
+    assert.equal(report.errors.length, 0, report.errors.map((item) => item.message).join("\n"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a governance-only note is invalid-typed rather than legacy", () => {
+  const dir = tempProject();
+  try {
+    writeNote(
+      dir,
+      "only-life.md",
+      `---
+lifecycle: active
+---
+
+# Only lifecycle
+`,
+      "only lifecycle",
+    );
+    const report = evaluateProjectKnowledge(dir);
+    assert.equal(report.notes[0]?.classification, "invalid-typed");
+    assert.ok(report.errors.some((item) => /requires kind/i.test(item.message)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("valid include, exclude, and include-plus-exclude scope parse", () => {
+  const dir = tempProject();
+  try {
+    writeNote(dir, "webhooks.md", withGovernance(`scope:\n  include_paths:\n    - src\n`));
+    assert.deepEqual(loadKnowledgeNotes(dir)[0]?.frontmatter?.scope, { include_paths: ["src"] });
+    writeNote(dir, "webhooks.md", withGovernance(`scope:\n  exclude_paths:\n    - src/webhooks.js\n`));
+    assert.deepEqual(loadKnowledgeNotes(dir)[0]?.frontmatter?.scope, { exclude_paths: ["src/webhooks.js"] });
+    writeNote(
+      dir,
+      "webhooks.md",
+      withGovernance(`scope:
+  include_paths:
+    - src/webhooks.js
+  exclude_paths:
+    - src/webhooks.js
+`),
+    );
+    assert.deepEqual(loadKnowledgeNotes(dir)[0]?.frontmatter?.scope, {
+      include_paths: ["src/webhooks.js"],
+      exclude_paths: ["src/webhooks.js"],
+    });
+    assert.equal(evaluateProjectKnowledge(dir).errors.length, 0);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("unknown lifecycle and malformed scope arrays fail", () => {
+  const dir = tempProject();
+  try {
+    writeNote(dir, "webhooks.md", withGovernance("lifecycle: maybe\nscope:\n  include_paths: []\n"));
+    const report = evaluateProjectKnowledge(dir);
+    assert.ok(report.errors.some((item) => /lifecycle must be active/i.test(item.message)));
+    assert.ok(report.errors.some((item) => /include_paths must be a non-empty array/i.test(item.message)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("absolute, traversal, root-only, and glob-like scope entries fail", () => {
+  const dir = tempProject();
+  try {
+    for (const entry of ["/etc/passwd", "../secret", ".", "src/*", "src/foo?", "src/foo[ab]"]) {
+      writeNote(
+        dir,
+        "webhooks.md",
+        withGovernance(`scope:\n  include_paths:\n    - ${JSON.stringify(entry)}\n`),
+      );
+      const report = evaluateProjectKnowledge(dir);
+      assert.ok(
+        report.errors.some((item) => /invalid include_paths entry/i.test(item.message)),
+        `${entry}: ${report.errors.map((item) => item.message).join("; ")}`,
+      );
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("reciprocal disputed notes with a Dispute section are valid", () => {
+  const dir = tempProject();
+  try {
+    const dispute = `
+
+## Dispute
+
+Both notes claim exclusive ownership of webhook idempotency keys.
+`;
+    writeNotes(dir, [
+      {
+        name: "alpha.md",
+        title: "alpha credit",
+        source: withGovernance(
+          "lifecycle: disputed\nconflicts_with:\n  - knowledge/beta.md\n",
+          dispute,
+        ).replace("Webhook credit idempotency", "Alpha credit"),
+      },
+      {
+        name: "beta.md",
+        title: "beta credit",
+        source: withGovernance(
+          "lifecycle: disputed\nconflicts_with:\n  - knowledge/alpha.md\n",
+          dispute,
+        ).replace("Webhook credit idempotency", "Beta credit"),
+      },
+    ]);
+    const report = evaluateProjectKnowledge(dir);
+    assert.equal(report.errors.length, 0, report.errors.map((item) => item.message).join("\n"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("non-reciprocal and self-referential disputes fail", () => {
+  const dir = tempProject();
+  try {
+    writeNote(
+      dir,
+      "alpha.md",
+      withGovernance(
+        "lifecycle: disputed\nconflicts_with:\n  - knowledge/alpha.md\n",
+        "\n## Dispute\n\nThis note disputes itself rather than a sibling claim.\n",
+      ),
+      "alpha credit",
+    );
+    const self = evaluateProjectKnowledge(dir);
+    assert.ok(self.errors.some((item) => /same note/i.test(item.message)));
+    writeNotes(dir, [
+      {
+        name: "alpha.md",
+        title: "alpha credit",
+        source: withGovernance(
+          "lifecycle: disputed\nconflicts_with:\n  - knowledge/beta.md\n",
+          "\n## Dispute\n\nAlpha claims the event-id key is required on every path.\n",
+        ).replace("Webhook credit idempotency", "Alpha credit"),
+      },
+      {
+        name: "beta.md",
+        title: "beta credit",
+        source: TYPED.replace("Webhook credit idempotency", "Beta credit"),
+      },
+    ]);
+    const oneSided = evaluateProjectKnowledge(dir);
+    assert.ok(oneSided.errors.some((item) => /not disputed|not reciprocal|not an existing typed note/i.test(item.message)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("retired notes require a live successor or a Retirement section", () => {
+  const dir = tempProject();
+  try {
+    writeNotes(dir, [
+      {
+        name: "old.md",
+        title: "old credit",
+        source: withGovernance("lifecycle: retired\nsuperseded_by: knowledge/webhooks.md\n").replace(
+          "Webhook credit idempotency",
+          "Old credit",
+        ),
+      },
+      {
+        name: "webhooks.md",
+        title: "webhook credit",
+        source: TYPED,
+      },
+    ]);
+    assert.equal(evaluateProjectKnowledge(dir).errors.length, 0);
+    unlinkSync(join(dir, ".methodrail", "knowledge", "webhooks.md"));
+    writeNote(
+      dir,
+      "old.md",
+      withGovernance(
+        "lifecycle: retired\n",
+        "\n## Retirement\n\nThe event-id key moved to the successor after the provider migration.\n",
+      ),
+      "old credit",
+    );
+    assert.equal(evaluateProjectKnowledge(dir).errors.length, 0);
+    writeNote(dir, "old.md", withGovernance("lifecycle: retired\n"), "old credit");
+    assert.ok(
+      evaluateProjectKnowledge(dir).errors.some((item) => /Retirement section/i.test(item.message)),
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("self and cyclic supersession fail", () => {
+  const dir = tempProject();
+  try {
+    writeNote(
+      dir,
+      "old.md",
+      withGovernance("lifecycle: retired\nsuperseded_by: knowledge/old.md\n"),
+      "old credit",
+    );
+    assert.ok(evaluateProjectKnowledge(dir).errors.some((item) => /same note/i.test(item.message)));
+    writeNotes(dir, [
+      {
+        name: "a.md",
+        title: "note a",
+        source: withGovernance("lifecycle: retired\nsuperseded_by: knowledge/b.md\n").replace(
+          "Webhook credit idempotency",
+          "Note a",
+        ),
+      },
+      {
+        name: "b.md",
+        title: "note b",
+        source: withGovernance("lifecycle: retired\nsuperseded_by: knowledge/a.md\n").replace(
+          "Webhook credit idempotency",
+          "Note b",
+        ),
+      },
+    ]);
+    const cyclic = evaluateProjectKnowledge(dir);
+    assert.ok(cyclic.errors.some((item) => /cycle|non-retired/i.test(item.message)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+

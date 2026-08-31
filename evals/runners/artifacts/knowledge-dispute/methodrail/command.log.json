@@ -1,0 +1,3 @@
+[
+  { "command": "read .methodrail/PROJECT.md", "phase": "inspect", "exit_status": 0 }
+]

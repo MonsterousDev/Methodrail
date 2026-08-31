@@ -1,0 +1,29 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/notifications.md",
+    "repo/src/notifications/dispatch.js",
+    "repo/src/notifications/legacy/sender.js"
+  ],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "notifications note says use dispatchOnce(event.id)",
+    "added legacy.ping through dispatchOnce"
+  ],
+  "outcome": "Applied the general event-id rule to the legacy sender. Colliding provider ids collapsed.",
+  "failure_modes": ["scope-ignored", "knowledge-overapplied"],
+  "behaviors_observed": ["apply dispatchOnce to every notice"],
+  "notes": "constructed baseline. Indexed note loaded but exclusion ignored.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/baseline/answer.md"
+  }
+}

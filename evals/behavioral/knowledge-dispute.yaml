@@ -1,0 +1,16 @@
+id: behavioral.knowledge.dispute
+kind: behavioral
+skill: develop
+description: Disputed notes are surfaced without selecting a winner or rewriting them.
+input:
+  prompt: "The two payment notes disagree. Implement the charge path."
+expected:
+  skills:
+    required: [develop]
+    forbidden: [arena, swarm, interrogate]
+  behaviors:
+    - present competing claims and current evidence
+    - not select a winner
+    - not modify either note
+    - wait for explicit approval before any governance mutation
+  baseline_failure: silently picking one disputed note and editing source

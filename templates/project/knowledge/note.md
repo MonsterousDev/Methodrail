@@ -4,6 +4,11 @@ status: verified
 validated_at: unversioned:fill-from-git-or-reason
 relevant_paths:
   - src/example.ts
+# lifecycle defaults to active when omitted.
+# Add scope only when the claim is path-bounded; do not invent it.
+# scope:
+#   include_paths:
+#     - src/example
 ---
 
 # Concise note title

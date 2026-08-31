@@ -9,14 +9,27 @@ Identity is the file path: `.methodrail/knowledge/<slug>.md`. Duplicate titles a
 ```yaml
 kind: fact | invariant | convention | known-failure | hypothesis
 status: verified | provisional
+lifecycle: active | disputed | retired
 validated_at: <40-character-git-sha | unversioned:<reason>>
 relevant_paths:
   - src/example.ts
+scope:
+  include_paths:
+    - src/example
+  exclude_paths:
+    - src/example/legacy
+conflicts_with:
+  - knowledge/other-claim.md
+superseded_by: knowledge/current-claim.md
 ```
 
 `validated_at` is a full Git SHA, or `unversioned:<reason>` when the repository has no Git history. Short SHAs and other strings are malformed. Unversioned provenance has reduced confidence and never counts as `fresh`.
 
 A `hypothesis` must be `provisional`. A `verified` note must contain meaningful evidence.
+
+`lifecycle` is optional; omitted means `active`. `scope` is optional; omitted means `unbounded`. Do not invent scope. Scope paths are repository-relative prefixes, not globs. Exclusion wins over inclusion. Matching is exact or descendant on a path-segment boundary (`src/mail` does not match `src/mailer.ts`).
+
+`conflicts_with` is allowed only on `disputed` notes, must be reciprocal typed-note identities (`knowledge/<slug>.md`), and requires a meaningful `## Dispute` section. `superseded_by` is allowed only on `retired` notes and must target one existing non-retired typed note. A retired note without a successor requires a meaningful `## Retirement` section. Do not move a file to represent retirement.
 
 ## Sections
 

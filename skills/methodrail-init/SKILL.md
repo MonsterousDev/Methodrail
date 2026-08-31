@@ -61,7 +61,7 @@ determine whether the project has a meaningful executable surface
 - `.methodrail/PROJECT.md` is a concise index, not the entire knowledge base.
 - Keep PROJECT.md pointer-oriented: links, durable facts, and paths. Do not clone the README or generate a giant summary.
 - For linked external placement, use the bundled deterministic script from [harness location](references/harness-location.md). The only repository entry is the locally ignored `.methodrail` link; all harness contents live outside the repository, and `HARNESS.yaml` owns the binding.
-- Recognize typed notes and legacy untyped notes. Validate that typed notes are indexed. Report potentially stale notes. Do not rewrite them automatically. Do not create files under `.methodrail/knowledge/` during init (typed or untyped).
+- Recognize typed notes and legacy untyped notes. Validate that typed notes are indexed. Report potentially stale, disputed, retired, malformed, and unbounded notes. Do not rewrite, resolve, or migrate them. Do not create files under `.methodrail/knowledge/` during init (typed or untyped).
 - Record commands the repository already supports; do not invent infrastructure.
 - Preserve existing `AGENTS.md`, `CLAUDE.md`, Cursor rules, copilot instructions, and local skills. Repository-specific instructions outrank generic Methodrail assumptions.
 - Do not copy generic Methodrail doctrine into the project.

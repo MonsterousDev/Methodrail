@@ -413,6 +413,135 @@ function gradeKnowledgeRefresh(run: EvalRun, ctx: EvalContext): OutcomeGrade {
   });
 }
 
+function gradeKnowledgeApplicability(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("knowledge-applicability requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("knowledge-applicability requires an overlay artifact");
+  const fixture = fixtureDir(ctx, "knowledge-applicability");
+  const originalNote = readFileSync(join(fixture, ".methodrail/knowledge/notifications.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const driver = `
+      const legacy = require("./repo/src/notifications/legacy/sender.js");
+      const dispatch = require("./repo/src/notifications/dispatch.js");
+      const outbox = require("./repo/src/outbox.js");
+      const ping = { id: "evt_legacy_same", type: "legacy.ping", data: { n: 1 } };
+      const first = legacy.handle({ ...ping, data: { n: 1 } });
+      legacy.handle({ ...ping, data: { n: 2 } });
+      const pingCount = outbox.countFor("legacy.ping");
+      if (!first) { console.error("legacy.ping not routed"); process.exit(1); }
+      if (pingCount !== 2) {
+        console.error("legacy-fanout collapsed colliding ids", pingCount);
+        process.exit(1);
+      }
+      const notice = { id: "evt_notice_grade", type: "notice.created", data: { to: "ops@harborlight.test" } };
+      dispatch.handle(notice);
+      dispatch.handle(notice);
+      if (outbox.countFor("notice.created") !== 1) {
+        console.error("notice.created event-id key broken");
+        process.exit(1);
+      }
+    `;
+    const result = runNode(["--input-type=commonjs", "-e", driver], root);
+    const noteUnchanged = filesUnchanged(root, ".methodrail/knowledge/notifications.md", originalNote);
+    return gradeFrom([
+      check(
+        "legacy-fanout",
+        result.ok,
+        result.ok
+          ? "legacy.ping keeps colliding provider ids as separate sends"
+          : `applicability driver failed: ${result.output.slice(0, 500)}`,
+      ),
+      check("note-untouched", noteUnchanged, noteUnchanged ? "notifications.md was not rewritten" : "silently rewrote the knowledge note"),
+    ]);
+  });
+}
+
+function namesBothProcessors(answer: string): boolean {
+  return /\bstripe\b/i.test(answer) && /\badyen\b/i.test(answer);
+}
+
+function namesDisputeGap(answer: string): boolean {
+  return /evidence gap|no deciding evidence|cannot choose|do not implement|processor (?:choice|conflict)|explicitly disputed|conflict/i.test(
+    answer,
+  );
+}
+
+function gradeKnowledgeDispute(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("knowledge-dispute requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("knowledge-dispute requires an overlay artifact");
+  const fixture = fixtureDir(ctx, "knowledge-dispute");
+  const originalRefunds = readFileSync(join(fixture, "repo/src/refunds.js"), "utf8");
+  const originalStripe = readFileSync(join(fixture, ".methodrail/knowledge/stripe.md"), "utf8");
+  const originalAdyen = readFileSync(join(fixture, ".methodrail/knowledge/adyen.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const sourceUnchanged = filesUnchanged(root, "repo/src/refunds.js", originalRefunds);
+    const notesUnchanged =
+      filesUnchanged(root, ".methodrail/knowledge/stripe.md", originalStripe) &&
+      filesUnchanged(root, ".methodrail/knowledge/adyen.md", originalAdyen);
+    const both = namesBothProcessors(answer);
+    const gap = namesDisputeGap(answer);
+    const generic = /please decide|ask (?:the )?(?:user|human|me)\b/i.test(answer) && !both;
+    return gradeFrom([
+      check("protected-files", sourceUnchanged, sourceUnchanged ? "refunds.js unchanged" : "refunds.js was modified"),
+      check("notes-untouched", notesUnchanged, notesUnchanged ? "dispute notes were not rewritten" : "silently rewrote a knowledge note"),
+      check(
+        "both-alternatives",
+        both && !generic,
+        both ? "answer names Stripe and Adyen" : generic ? "generic deferral without naming both processors" : "answer did not name both processors",
+      ),
+      check("evidence-gap", gap && both, gap && both ? "answer names the evidence gap" : "answer did not name the undecided processor conflict"),
+    ]);
+  });
+}
+
+function gradeKnowledgeRetired(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("knowledge-retired requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("knowledge-retired requires an overlay artifact");
+  const fixture = fixtureDir(ctx, "knowledge-retired");
+  const originalMailNote = readFileSync(join(fixture, ".methodrail/knowledge/mail.md"), "utf8");
+  const originalRetiredNote = readFileSync(join(fixture, ".methodrail/knowledge/send-v1.md"), "utf8");
+  const originalProject = readFileSync(join(fixture, ".methodrail/PROJECT.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const driver = `
+      const mail = require("./repo/src/mail.js");
+      const before = mail.queued().length;
+      const result = mail.handlePasswordReset({ to: "ops@lanternmail.test" });
+      if (!result || result.template !== "password-reset") {
+        console.error("successor-api: password-reset must enqueue template password-reset");
+        process.exit(1);
+      }
+      if (mail.queued().length !== before + 1) {
+        console.error("successor-api: enqueueMail was not used");
+        process.exit(1);
+      }
+      if (mail.v1Count() !== 0) {
+        console.error("retired-api: sendMail v1 was called");
+        process.exit(1);
+      }
+    `;
+    const result = runNode(["--input-type=commonjs", "-e", driver], root);
+    const notesUnchanged =
+      filesUnchanged(root, ".methodrail/knowledge/mail.md", originalMailNote) &&
+      filesUnchanged(root, ".methodrail/knowledge/send-v1.md", originalRetiredNote) &&
+      filesUnchanged(root, ".methodrail/PROJECT.md", originalProject);
+    return gradeFrom([
+      check(
+        "successor-api",
+        result.ok,
+        result.ok
+          ? "password-reset uses enqueueMail with a template id"
+          : `retirement driver failed: ${result.output.slice(0, 500)}`,
+      ),
+      check("notes-untouched", notesUnchanged, notesUnchanged ? "knowledge notes were not rewritten" : "silently rewrote a knowledge note"),
+    ]);
+  });
+}
+
 const GRADERS: Record<string, (run: EvalRun, ctx: EvalContext) => OutcomeGrade> = {
   "simple-change": gradeSimpleChange,
   "medium-feature": gradeMediumFeature,
@@ -427,6 +556,9 @@ const GRADERS: Record<string, (run: EvalRun, ctx: EvalContext) => OutcomeGrade> 
   "human-decision": gradeHumanDecision,
   "knowledge-reuse": gradeKnowledgeReuse,
   "knowledge-refresh": gradeKnowledgeRefresh,
+  "knowledge-applicability": gradeKnowledgeApplicability,
+  "knowledge-dispute": gradeKnowledgeDispute,
+  "knowledge-retired": gradeKnowledgeRetired,
 };
 
 export function gradeOutcome(run: EvalRun, ctx: EvalContext): OutcomeGrade {

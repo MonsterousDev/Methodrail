@@ -1,5 +1,12 @@
 enabled: false
 # Optional release threshold. Must be predeclared before a live battery
-# and must not be edited after seeing results. Off for 0.6.1.
+# and must not be edited after seeing results. Off for 0.6.1 and 0.7.
+# Completeness is a release gate; Methodrail winning is not.
+# v0.8 knowledge-governance (declared 2026-08-31, before live trials):
+# live harmed on these fixtures blocks release pending investigation.
+# knowledge-applicability may be empirical neutral.
 empirical:
-  must_not_harm: []
+  must_not_harm:
+    - knowledge-applicability
+    - knowledge-dispute
+    - knowledge-retired

@@ -104,6 +104,8 @@ test("linked external harness remains repository-addressable and out of Git stat
   assert.equal(report.errors.length, 0, report.errors.map((entry) => entry.message).join("\n"));
   const note = loadKnowledgeNotes(item.repository)[0];
   assert.ok(note);
+  assert.equal(note.frontmatter?.lifecycle, "active");
+  assert.equal(note.frontmatter?.scope, undefined);
   assert.equal(evaluateFreshness(note, item.repository).state, "fresh");
 
   const manifestBefore = readFileSync(created.manifestPath!, "utf8");

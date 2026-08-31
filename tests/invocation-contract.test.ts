@@ -131,3 +131,14 @@ test("handoff is a travel document, not durable project knowledge", () => {
   assert.match(context, /not a durable project record/);
   assert.doesNotMatch(context, /Use explicit durable state when work moves/);
 });
+
+test("knowledge reuse refuses retired notes and does not pick a dispute winner", () => {
+  const reuse = readFileSync(join(root, "references/knowledge/reuse.md"), "utf8");
+  const reflect = readFileSync(join(root, "skills/reflect/SKILL.md"), "utf8");
+  const init = readFileSync(join(root, "skills/methodrail-init/SKILL.md"), "utf8");
+  assert.match(reuse, /Refuse retired knowledge/);
+  assert.match(reuse, /without selecting a winner/);
+  assert.match(reuse, /Apply an eligible scoped note only inside its applicable paths/);
+  assert.match(reflect, /A reciprocal dispute may update both notes/);
+  assert.match(init, /disputed, retired, malformed, and unbounded/);
+});

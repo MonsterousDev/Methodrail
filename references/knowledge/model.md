@@ -68,4 +68,4 @@ hypothesis
 
 **Decision** stays on the decision-record template in `.methodrail/knowledge/decisions/`. **Rationale** and **observation** stay records. Do not file them as typed notes.
 
-Typed notes use the [note contract](note-contract.md). Existing untyped files remain legacy notes with reduced confidence.
+Typed notes use the [note contract](note-contract.md). Existing untyped files remain legacy notes with reduced confidence. Optional `lifecycle` and `scope` govern reuse; they do not change kind.

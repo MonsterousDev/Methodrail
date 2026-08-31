@@ -1,0 +1,14 @@
+id: behavioral.knowledge.proportional
+kind: behavioral
+skill: develop
+description: Trivial unrelated work does not load or report irrelevant knowledge notes.
+input:
+  prompt: "Rename the local helper getUserById to findUserById. Formatting only."
+expected:
+  skills:
+    required: [develop]
+    forbidden: [architect, wayfinder, interrogate, arena, swarm]
+  behaviors:
+    - not load or report unrelated knowledge notes
+    - not run a knowledge decision ceremony
+  baseline_failure: enumerating every knowledge note before a local rename

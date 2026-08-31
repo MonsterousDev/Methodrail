@@ -40,13 +40,14 @@ Use [synthesizer.md](references/synthesizer.md). Produce Accepted / Rejected / B
 
 Move anything a mechanical check would enforce more reliably than a skill onto the structural-enforcement list.
 
-A knowledge candidate is earned only from this work's evidence. Ordinary implementation detail is not a note. At most one typed note per approval. Include:
+A knowledge candidate is earned only from this work's evidence. Ordinary implementation detail is not a note. Propose at most one governance mutation per approval: create, narrow scope, dispute, resolve, or retire. Include:
 
-- proposed `kind` and `status`
+- proposed `kind`, `status`, and `lifecycle`
 - concise claim
 - evidence
 - `validated_at` (current Git SHA, or `unversioned:<reason>`)
-- `relevant_paths`
+- `relevant_paths` and optional `scope` (only when the claim is path-bounded; do not invent scope)
+- `conflicts_with` or `superseded_by` when disputing or retiring
 - how a future task would reuse it
 - estimated rediscovery cost
 - staleness risk and refresh triggers
@@ -77,10 +78,12 @@ Show the full Accepted / Rejected / Backlog list. Wait for explicit approval bef
 1. Recheck that the evidence still supports the claim.
 2. Confirm that another canonical document does not already own the information.
 3. Confirm that structural enforcement is not the better destination.
-4. Create or update exactly one typed note using [templates/project/knowledge/note.md](../../templates/project/knowledge/note.md).
-5. Add or update one concise PROJECT.md pointer.
-6. Validate the note (kind, status, evidence, index, size). Report freshness scope.
+4. Apply the approved mutation using [templates/project/knowledge/note.md](../../templates/project/knowledge/note.md). Default is exactly one typed note. A reciprocal dispute may update both notes and the PROJECT.md pointer set as one transaction.
+5. Add or update the concise PROJECT.md pointer(s).
+6. Validate kind, status, lifecycle, evidence, index, size, and dispute/retirement sections. Report freshness and scope.
 7. Verify that an unchanged rerun produces no diff.
+
+If the transaction is only partly applied, show the incomplete diff. Do not guess the missing half. Ask whether to complete or revert it.
 
 Do not keep a candidate queue on disk.
 

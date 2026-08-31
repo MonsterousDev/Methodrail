@@ -1,0 +1,10 @@
+{
+  "name": "harborlight",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny notice dispatcher. Customer notices use an outbox. A separate legacy sender talks to an older provider.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/notifications/dispatch.test.js src/notifications/legacy/sender.test.js"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "lanternmail",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny customer mailer. Welcome already uses the queue. Password-reset is not wired.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/mail.test.js"
+  }
+}

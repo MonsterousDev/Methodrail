@@ -1,0 +1,28 @@
+{
+  "fixture_id": "knowledge-retired",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/send-v1.md",
+    "repo/src/mail.js"
+  ],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "send-v1.md says use sendMail api v1",
+    "added password-reset through sendMail"
+  ],
+  "outcome": "Applied the retired v1 sendMail claim to password-reset.",
+  "failure_modes": ["retired-applied"],
+  "behaviors_observed": ["call sendMail v1"],
+  "notes": "constructed baseline. Retired note treated as current.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-retired/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-retired/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-retired/baseline/answer.md"
+  }
+}

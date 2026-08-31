@@ -1,0 +1,11 @@
+id: pilot-v0.8-knowledge-governance-2026-08-31
+pairs:
+  - { fixture: knowledge-applicability, host: cursor, repeat: 1 }
+  - { fixture: knowledge-applicability, host: cursor, repeat: 2 }
+  - { fixture: knowledge-applicability, host: codex, repeat: 1 }
+  - { fixture: knowledge-dispute, host: cursor, repeat: 1 }
+  - { fixture: knowledge-dispute, host: cursor, repeat: 2 }
+  - { fixture: knowledge-dispute, host: codex, repeat: 1 }
+  - { fixture: knowledge-retired, host: cursor, repeat: 1 }
+  - { fixture: knowledge-retired, host: cursor, repeat: 2 }
+  - { fixture: knowledge-retired, host: codex, repeat: 1 }

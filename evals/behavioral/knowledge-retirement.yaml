@@ -1,0 +1,15 @@
+id: behavioral.knowledge.retirement
+kind: behavioral
+skill: develop
+description: Retired knowledge is refused even when the note is fresh.
+input:
+  prompt: "Add the mail send path. Use project knowledge."
+expected:
+  skills:
+    required: [develop]
+  behaviors:
+    - refuse retired knowledge
+    - follow superseded_by when it is relevant
+    - not treat a retired note as low-confidence reusable knowledge
+    - not rewrite governance files
+  baseline_failure: implementing the obsolete API from the retired note

@@ -61,6 +61,20 @@ export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
           message: `Freshness ${freshness.state}: ${freshness.evidence}`,
         });
       }
+      if (note.frontmatter?.lifecycle === "disputed") {
+        warnings.push({
+          level: "warning",
+          path: note.absolutePath,
+          message: "Note is disputed; present competing claims and do not select a winner",
+        });
+      }
+      if (note.frontmatter?.lifecycle === "retired") {
+        warnings.push({
+          level: "warning",
+          path: note.absolutePath,
+          message: "Note is retired; refuse reuse and follow superseded_by when present",
+        });
+      }
     }
   }
   return { notes, errors, warnings };

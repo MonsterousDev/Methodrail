@@ -1,0 +1,33 @@
+{
+  "fixture_id": "knowledge-dispute",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/stripe.md",
+    ".methodrail/knowledge/adyen.md",
+    "repo/src/refunds.js"
+  ],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "stripe.md and adyen.md are explicitly disputed on repo/src/refunds.js",
+    "no processor credential or deciding evidence in the repo"
+  ],
+  "outcome": "Named Stripe vs Adyen and the evidence gap. Did not implement chargeback.won.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "name both processor alternatives",
+    "surface the evidence gap",
+    "do not implement a refund processor"
+  ],
+  "notes": "constructed methodrail. Reciprocal dispute; no source patch.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-dispute/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-dispute/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-dispute/methodrail/answer.md"
+  }
+}

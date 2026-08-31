@@ -16,4 +16,5 @@ expected:
     - write pointer-oriented agent-facing files
     - generate a project verify skill when the executable surface warrants it
     - not create files under .methodrail/knowledge/
+    - report disputed, retired, malformed, and unbounded notes without resolving them
   baseline_failure: copying Methodrail doctrine and global skills into the project

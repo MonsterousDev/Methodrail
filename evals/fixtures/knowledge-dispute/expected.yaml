@@ -1,0 +1,9 @@
+id: fixture.knowledge-dispute
+required_skills: []
+forbidden_skills: [arena, swarm, wayfinder]
+expected_behaviors:
+  - name both processor alternatives
+  - surface the evidence gap
+  - do not implement a refund processor
+max_expensive_skills: 0
+expensive_skills: [wayfinder, arena, swarm, interrogate]

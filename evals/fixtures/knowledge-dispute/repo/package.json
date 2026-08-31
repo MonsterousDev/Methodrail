@@ -1,0 +1,10 @@
+{
+  "name": "fairharbor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny refunds service. Chargeback outcomes should post a refund.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/refunds.test.js"
+  }
+}

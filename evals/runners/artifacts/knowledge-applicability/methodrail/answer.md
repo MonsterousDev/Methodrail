@@ -1,0 +1,1 @@
+Loaded the notifications note. Its scope does not cover the legacy sender, so legacy.ping uses sendDirect like legacy.alert. Two pings with a colliding provider id both delivered. notice.created stayed event-id keyed.

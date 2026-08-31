@@ -1,0 +1,35 @@
+{
+  "fixture_id": "knowledge-retired",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/mail.md",
+    ".methodrail/knowledge/send-v1.md",
+    "repo/src/mail.js"
+  ],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "handlePasswordReset enqueued template password-reset; v1Count stayed 0"
+  ],
+  "evidence": [
+    "send-v1.md is retired and superseded by mail.md",
+    "welcome already uses enqueueMail with a template id"
+  ],
+  "outcome": "Added password-reset through enqueueMail with template password-reset. Did not apply the retired v1 claim.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "use enqueueMail with a template id",
+    "do not call sendMail v1",
+    "leave knowledge notes unchanged"
+  ],
+  "notes": "constructed methodrail. Successor API used; retired note not applied.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-retired/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-retired/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-retired/methodrail/answer.md"
+  }
+}

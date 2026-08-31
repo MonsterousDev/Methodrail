@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
-import { isAbsolute, join, normalize, resolve, sep } from "node:path";
+import { join } from "node:path";
 import { knowledgeIndexEntries } from "./load.js";
+import { identitiesEqual, noteHasIdentity, noteIdentity, pathEscapesRepository } from "./paths.js";
 import type { KnowledgeDiagnostic, KnowledgeNote } from "./types.js";
 import { MAX_NOTE_CHARS, MAX_NOTE_LINES } from "./types.js";
 
@@ -24,23 +25,26 @@ function meaningful(text: string): boolean {
   return trimmed.length >= 24;
 }
 
-function pathEscapes(projectRoot: string, declared: string): boolean {
-  if (declared.includes("\0") || isAbsolute(declared)) return true;
-  const normalized = normalize(declared);
-  if (normalized.startsWith(`..${sep}`) || normalized === "..") return true;
-  const resolved = resolve(projectRoot, declared);
-  const root = resolve(projectRoot);
-  return resolved === root || !resolved.startsWith(root + sep);
+function hrefMatchesNote(href: string, note: KnowledgeNote): boolean {
+  return noteHasIdentity(note, href);
 }
 
-function hrefMatchesNote(href: string, note: KnowledgeNote): boolean {
-  const normalized = href.replace(/^\.\//, "");
-  return (
-    note.relativePath === normalized ||
-    note.relativePath.endsWith(`/${normalized}`) ||
-    note.relativePath === `.methodrail/${normalized}` ||
-    note.relativePath.endsWith(normalized.replace(/^knowledge\//, "/knowledge/"))
-  );
+function typedSibling(siblings: KnowledgeNote[], identity: string): KnowledgeNote | undefined {
+  return siblings.find((other) => other.classification === "typed" && noteHasIdentity(other, identity));
+}
+
+function supersessionCycle(note: KnowledgeNote, siblings: KnowledgeNote[]): boolean {
+  const seen = new Set<string>();
+  let current: KnowledgeNote | undefined = note;
+  while (current?.frontmatter?.superseded_by) {
+    const identity = noteIdentity(current);
+    if (!identity) return false;
+    const key = identity.toLowerCase();
+    if (seen.has(key)) return true;
+    seen.add(key);
+    current = typedSibling(siblings, current.frontmatter.superseded_by);
+  }
+  return false;
 }
 
 export function validateNote(
@@ -98,6 +102,12 @@ export function validateNote(
     });
   }
 
+  if (note.governanceErrors) {
+    for (const message of note.governanceErrors) {
+      diagnostics.push({ level: "error", path, message });
+    }
+  }
+
   if (fm.kind === "hypothesis" && fm.status !== "provisional") {
     diagnostics.push({ level: "error", path, message: "A hypothesis must be provisional" });
   }
@@ -128,7 +138,7 @@ export function validateNote(
   }
 
   for (const declared of fm.relevant_paths) {
-    if (pathEscapes(projectRoot, declared)) {
+    if (pathEscapesRepository(projectRoot, declared)) {
       diagnostics.push({
         level: "error",
         path,
@@ -142,6 +152,112 @@ export function validateNote(
         level: "warning",
         path,
         message: `Relevant path is missing on this tree: ${declared}`,
+      });
+    }
+  }
+
+  for (const declared of [...(fm.scope?.include_paths ?? []), ...(fm.scope?.exclude_paths ?? [])]) {
+    if (pathEscapesRepository(projectRoot, declared)) {
+      diagnostics.push({
+        level: "error",
+        path,
+        message: `scope path escapes the repository: ${declared}`,
+      });
+    }
+  }
+
+  if (fm.lifecycle !== "disputed" && fm.conflicts_with) {
+    diagnostics.push({
+      level: "error",
+      path,
+      message: "conflicts_with is allowed only when lifecycle is disputed",
+    });
+  }
+  if (fm.lifecycle === "disputed") {
+    if (!fm.conflicts_with || fm.conflicts_with.length === 0) {
+      diagnostics.push({
+        level: "error",
+        path,
+        message: "A disputed note requires conflicts_with identities",
+      });
+    } else {
+      const own = noteIdentity(note);
+      for (const identity of fm.conflicts_with) {
+        if (own && identitiesEqual(own, identity)) {
+          diagnostics.push({ level: "error", path, message: "conflicts_with cannot target the same note" });
+          continue;
+        }
+        const other = typedSibling(siblings, identity);
+        if (!other?.frontmatter) {
+          diagnostics.push({
+            level: "error",
+            path,
+            message: `conflicts_with target is not an existing typed note: ${identity}`,
+          });
+          continue;
+        }
+        if (other.frontmatter.lifecycle !== "disputed") {
+          diagnostics.push({
+            level: "error",
+            path,
+            message: `conflicts_with target is not disputed: ${identity}`,
+          });
+        }
+        const reciprocal = other.frontmatter.conflicts_with?.some((item) => own && identitiesEqual(own, item));
+        if (!reciprocal) {
+          diagnostics.push({
+            level: "error",
+            path,
+            message: `conflicts_with is not reciprocal: ${identity}`,
+          });
+        }
+      }
+    }
+    if (!meaningful(note.dispute ?? "")) {
+      diagnostics.push({
+        level: "error",
+        path,
+        message: "A disputed note requires a meaningful Dispute section",
+      });
+    }
+  }
+
+  if (fm.lifecycle !== "retired" && fm.superseded_by) {
+    diagnostics.push({
+      level: "error",
+      path,
+      message: "superseded_by is allowed only when lifecycle is retired",
+    });
+  }
+  if (fm.lifecycle === "retired") {
+    if (fm.superseded_by) {
+      const own = noteIdentity(note);
+      if (own && identitiesEqual(own, fm.superseded_by)) {
+        diagnostics.push({ level: "error", path, message: "superseded_by cannot target the same note" });
+      } else {
+        const successor = typedSibling(siblings, fm.superseded_by);
+        if (!successor?.frontmatter) {
+          diagnostics.push({
+            level: "error",
+            path,
+            message: `superseded_by target is not an existing typed note: ${fm.superseded_by}`,
+          });
+        } else if (successor.frontmatter.lifecycle === "retired") {
+          diagnostics.push({
+            level: "error",
+            path,
+            message: `superseded_by must target a non-retired typed note: ${fm.superseded_by}`,
+          });
+        }
+      }
+      if (supersessionCycle(note, siblings)) {
+        diagnostics.push({ level: "error", path, message: "superseded_by cycle is not allowed" });
+      }
+    } else if (!meaningful(note.retirement ?? "")) {
+      diagnostics.push({
+        level: "error",
+        path,
+        message: "A retired note without superseded_by requires a meaningful Retirement section",
       });
     }
   }

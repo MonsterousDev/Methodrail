@@ -31,6 +31,20 @@ Promote knowledge when it is:
 
 Classify it using the [knowledge model](model.md) before promoting. A hypothesis can be recorded as a hypothesis; it must not be filed as a fact. Reflect proposes a typed note and waits for explicit approval.
 
+## Governance after promotion
+
+A typed note is `active`, `disputed`, or `retired`. Omitted lifecycle means `active`. Omitted scope means `unbounded`.
+
+Reflect may propose one of: create, narrow scope, dispute, resolve, or retire. After explicit approval it applies at most one logical knowledge transaction. A reciprocal dispute may update both notes and the PROJECT.md pointer set as that one transaction.
+
+Resolution choices are: retain one claim, synthesize a replacement, or keep both with non-overlapping scopes. Current source and tests remain authoritative during every conflict.
+
+Retired notes remain at their path for provenance and are never reused. Do not move a file to represent retirement.
+
+If a governance transaction is only partly applied, show the incomplete diff. Do not guess the missing half. Ask whether to complete or revert it.
+
+Init reports disputed, retired, malformed, and unbounded notes. It does not resolve or migrate them.
+
 ## Who may write `.methodrail/knowledge/`
 
 - **Typed notes:** only `reflect`, after explicit human approval, using the [note contract](note-contract.md).

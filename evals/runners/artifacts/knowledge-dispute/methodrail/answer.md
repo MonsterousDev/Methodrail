@@ -1,0 +1,1 @@
+Two indexed notes conflict on the same path: Stripe Refunds API vs Adyen `/refunds`. Both are verified and explicitly disputed. This repo has no processor credential or other deciding evidence. Do not implement chargeback.won until a human picks the processor.

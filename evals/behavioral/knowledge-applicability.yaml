@@ -1,0 +1,16 @@
+id: behavioral.knowledge.applicability
+kind: behavioral
+skill: develop
+description: A scoped note is not applied outside its include paths; exclusion wins.
+input:
+  prompt: "Change the legacy notification sender. Follow project knowledge."
+expected:
+  skills:
+    required: [develop]
+  behaviors:
+    - read lifecycle and scope before applying a note
+    - not generalize a scoped invariant to excluded or outside paths
+    - treat exclusion as stronger than inclusion
+    - reconcile when applicability is partial
+    - not invent scope
+  baseline_failure: applying a notifications invariant to the excluded legacy path

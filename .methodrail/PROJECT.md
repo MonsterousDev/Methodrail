@@ -6,11 +6,17 @@ Pointer index for Methodrail maintainers. Canonical product docs stay in the rep
 
 Methodrail is a Cursor plugin and portable Agent Skills family. It is methodology plus a project harness, not an agent runtime.
 
+## Important boundaries
+
+- This repository's harness is git-root `.methodrail/` only. `.methodrail` trees under `evals/fixtures/` and `tests/fixtures/` are fixture data.
+- `src/` validates Methodrail, fixtures, and evals; it is not a consumer runtime ([README.md](../README.md)).
+- `rules/methodrail.mdc` and `adapters/` are host projections of [family invariant](../references/methodrail-family-invariant.md).
+
 ## Canonical commands
 
 - Install: `npm install`
 - Test: `npm test`
-- Typecheck and validate: `npm run check`
+- Typecheck, tests, validate, and eval: `npm run check`
 - Validate only: `npm run validate`
 - Eval fixtures and recorded examples: `npm run eval`
 - Upstream drift: `npm run check-upstreams`
@@ -18,7 +24,11 @@ Methodrail is a Cursor plugin and portable Agent Skills family. It is methodolog
 
 ## Verification
 
-`npm run check` is the maintainer gate: typecheck, tests, and repository validation. `npm run eval` scores recorded composition examples; it does not launch an agent.
+This repository has no user-facing runtime, so there is no project-local verify skill. `npm run check` is the maintainer gate: `tsc --noEmit`, tests, `validate`, and `eval`. `npm run eval` scores recorded composition examples; it does not launch an agent.
+
+- Skill, rule, reference, or `src/` change: `npm test` and `npm run validate`; `npm run check` before claiming the slice done
+- Family invariant change: `npm run project-hosts`, then `npm run check`
+- Upstream records: `npm run check-upstreams`
 
 ## Architecture pointers
 
@@ -28,6 +38,12 @@ Methodrail is a Cursor plugin and portable Agent Skills family. It is methodolog
 - [family invariant](../references/methodrail-family-invariant.md)
 - [project harness](../references/project-harness.md)
 - [eval runner](../evals/README.md)
+- [family integration](../docs/family-integration.md)
+- [upstream maintenance](../docs/upstream-maintenance.md)
+
+## Important constraints
+
+- After changing the family invariant, run `npm run project-hosts` rather than editing host copies.
 
 ## Existing AI guidance
 

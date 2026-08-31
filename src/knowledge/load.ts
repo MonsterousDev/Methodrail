@@ -2,8 +2,16 @@ import { existsSync, readFileSync } from "node:fs";
 import { basename, join, relative, sep } from "node:path";
 import { parse } from "yaml";
 import { walkFiles } from "../fs-walk.js";
-import type { KnowledgeNote, NoteClassification, NoteKind, NoteStatus } from "./types.js";
-import { NOTE_KINDS, NOTE_STATUSES } from "./types.js";
+import { canonicalizeRepoPath, parseNoteIdentity } from "./paths.js";
+import type {
+  KnowledgeNote,
+  NoteClassification,
+  NoteKind,
+  NoteLifecycle,
+  NoteScope,
+  NoteStatus,
+} from "./types.js";
+import { NOTE_KINDS, NOTE_LIFECYCLES, NOTE_STATUSES, TYPED_FIELDS } from "./types.js";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -58,6 +66,78 @@ function asPaths(value: unknown): string[] | undefined {
   return value.map((item) => String(item).trim());
 }
 
+function asLifecycle(value: unknown): NoteLifecycle | undefined {
+  return typeof value === "string" && (NOTE_LIFECYCLES as readonly string[]).includes(value)
+    ? (value as NoteLifecycle)
+    : undefined;
+}
+
+function asIdentityList(value: unknown): string[] | undefined {
+  if (!Array.isArray(value) || value.length === 0) return undefined;
+  const identities: string[] = [];
+  for (const item of value) {
+    if (typeof item !== "string") return undefined;
+    const identity = parseNoteIdentity(item);
+    if (!identity) return undefined;
+    identities.push(identity);
+  }
+  return identities;
+}
+
+function asScope(value: unknown): { scope?: NoteScope; error?: string } {
+  if (value === undefined) return {};
+  if (!isRecord(value)) return { error: "scope must be a mapping of include_paths and/or exclude_paths" };
+  const unknownKeys = Object.keys(value).filter((key) => key !== "include_paths" && key !== "exclude_paths");
+  if (unknownKeys.length > 0) return { error: `scope has unknown keys: ${unknownKeys.join(", ")}` };
+  if (!("include_paths" in value) && !("exclude_paths" in value)) {
+    return { error: "scope must declare include_paths and/or exclude_paths" };
+  }
+  const scope: NoteScope = {};
+  for (const field of ["include_paths", "exclude_paths"] as const) {
+    if (!(field in value)) continue;
+    const paths = asPaths(value[field]);
+    if (!paths) return { error: `${field} must be a non-empty array of repository-relative paths` };
+    const canonical: string[] = [];
+    for (const declared of paths) {
+      const normalized = canonicalizeRepoPath(declared);
+      if (!normalized) return { error: `invalid ${field} entry: ${declared}` };
+      canonical.push(normalized);
+    }
+    scope[field] = canonical;
+  }
+  return { scope };
+}
+
+function parseGovernance(data: Record<string, unknown> | undefined): {
+  lifecycle: NoteLifecycle;
+  scope?: NoteScope;
+  conflicts_with?: string[];
+  superseded_by?: string;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  if (!data) return { lifecycle: "active", errors };
+  let lifecycle: NoteLifecycle = "active";
+  if ("lifecycle" in data) {
+    const parsed = asLifecycle(data.lifecycle);
+    if (!parsed) errors.push("lifecycle must be active, disputed, or retired");
+    else lifecycle = parsed;
+  }
+  const scoped = asScope(data.scope);
+  if (scoped.error) errors.push(scoped.error);
+  let conflicts_with: string[] | undefined;
+  if ("conflicts_with" in data) {
+    conflicts_with = asIdentityList(data.conflicts_with);
+    if (!conflicts_with) errors.push("conflicts_with must be a non-empty array of knowledge/<slug>.md identities");
+  }
+  let superseded_by: string | undefined;
+  if ("superseded_by" in data) {
+    superseded_by = typeof data.superseded_by === "string" ? parseNoteIdentity(data.superseded_by) : undefined;
+    if (!superseded_by) errors.push("superseded_by must be one knowledge/<slug>.md identity");
+  }
+  return { lifecycle, errors, ...(scoped.scope ? { scope: scoped.scope } : {}), ...(conflicts_with ? { conflicts_with } : {}), ...(superseded_by ? { superseded_by } : {}) };
+}
+
 export function parseNote(absolutePath: string, source: string, projectRoot: string): KnowledgeNote {
   const relativePath = relative(projectRoot, absolutePath).split(sep).join("/");
   const underDecisions = relativePath.includes("/knowledge/decisions/") || relativePath.endsWith("/knowledge/decisions");
@@ -81,6 +161,8 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
   const evidence = section(body, "Evidence");
   const reuseGuidance = section(body, "Reuse guidance");
   const refreshTriggers = section(body, "Refresh triggers");
+  const dispute = section(body, "Dispute");
+  const retirement = section(body, "Retirement");
 
   if (underDecisions) {
     return {
@@ -93,12 +175,12 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
       reuseGuidance,
       refreshTriggers,
       source,
+      dispute,
+      retirement,
     };
   }
 
-  const hasTypedField = Boolean(
-    data && ["kind", "status", "validated_at", "relevant_paths"].some((field) => field in data),
-  );
+  const hasTypedField = Boolean(data && TYPED_FIELDS.some((field) => field in data));
   if (!hasTypedField) {
     return {
       absolutePath,
@@ -110,6 +192,8 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
       reuseGuidance,
       refreshTriggers,
       source,
+      dispute,
+      retirement,
     };
   }
 
@@ -119,6 +203,7 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
   const relevant_paths = asPaths(data?.relevant_paths);
   const typed = Boolean(kind && status && validated_at && relevant_paths);
   const classification: NoteClassification = typed ? "typed" : "invalid-typed";
+  const governance = parseGovernance(data);
   const note: KnowledgeNote = {
     absolutePath,
     relativePath,
@@ -129,9 +214,21 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
     reuseGuidance,
     refreshTriggers,
     source,
+    dispute,
+    retirement,
   };
+  if (governance.errors.length > 0) note.governanceErrors = governance.errors;
   if (typed && kind && status && relevant_paths) {
-    note.frontmatter = { kind, status, validated_at, relevant_paths };
+    note.frontmatter = {
+      kind,
+      status,
+      validated_at,
+      relevant_paths,
+      lifecycle: governance.lifecycle,
+    };
+    if (governance.scope) note.frontmatter.scope = governance.scope;
+    if (governance.conflicts_with) note.frontmatter.conflicts_with = governance.conflicts_with;
+    if (governance.superseded_by) note.frontmatter.superseded_by = governance.superseded_by;
   }
   return note;
 }

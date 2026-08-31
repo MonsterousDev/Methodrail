@@ -1,0 +1,28 @@
+{
+  "fixture_id": "knowledge-dispute",
+  "condition": "baseline",
+  "skills_invoked": ["how"],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/stripe.md",
+    "repo/src/refunds.js"
+  ],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [
+    "stripe.md says refunds go through Stripe",
+    "implemented chargeback.won via Stripe"
+  ],
+  "outcome": "Picked Stripe and implemented the refund path.",
+  "failure_modes": ["dispute-ignored", "undecided-choice"],
+  "behaviors_observed": ["implement a refund processor"],
+  "notes": "constructed baseline. Chose a winner without deciding evidence.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-dispute/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-dispute/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-dispute/baseline/answer.md"
+  }
+}

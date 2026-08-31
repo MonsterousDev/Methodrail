@@ -1,0 +1,35 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "methodrail",
+  "skills_invoked": [],
+  "references_loaded": [
+    ".methodrail/PROJECT.md",
+    ".methodrail/knowledge/notifications.md",
+    "repo/src/notifications/legacy/sender.js",
+    "repo/src/outbox.js"
+  ],
+  "tools_used": ["read", "write", "shell"],
+  "subagents_used": 0,
+  "verification_steps": [
+    "delivered legacy.ping evt_legacy_same twice; countFor stayed 2"
+  ],
+  "evidence": [
+    ".methodrail/knowledge/notifications.md scope excludes repo/src/notifications/legacy",
+    "routed legacy.ping through sendDirect like legacy.alert"
+  ],
+  "outcome": "Loaded the notifications note. Its scope does not cover the legacy sender, so legacy.ping uses sendDirect like legacy.alert.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "preserve the legacy send path",
+    "do not apply the general event-id rule to legacy.ping",
+    "keep notice.created event-id keyed"
+  ],
+  "notes": "constructed methodrail. Scoped note loaded; exclusion honored.",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/methodrail/answer.md"
+  }
+}
