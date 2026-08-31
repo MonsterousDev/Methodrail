@@ -1,0 +1,100 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && ls",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "find repo -maxdepth 3 -type f | sort | sed -n '1,200p'",
+      "exit_status": 0
+    },
+    {
+      "command": "rg -n \"legacy|notification|ping\" repo",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/legacy/sender.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/legacy/sender.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/dispatch.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/outbox.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/dispatch.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0
+    },
+    {
+      "command": "git -C repo diff -- src/notifications/legacy/sender.js src/notifications/legacy/sender.test.js",
+      "exit_status": 1
+    },
+    {
+      "command": "git -C repo status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "nl -ba repo/src/notifications/legacy/sender.js | sed -n '1,80p'",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba repo/src/notifications/legacy/sender.test.js | sed -n '1,120p'",
+      "exit_status": 0
+    },
+    {
+      "command": "node -e \"JSON.parse(require('node:fs').readFileSync('COMMANDS.json', 'utf8'))\"",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented support for `legacy.ping` in the legacy notification sender.",
+    "Changed `repo/src/notifications/legacy/sender.js` so `legacy.ping` uses the same direct-send path as `legacy.alert`, and updated `repo/src/notifications/legacy/sender.test.js` to assert the ping delivery is sent with the expected channel and body.",
+    "Verification: `npm test` passes with 3 tests."
+  ],
+  "outcome": "Implemented support for `legacy.ping` in the legacy notification sender. Changed `repo/src/notifications/legacy/sender.js` so `legacy.ping` uses the same direct-send path as `legacy.alert`, and updated `repo/src/notifications/legacy/sender.test.js` to assert the ping delivery is sent with the expected channel and body. Verification: `npm test` passes with 3 tests.",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-applicability/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-applicability/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

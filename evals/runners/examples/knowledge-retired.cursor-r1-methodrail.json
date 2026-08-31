@@ -1,0 +1,39 @@
+{
+  "fixture_id": "knowledge-retired",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git status && git log --oneline -20 && git rev-parse HEAD 2>/dev/null; echo \"---\"; git cat-file -t aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 2>&1; git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"---mail.js---\"; git log --oneline -- repo/src/mail.js; echo \"---diff from fake shas---\"; git diff aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -- repo/src/mail.js 2>&1 | head -20; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/mail.js 2>&1 | head -20",
+      "exit_status": 0
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Password-reset mail now goes through `enqueueMail` with template id `password-reset`, matching welcome.",
+    "**Knowledge:** refused retired `.methodrail/knowledge/send-v1.md` (`superseded_by: knowledge/mail.md`). Reused active `.methodrail/knowledge/mail.md` (customer mail uses `enqueueMail` + template id). Freshness was **unknown** (no git history; `validated_at` SHAs do not resolve); claim was reconciled against current `repo/src/mail.js` (welcome already queues; `sendMail` unused by customer paths).",
+    "**Change:** `handlePasswordReset` calls `enqueueMail({ template: \"password-reset\", to, vars })` instead of returning `null`. Tests updated and passing (`npm test`: 2 pass)."
+  ],
+  "outcome": "Password-reset mail now goes through `enqueueMail` with template id `password-reset`, matching welcome. **Knowledge:** refused retired `.methodrail/knowledge/send-v1.md` (`superseded_by: knowledge/mail.md`). Reused active `.methodrail/knowledge/mail.md` (customer mail uses `enqueueMail` + template id). Freshness was **unknown** (no git history; `validated_at` SHAs do not resolve); claim was reconciled against current `repo/src/mail.js` (welcome already queues; `sendMail` unused by customer paths",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-retired/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-retired/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-retired/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-retired/cursor-r1-methodrail/answer.md"
+  }
+}

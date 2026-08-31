@@ -1,0 +1,10 @@
+[
+  {
+    "command": "git rev-parse --is-inside-work-tree && git log --oneline -20 && echo \"---STATUS---\" && git status && echo \"---SHA---\" && git rev-parse HEAD && echo \"---DIFF vs note SHA---\" && git log bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..HEAD --oneline -- repo/src/refunds.js 2>&1; echo \"---CAT SHA---\"; git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"---LOG refunds---\"; git log --all --oneline -- repo/src/refunds.js; echo \"---SHOW refunds history---\"; git log -p -- repo/src/refunds.js | head -200",
+    "exit_status": 0
+  },
+  {
+    "command": "node --test src/refunds.test.js",
+    "exit_status": 0
+  }
+]

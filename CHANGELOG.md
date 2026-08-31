@@ -2,7 +2,7 @@
 
 ## 0.8.0 — 2026-08-31
 
-Knowledge Governance: scoped, disputed, and retired typed notes with deterministic eligibility. Constructed applicability, dispute, and retirement specs pass. The live C7 battery is declared and not yet executed.
+Knowledge Governance: scoped, disputed, and retired typed notes with deterministic eligibility. Constructed applicability, dispute, and retirement specs pass. A 9-pair live C7 battery (2026-08-31) was empirical-neutral on applicability and retirement, helped on Cursor dispute, and incomplete on Codex dispute (both conditions patched `refunds.js`). No live `harmed`.
 
 - Add optional typed-note `lifecycle` (`active` | `disputed` | `retired`) and path-segment `scope`; omitted fields stay active/unbounded so v0.7 notes need no migration
 - Evaluate applicability and eligibility in TypeScript; malformed lifecycle or scope is invalid-typed and not eligible
@@ -11,6 +11,7 @@ Knowledge Governance: scoped, disputed, and retired typed notes with determinist
 - Grade constructed knowledge-governance fixtures; reject a dispute answer that names both processors then picks a winner
 - Align `verify-change` with the family rule: verification in this turn against unchanged relevant state
 - Public-repo dogfood on Express, Deno std, and Flask was qualitative and is not a live-pilot result
+- Record the 9-pair live C7 battery: applicability and retirement empirical-neutral; Cursor dispute helped; Codex dispute incomplete after naming the dispute then patching `refunds.js`
 
 ## 0.7.1 — 2026-08-27
 

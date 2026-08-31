@@ -1,0 +1,14 @@
+[
+  {
+    "command": "git rev-parse --is-inside-work-tree && git log --oneline -20 && echo '---' && git status && echo '---SHA---' && git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"cat-file-exit:$?\" && echo '---DIFF---' && git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/refunds.js 2>&1; echo \"diff-exit:$?\" && echo '---LOG-PATH---' && git log --oneline -- repo/src/refunds.js repo/src/refunds.test.js",
+    "exit_status": 128
+  },
+  {
+    "command": "node --test src/refunds.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && echo \"ANSWER.md exists=yes\" && python3 -c \"import json; json.load(open('COMMANDS.json'))\" && echo \"COMMANDS.json valid\"",
+    "exit_status": 0
+  }
+]

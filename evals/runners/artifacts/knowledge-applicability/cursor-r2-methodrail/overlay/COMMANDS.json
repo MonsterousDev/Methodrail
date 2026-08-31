@@ -1,0 +1,10 @@
+[
+  {
+    "command": "git rev-parse --is-inside-work-tree && git log -1 --oneline && git rev-parse HEAD && git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"---diff relevant---\"; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/notifications/dispatch.js repo/src/outbox.js 2>&1; echo \"---log relevant---\"; git log --oneline bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..HEAD -- repo/src/notifications/dispatch.js repo/src/outbox.js 2>&1; echo \"---status---\"; git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  }
+]

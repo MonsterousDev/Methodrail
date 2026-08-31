@@ -1,0 +1,40 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse --is-inside-work-tree && git log -1 --oneline && git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/notifications/dispatch.js repo/src/outbox.js 2>&1 | head -50",
+      "exit_status": 0
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Added `legacy.ping` to the legacy sender via `sendDirect`, matching `legacy.alert`.",
+    "**Knowledge:** `.methodrail/knowledge/notifications.md` (invariant, verified, lifecycle active) claims customer-visible notices must use `dispatchOnce(event.id, ...)`. Scope includes `repo/src/notifications` but **excludes** `repo/src/notifications/legacy`. Exclusion wins, so the note was not applied. Freshness is unknown (tree is not a git repository; `validated_at` SHA cannot be resolved).",
+    "**Change:** `repo/src/notifications/legacy/sender.js` now routes `legacy.ping` through `sendDirect(event.type, event.data)`. Tests updated to expect colliding provider IDs to both send.",
+    "**Verification (test-confirmed):** `npm test` — 3 pass, 0 fail."
+  ],
+  "outcome": "Added `legacy.ping` to the legacy sender via `sendDirect`, matching `legacy.alert`. **Knowledge:** `.methodrail/knowledge/notifications.md` (invariant, verified, lifecycle active) claims customer-visible notices must use `dispatchOnce(event.id, ...)`. Scope includes `repo/src/notifications` but **excludes** `repo/src/notifications/legacy`. Exclusion wins, so the note was not applied. Freshness is unknown (tree is not a git repository; `validated_at` SHA cannot be resolved). **Change:** `repo/src",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-applicability/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/cursor-r1-methodrail/answer.md"
+  }
+}

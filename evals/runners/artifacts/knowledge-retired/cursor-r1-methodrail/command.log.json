@@ -1,0 +1,10 @@
+[
+  {
+    "command": "git status && git log --oneline -20 && git rev-parse HEAD 2>/dev/null; echo \"---\"; git cat-file -t aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 2>&1; git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"---mail.js---\"; git log --oneline -- repo/src/mail.js; echo \"---diff from fake shas---\"; git diff aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -- repo/src/mail.js 2>&1 | head -20; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/mail.js 2>&1 | head -20",
+    "exit_status": 0
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  }
+]

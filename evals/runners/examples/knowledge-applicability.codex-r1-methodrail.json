@@ -1,0 +1,122 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' rules/methodrail.mdc",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f .methodrail/PROJECT.md && sed -n '1,260p' .methodrail/PROJECT.md || true",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' references/knowledge/reuse.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' .methodrail/knowledge/notifications.md",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/notifications/legacy/sender.js",
+      "exit_status": 0
+    },
+    {
+      "command": "rg \"legacy|ping|notifications|sender\" repo test tests -n",
+      "exit_status": 2
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/legacy/sender.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' repo/src/outbox.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/dispatch.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/src/notifications/dispatch.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "cat repo/package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0
+    },
+    {
+      "command": "git diff -- repo/src/notifications/legacy/sender.js repo/src/notifications/legacy/sender.test.js",
+      "exit_status": 1
+    },
+    {
+      "command": "git diff -- src/notifications/legacy/sender.js src/notifications/legacy/sender.test.js",
+      "exit_status": 1
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "sed -n '1,120p' repo/src/notifications/legacy/sender.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,160p' repo/src/notifications/legacy/sender.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -name .git -type d -print",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented `legacy.ping` support in the legacy notification sender.",
+    "- `repo/src/notifications/legacy/sender.js` now routes both `legacy.alert` and `legacy.ping` through `sendDirect`.",
+    "- `repo/src/notifications/legacy/sender.test.js` now asserts that `legacy.ping` is sent and counted.",
+    "- Verified with `npm test`: 3 tests passed.",
+    "Knowledge disposition: `.methodrail/knowledge/notifications.md` was reviewed and is scoped away from `repo/src/notifications/legacy`, so it did not constrain this legacy sender change."
+  ],
+  "outcome": "Implemented `legacy.ping` support in the legacy notification sender. - `repo/src/notifications/legacy/sender.js` now routes both `legacy.alert` and `legacy.ping` through `sendDirect`. - `repo/src/notifications/legacy/sender.test.js` now asserts that `legacy.ping` is sent and counted. - Verified with `npm test`: 3 tests passed. Knowledge disposition: `.methodrail/knowledge/notifications.md` was reviewed and is scoped away from `repo/src/notifications/legacy`, so it did not constrain this legacy s",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-applicability/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-applicability/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

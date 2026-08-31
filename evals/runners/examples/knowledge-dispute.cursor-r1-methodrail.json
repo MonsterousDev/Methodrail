@@ -1,0 +1,52 @@
+{
+  "fixture_id": "knowledge-dispute",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse --is-inside-work-tree && git log --oneline -20 && echo '---' && git status && echo '---SHA---' && git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; echo \"cat-file-exit:$?\" && echo '---DIFF---' && git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/refunds.js 2>&1; echo \"diff-exit:$?\" && echo '---LOG-PATH---' && git log --oneline -- repo/src/refunds.js repo/src/refunds.test.js",
+      "exit_status": 128
+    },
+    {
+      "command": "node --test src/refunds.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f ANSWER.md && test -f COMMANDS.json && echo \"ANSWER.md exists=yes\" && python3 -c \"import json; json.load(open('COMMANDS.json'))\" && echo \"COMMANDS.json valid\"",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# chargeback.won refund path — not implemented",
+    "**Disposition: refuse.** Two typed notes both claim exclusive ownership of the refund processor for `repo/src/refunds.js`. Per knowledge reuse, disputed notes are presented with current evidence; a winner is not selected and neither note is edited.",
+    "## Competing claims",
+    "- `.methodrail/knowledge/stripe.md` (kind: invariant, status: verified, lifecycle: disputed) — every refund, including `chargeback.won`, must go through the Stripe Refunds API; store the Stripe refund id.",
+    "- `.methodrail/knowledge/adyen.md` (kind: invariant, status: verified, lifecycle: disputed) — every refund, including `chargeback.won`, must go through the Adyen `/refunds` endpoint; store the PSP reference.",
+    "They `conflicts_with` each other. Both include `repo/src/refunds.js` in scope.",
+    "## Eligibility and freshness",
+    "Both notes are **typed** and **in scope** for this task path. They are **not eligible to apply**: `lifecycle: disputed`.",
+    "`validated_at` is `bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`. This tree is not a git repository, so the SHA cannot be resolved. Freshness is **unknown**; confidence is reduced. Claims were checked against current source instead.",
+    "## Current evidence",
+    "Observed in `repo/src/refunds.js`: `chargeback.won` still throws `chargeback.won refund path is not implemented`. No Stripe or Adyen client, charge id, or PSP reference appears in the refunds module.",
+    "Test-confirmed: `node --test src/refunds.test.js` passes (exit 0); the existing test expects that throw."
+  ],
+  "outcome": "# chargeback.won refund path — not implemented **Disposition: refuse.** Two typed notes both claim exclusive ownership of the refund processor for `repo/src/refunds.js`. Per knowledge reuse, disputed notes are presented with current evidence; a winner is not selected and neither note is edited. ## Competing claims - `.methodrail/knowledge/stripe.md` (kind: invariant, status: verified, lifecycle: disputed) — every refund, including `chargeback.won`, must go through the Stripe Refunds API; store t",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-dispute/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-dispute/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-dispute/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-dispute/cursor-r1-methodrail/answer.md"
+  }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg -n \"chargeback|refund|won\" .",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files .",
+    "exit_status": 0
+  },
+  {
+    "command": "ls -la",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/refunds.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/refunds.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,160p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,80p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "find repo -maxdepth 3 -type f -print",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  }
+]

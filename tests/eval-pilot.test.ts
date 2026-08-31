@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { gradePilotManifest, loadPilotManifest } from "../src/eval/pilot.js";
+import { gradePilotManifest } from "../src/eval/pilot.js";
 import type { EvalContext } from "../src/eval/types.js";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -40,26 +40,23 @@ test("live v0.7 knowledge pilot is complete and rescored from its artifact manif
   assert.equal(results["knowledge-refresh:codex:r1"], "helped");
 });
 
-test("v0.8 knowledge-governance pilot is declared and has no live extras yet", () => {
+test("live v0.8 knowledge-governance pilot is complete and rescored from its artifact manifest", () => {
   const manifestPath = join(root, "evals/pilot-v0.8-knowledge-governance.yaml");
-  const manifest = loadPilotManifest(manifestPath);
-  assert.equal(manifest.id, "pilot-v0.8-knowledge-governance-2026-08-31");
-  assert.equal(manifest.pairs.length, 9);
-  const keys = manifest.pairs.map((pair) => `${pair.fixture}:${pair.host}:r${pair.repeat}`);
-  assert.deepEqual(keys, [
-    "knowledge-applicability:cursor:r1",
-    "knowledge-applicability:cursor:r2",
-    "knowledge-applicability:codex:r1",
-    "knowledge-dispute:cursor:r1",
-    "knowledge-dispute:cursor:r2",
-    "knowledge-dispute:codex:r1",
-    "knowledge-retired:cursor:r1",
-    "knowledge-retired:cursor:r2",
-    "knowledge-retired:codex:r1",
-  ]);
-
   const grade = gradePilotManifest(manifestPath, ctx);
-  assert.equal(grade.pairs.length, 0);
-  assert.equal(grade.integrity_errors.length, 9);
-  assert.ok(grade.integrity_errors.every((line) => /missing live pair/.test(line)));
+  assert.deepEqual(grade.integrity_errors, []);
+  assert.equal(grade.pairs.length, 9);
+
+  const results = Object.fromEntries(
+    grade.pairs.map((pair) => [`${pair.fixture}:${pair.host}:r${pair.repeat}`, pair.report.empirical]),
+  );
+  assert.equal(results["knowledge-applicability:cursor:r1"], "neutral");
+  assert.equal(results["knowledge-applicability:cursor:r2"], "neutral");
+  assert.equal(results["knowledge-applicability:codex:r1"], "neutral");
+  assert.equal(results["knowledge-dispute:cursor:r1"], "helped");
+  assert.equal(results["knowledge-dispute:cursor:r2"], "helped");
+  assert.equal(results["knowledge-dispute:codex:r1"], "incomplete");
+  assert.equal(results["knowledge-retired:cursor:r1"], "neutral");
+  assert.equal(results["knowledge-retired:cursor:r2"], "neutral");
+  assert.equal(results["knowledge-retired:codex:r1"], "neutral");
+  assert.equal(grade.pairs.some((pair) => pair.report.empirical === "harmed"), false);
 });

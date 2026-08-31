@@ -112,7 +112,11 @@ function examples(): void {
     ? readdirSync(exampleDir).filter((name) => isCanonicalExampleFile(name))
     : [];
   if (extras.length === 0 && integrityErrors.length === 0) fail("No example runs found under evals/runners/examples");
-  for (const manifest of ["evals/pilot-t5-t10.yaml", "evals/pilot-v0.7-knowledge.yaml"]) {
+  for (const manifest of [
+    "evals/pilot-t5-t10.yaml",
+    "evals/pilot-v0.7-knowledge.yaml",
+    "evals/pilot-v0.8-knowledge-governance.yaml",
+  ]) {
     const path = join(repoRoot, manifest);
     if (existsSync(path)) integrityErrors.push(...pilot(path));
   }

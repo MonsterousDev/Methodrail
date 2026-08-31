@@ -1,0 +1,70 @@
+[
+  {
+    "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'pyproject.toml' -g 'go.mod' -g 'Cargo.toml' -g 'README*'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' rules/methodrail.mdc",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f .methodrail/PROJECT.md && sed -n '1,260p' .methodrail/PROJECT.md || true",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' references/knowledge/reuse.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' .methodrail/knowledge/stripe.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' .methodrail/knowledge/adyen.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files repo",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/refunds.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,320p' repo/src/refunds.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 3 -type f | sort",
+    "exit_status": 0
+  },
+  {
+    "command": "git -C repo status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git -C repo log --oneline --decorate -5",
+    "exit_status": 128
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  }
+]

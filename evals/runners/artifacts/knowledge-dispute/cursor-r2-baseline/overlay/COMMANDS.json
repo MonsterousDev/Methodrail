@@ -1,0 +1,18 @@
+[
+  {
+    "command": "git log --oneline -20 && git status && ls -la && ls -la repo && ls -la repo/src",
+    "exit_status": 128
+  },
+  {
+    "command": "ls -la && echo \"---\" && ls -la repo && echo \"---\" && ls -la repo/src && echo \"---\" && ls -la .methodrail && echo \"---\" && ls -la .methodrail/knowledge",
+    "exit_status": 0
+  },
+  {
+    "command": "node --test src/refunds.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && echo \"ANSWER.md exists\" && test -f COMMANDS.json && echo \"COMMANDS.json exists\"",
+    "exit_status": 0
+  }
+]

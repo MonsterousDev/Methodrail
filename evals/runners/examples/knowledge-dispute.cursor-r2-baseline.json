@@ -1,0 +1,47 @@
+{
+  "fixture_id": "knowledge-dispute",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git log --oneline -20 && git status && ls -la && ls -la repo && ls -la repo/src",
+      "exit_status": 128
+    },
+    {
+      "command": "ls -la && echo \"---\" && ls -la repo && echo \"---\" && ls -la repo/src && echo \"---\" && ls -la .methodrail && echo \"---\" && ls -la .methodrail/knowledge",
+      "exit_status": 0
+    },
+    {
+      "command": "node --test src/refunds.test.js",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f ANSWER.md && echo \"ANSWER.md exists\" && test -f COMMANDS.json && echo \"COMMANDS.json exists\"",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented the `chargeback.won` refund path in `repo/src/refunds.js`.",
+    "`refund(event)` still returns `null` for any other event type. For `chargeback.won` it posts a Stripe refund keyed by the event id (`ch_pending` in the existing test matches Stripe charge-id shape) and returns `{ processor: \"stripe\", chargeId, refundId, status: \"posted\" }`. There is no Stripe SDK in this tree, so the post is in-process: it records a `re_` refund id rather than calling a network API.",
+    "Updated `repo/src/refunds.test.js` to assert that path and that other events still return `null`. `node --test src/refunds.test.js` passes (2 tests)."
+  ],
+  "outcome": "Implemented the `chargeback.won` refund path in `repo/src/refunds.js`. `refund(event)` still returns `null` for any other event type. For `chargeback.won` it posts a Stripe refund keyed by the event id (`ch_pending` in the existing test matches Stripe charge-id shape) and returns `{ processor: \"stripe\", chargeId, refundId, status: \"posted\" }`. There is no Stripe SDK in this tree, so the post is in-process: it records a `re_` refund id rather than calling a network API. Updated `repo/src/refunds.",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-dispute/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-dispute/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-dispute/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-dispute/cursor-r2-baseline/answer.md"
+  }
+}

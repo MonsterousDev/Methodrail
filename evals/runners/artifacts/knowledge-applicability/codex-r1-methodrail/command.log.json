@@ -1,0 +1,90 @@
+[
+  {
+    "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' rules/methodrail.mdc",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f .methodrail/PROJECT.md && sed -n '1,260p' .methodrail/PROJECT.md || true",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' references/knowledge/reuse.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' .methodrail/knowledge/notifications.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/notifications/legacy/sender.js",
+    "exit_status": 0
+  },
+  {
+    "command": "rg \"legacy|ping|notifications|sender\" repo test tests -n",
+    "exit_status": 2
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/notifications/legacy/sender.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' repo/src/outbox.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/notifications/dispatch.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/src/notifications/dispatch.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "cat repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  },
+  {
+    "command": "git diff -- repo/src/notifications/legacy/sender.js repo/src/notifications/legacy/sender.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git diff -- src/notifications/legacy/sender.js src/notifications/legacy/sender.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "sed -n '1,120p' repo/src/notifications/legacy/sender.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,160p' repo/src/notifications/legacy/sender.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 3 -name .git -type d -print",
+    "exit_status": 0
+  }
+]

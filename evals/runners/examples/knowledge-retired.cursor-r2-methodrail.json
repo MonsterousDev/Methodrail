@@ -1,0 +1,40 @@
+{
+  "fixture_id": "knowledge-retired",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git rev-parse --is-inside-work-tree && git log --oneline -10 && git status && git rev-parse HEAD && git cat-file -t bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2>&1; git cat-file -t aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 2>&1; git diff bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -- repo/src/mail.js 2>&1; git log bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..HEAD -- repo/src/mail.js 2>&1",
+      "exit_status": 128
+    },
+    {
+      "command": "npm test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Password-reset mail now goes through the queue.",
+    "`handlePasswordReset` calls `enqueueMail({ template: \"password-reset\", to, vars })`, matching welcome. It does not use `sendMail`.",
+    "Knowledge: refused retired `.methodrail/knowledge/send-v1.md` (v1 `sendMail`; `superseded_by: knowledge/mail.md`). Reused active `.methodrail/knowledge/mail.md` (customer mail must `enqueueMail` with a template id). Freshness unknown (this tree is not a git repo; `validated_at` SHAs do not resolve); the mail.md claim was checked against current `repo/src/mail.js` and tests.",
+    "Observed: `npm test` in `repo/` — 2 passed (welcome + password-reset enqueue paths; v1 count stays 0)."
+  ],
+  "outcome": "Password-reset mail now goes through the queue. `handlePasswordReset` calls `enqueueMail({ template: \"password-reset\", to, vars })`, matching welcome. It does not use `sendMail`. Knowledge: refused retired `.methodrail/knowledge/send-v1.md` (v1 `sendMail`; `superseded_by: knowledge/mail.md`). Reused active `.methodrail/knowledge/mail.md` (customer mail must `enqueueMail` with a template id). Freshness unknown (this tree is not a git repo; `validated_at` SHAs do not resolve); the mail.md claim wa",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-retired/cursor-r2-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-retired/cursor-r2-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-retired/cursor-r2-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-retired/cursor-r2-methodrail/answer.md"
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'Cargo.toml' -g 'pyproject.toml' -g 'go.mod' -g 'README*'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 3 -type f | sort",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/mail.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/mail.test.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "npm test",
+    "exit_status": 0
+  },
+  {
+    "command": "git diff -- repo/src/mail.js repo/src/mail.test.js",
+    "exit_status": 1
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git diff -- src/mail.js src/mail.test.js",
+    "exit_status": 1
+  }
+]

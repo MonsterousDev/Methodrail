@@ -1,0 +1,34 @@
+{
+  "fixture_id": "knowledge-applicability",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "npm test",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Added `legacy.ping` support in the legacy notification sender.",
+    "`handle()` now sends `legacy.ping` the same way as `legacy.alert`: via `sendDirect(event.type, event.data)`. The pending test was updated to assert that ping is routed and counted. All 3 tests pass."
+  ],
+  "outcome": "Added `legacy.ping` support in the legacy notification sender. `handle()` now sends `legacy.ping` the same way as `legacy.alert`: via `sendDirect(event.type, event.data)`. The pending test was updated to assert that ping is routed and counted. All 3 tests pass.",
+  "failure_modes": [],
+  "notes": "Live v0.8 knowledge-governance pilot 2026-08-31. Freeze e22ff0ab9d7b0d245590edf29e592dd596693efc. Worktree /tmp/methodrail-pilot-20260831-v08/knowledge-applicability/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-applicability/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-applicability/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-applicability/cursor-r2-baseline/answer.md"
+  }
+}
