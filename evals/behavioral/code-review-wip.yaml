@@ -1,0 +1,17 @@
+id: behavioral.code-review.wip-working-tree
+kind: behavioral
+skill: code-review
+description: WIP review inspects staged, unstaged, and untracked files, not only <base>...HEAD.
+input:
+  prompt: "Review my work-in-progress against main. Nothing is committed yet."
+conditions:
+  baseline: native agent without Methodrail skills
+  treatment: native agent with the code-review skill loaded
+expected:
+  skills:
+    required: [code-review]
+  behaviors:
+    - pin a fixed point
+    - capture git diff --cached, git diff, and untracked files
+    - not treat an empty <base>...HEAD diff as an empty review when the worktree is dirty
+  baseline_failure: reporting no changes because HEAD matches the base

@@ -1,0 +1,15 @@
+id: behavioral.blast-radius.read-only-parent
+kind: behavioral
+skill: blast-radius
+description: Under /review, blast-radius proves safety without writing repository files.
+input:
+  prompt: "Review this payment schema change. Stay read-only. What else could it break?"
+expected:
+  skills:
+    required: [review, blast-radius]
+    forbidden: [arena, swarm, interrogate]
+  behaviors:
+    - identify impact beyond the diff
+    - prove or mark unproven using existing checks or temp probes
+    - do not add tests, scripts, or product files to the repository
+  baseline_failure: writing a new test or script into the repo during review

@@ -13,11 +13,7 @@ A mature service may need:
 ```text
 .methodrail/
 ├── PROJECT.md
-├── knowledge/
-│   ├── domain.md
-│   ├── architecture.md
-│   ├── behavior.md
-│   ├── operations.md
+├── knowledge/          # typed notes after Reflect; decisions/; optional legacy
 │   └── decisions/
 └── control/
     ├── CONTROL.md
@@ -68,7 +64,7 @@ knowledge proposals
 durable project knowledge
 ```
 
-Do not fully document a repository during init. Do not create typed knowledge notes during init. Grow the harness around actual engineering work. Later sessions reuse notes through [knowledge reuse](knowledge/reuse.md).
+Do not fully document a repository during init. Do not create files under `.methodrail/knowledge/` during init. Grow the harness around actual engineering work. Later sessions reuse notes through [knowledge reuse](knowledge/reuse.md).
 
 ## Existing instructions outrank Methodrail
 

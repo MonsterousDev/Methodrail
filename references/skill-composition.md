@@ -4,6 +4,8 @@ Skills are members of one Methodrail family. Organize them by functional role, n
 
 Share infrastructure aggressively. Compose procedures conservatively. A skill should invoke or suggest another skill only when that additional procedure materially reduces uncertainty, reduces risk, provides missing evidence, or creates reusable value.
 
+Invocation is two layers. **Host discovery** (`disable-model-invocation`) decides whether mixed intent may load a skill. **Parent composition** decides whether an already-active skill may load a named skill when its procedure's conditions match. Explicit skills are workflow-callable, not human-only. `interrogate` is suggest-only: name it and wait. Canonical rules: [SKILL-MECHANICS](../skills/writing-for-agents/SKILL-MECHANICS.md).
+
 Do not turn every task into:
 
 ```text
@@ -120,7 +122,7 @@ Guidance, not a scheduler. Explicit user invocation remains allowed.
 | 0–1 | Prefer one context |
 | 2 | Isolated subagents only where they improve context quality or independence |
 | 3 | Parallel exploration may be justified |
-| 4 | Arena/interrogate may be justified for consequential uncertainty or review |
+| 4 | Arena may be justified; name `interrogate` and wait |
 | 5 | Strong independent evidence/review is expected where available |
 
 See [rigor](rigor.md) and [host capabilities](host-capabilities.md).
@@ -151,7 +153,8 @@ debug → diagnosing-bugs → observe → runtime-forensics only if needed
 ```text
 develop → wayfinder → domain-modeling → how → architect
 → prototype empirical unknowns → implementation → blast-radius
-→ code-review → interrogate only if risk warrants → verify
+→ code-review → verify
+→ name interrogate if risk warrants; wait
 ```
 
 ## Control planes

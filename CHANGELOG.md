@@ -8,6 +8,10 @@ Linked-external harness packaging for Harness Intelligence. Repository-bound sib
 - Ignore the repository-root link only through Git’s local `.git/info/exclude` (not the tracked `.gitignore`)
 - Keep create/inspect idempotent and fail closed on missing exclude, wrong-repo manifests, non-link paths, unbound targets, and in-repo storage
 - Share one `HARNESS.yaml` parser between create and inspect so a decoy `path` key cannot rebind create
+- Reject duplicate `HARNESS.yaml` keys and require the link ignore to come from this repository’s `.git/info/exclude`
+- Contain symlink walks; treat malformed note YAML as a per-note error; mark ignored `relevant_paths` unknown
+- Distinguish host discovery from parent composition; keep `interrogate` suggest-only
+- Close untyped `.methodrail/knowledge/` write paths; review WIP includes staged, unstaged, and untracked work
 - Cover linked-storage knowledge freshness against the repository root (not the external storage directory)
 - Dogfood on Darwin only; Windows junctions were not tested
 

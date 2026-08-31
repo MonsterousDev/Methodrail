@@ -1,0 +1,9 @@
+id: skill.code-review.routing-positive-wip
+kind: routing
+skill: code-review
+description: "Uncommitted work-in-progress review activates code-review."
+input:
+  prompt: "Review my uncommitted work-in-progress against main for spec compliance and coding standards."
+expected:
+  skills:
+    required: [code-review]

@@ -15,4 +15,5 @@ expected:
     - preserve existing AGENTS.md and CLAUDE.md
     - write pointer-oriented agent-facing files
     - generate a project verify skill when the executable surface warrants it
+    - not create files under .methodrail/knowledge/
   baseline_failure: copying Methodrail doctrine and global skills into the project

@@ -33,8 +33,11 @@ Any safety fact you can't get to step 4, say so out loud. Don't write it up as s
 2. Find the one fact it's safe because of. Most changes that look scary are safe because of a single fact. If it holds, most of the scary cases die at once.
 3. Look where grep stops. Read the source of the library you call, and check its pinned version and any local patch. Follow what a symbol search misses: the JSON an API returns, a DB column, a wire format, another language reading the same bytes, a feature flag, code three hops downstream.
 4. Be honest about each risk. Give it a real chance of happening and a real cost if it does. Cite a real `file:line`. A search that finds nothing is still an answer. Never make up a caller or an API.
-5. Prove the one fact. Write a script or test that runs the real code, run it, and paste what happened. If you can't prove it cheaply, mark it unproven.
-6. For a big or wide change, run `arena` when the host supports competing candidates. If not, obtain a second independent pass in this context or state the limitation. See [host capabilities](../../references/host-capabilities.md).
+5. Prove the one fact.
+   - **Read-only parent** (`/review`, `/investigate`, or the user said not to edit): run an existing test or script first. If you need a new probe, run it from a temp file outside the repository (or an equivalent one-shot command) and leave the worktree unchanged. Do not add tests, scripts, or product files.
+   - **Write parent** (`/develop`, `/debug`, `/refactor`, or a direct request that may edit): prefer a real test or script in the repo that calls the real code and fails loud if you're wrong.
+   If you can't prove it cheaply, mark it unproven.
+6. For a big or wide change, run `arena` only when the parent may edit and the host supports competing candidates. Under a read-only parent, obtain a second independent pass in this context or state the limitation. See [host capabilities](../../references/host-capabilities.md).
 
 ## What to hand back
 
@@ -50,6 +53,6 @@ Silent "nothing else is affected" is forbidden without evidence.
 
 ```text
 Need current system           → how
-Need competing safety proofs  → arena
-Do not auto-invoke            → local mechanical edits
+Need competing safety proofs  → arena (write parent only)
+Read-only parent              → existing checks or temp probes
 ```

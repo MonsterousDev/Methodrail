@@ -16,7 +16,7 @@ Takes current conversation context and codebase understanding and produces a spe
 2. Sketch the seams at which you're going to test the feature. Prefer existing seams. Use the highest seam possible. Confirm seams with the user.
 3. Write the spec using the template below, then publish it:
    - to the project's existing issue tracker if one is already in use, or
-   - as a project-local markdown file (`docs/`, `specs/`, `.scratch/`, or `.methodrail/knowledge/`) when no tracker integration is available.
+   - as a project-local markdown file (`docs/`, `specs/`, or `.scratch/`) when no tracker integration is available. Do not write `.methodrail/knowledge/`; that path is typed notes after `reflect` approval, or decision records.
 
 Do not require a Methodrail or Matt Pocock tracker setup skill.
 

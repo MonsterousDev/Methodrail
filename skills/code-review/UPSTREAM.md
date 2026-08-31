@@ -9,3 +9,4 @@ Methodrail changes:
 - issue-tracker setup isolated; no setup-matt-pocock-skills requirement
 - Methodrail review-packet integration
 - subagents optional per host capabilities
+- WIP review captures staged, unstaged, and untracked work, not only `<base>...HEAD`

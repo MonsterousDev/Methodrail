@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -141,7 +141,9 @@ test("verified hypothesis fails", () => {
       "bad",
     );
     const report = evaluateProjectKnowledge(dir);
-    assert.ok(report.errors.some((item) => /hypothesis/i.test(item.message)));
+    const hypo = report.errors.filter((item) => /hypothesis/i.test(item.message));
+    assert.equal(hypo.length, 1, hypo.map((item) => item.message).join("\n"));
+    assert.match(hypo[0]!.message, /must be provisional/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -377,6 +379,93 @@ test("decision records are not typed-note errors", () => {
     assert.equal(report.errors.length, 0);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("malformed note YAML is a per-note error instead of a crash", () => {
+  const dir = tempProject();
+  try {
+    writeNote(
+      dir,
+      "broken.md",
+      `---
+kind: [
+---
+
+# Broken
+
+## Claim
+
+This note has malformed frontmatter and must not abort validation.
+
+## Evidence
+
+- Placeholder evidence so the body is not empty of headings.
+
+## Reuse guidance
+
+Do not reuse this note.
+
+## Refresh triggers
+
+- Frontmatter is repaired.
+`,
+      "broken",
+    );
+    const report = evaluateProjectKnowledge(dir);
+    assert.equal(report.notes[0]?.classification, "invalid-typed");
+    assert.ok(report.errors.some((item) => /not valid YAML/i.test(item.message)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("an ignored relevant path is unknown rather than fresh", () => {
+  const dir = tempProject();
+  try {
+    execFileSync("git", ["init"], { cwd: dir, stdio: "ignore" });
+    execFileSync("git", ["config", "user.email", "eval@example.com"], { cwd: dir, stdio: "ignore" });
+    execFileSync("git", ["config", "user.name", "Eval"], { cwd: dir, stdio: "ignore" });
+    execFileSync("git", ["add", "."], { cwd: dir, stdio: "ignore" });
+    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "base"], { cwd: dir, stdio: "ignore" });
+    const sha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: dir, encoding: "utf8" }).trim();
+    writeNote(
+      dir,
+      "webhooks.md",
+      TYPED.replace("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sha).replace("src/webhooks.js", "src/secret.js"),
+    );
+    execFileSync("git", ["add", ".methodrail"], { cwd: dir, stdio: "ignore" });
+    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "note"], { cwd: dir, stdio: "ignore" });
+    const note = loadKnowledgeNotes(dir)[0];
+    assert.ok(note);
+    writeFileSync(join(dir, ".gitignore"), "src/secret.js\n");
+    writeFileSync(join(dir, "src", "secret.js"), "module.exports = { secret: true }\n");
+    const freshness = evaluateFreshness(note, dir);
+    assert.equal(freshness.state, "unknown");
+    assert.match(freshness.evidence, /ignored/i);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("knowledge loading does not follow escaping or cyclic directory symlinks", () => {
+  const dir = tempProject();
+  const outside = mkdtempSync(join(tmpdir(), "methodrail-knowledge-outside-"));
+  try {
+    writeFileSync(join(outside, "secret.md"), "# Secret\n\nShould not be loaded.\n");
+    symlinkSync(join(outside, "secret.md"), join(dir, ".methodrail", "knowledge", "escape.md"));
+    mkdirSync(join(dir, ".methodrail", "knowledge", "loop"));
+    symlinkSync(join(dir, ".methodrail", "knowledge"), join(dir, ".methodrail", "knowledge", "loop", "back"));
+    writeNote(dir, "webhooks.md", TYPED);
+    const notes = loadKnowledgeNotes(dir);
+    assert.equal(
+      notes.some((note) => note.relativePath.endsWith("escape.md") || /Secret/.test(note.source)),
+      false,
+    );
+    assert.ok(notes.some((note) => note.relativePath.endsWith("webhooks.md")));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
   }
 });
 

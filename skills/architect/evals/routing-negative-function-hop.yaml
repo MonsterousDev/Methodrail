@@ -1,0 +1,9 @@
+id: skill.architect.routing-negative-function-hop
+kind: routing
+skill: architect
+description: "A local function extraction is not an architecture decision."
+input:
+  prompt: "Extract this helper so two functions can share it. No public API change."
+expected:
+  skills:
+    forbidden: [architect]

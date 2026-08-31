@@ -32,7 +32,7 @@ inspect repository
 ↓
 resolve harness placement (directory vs linked external storage)
 ↓
-establish high-value project knowledge
+index existing high-value project knowledge
 ↓
 determine whether the project has a meaningful executable surface
         │
@@ -47,9 +47,9 @@ determine whether the project has a meaningful executable surface
 4. Resolve only remaining choices the repository cannot answer. Ask a focused question only when the answer materially changes the generated files.
 5. Plan proportionally using [information ROI](references/information-roi.md) and [optional artifacts](references/optional-artifacts.md):
    - always consider `.methodrail/PROJECT.md` as a short index pointing at canonical sources (`AGENTS.md`, ADRs, runbooks) rather than copying them;
-   - add knowledge, control, or a project-local skill only when it removes real recurring uncertainty;
+   - index existing knowledge; add control or a project-local skill only when it removes real recurring uncertainty; do not create files under `.methodrail/knowledge/`;
    - in a monorepo, document shared conventions once and add package-specific detail only where commands or constraints differ.
-6. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md). For an in-repository harness, invoke `create-verification-skill` when the surface warrants it. For a linked external harness, record the verified procedure under `.methodrail/control/` instead; do not claim a host-native skill outside the host's discovery root. If the surface is not meaningful, document static verification and do not invent runtime infrastructure.
+6. Investigate control/verification explicitly when the project has a runnable surface. Load [control investigation](references/control-investigation.md). For an in-repository harness, invoke `create-verification-skill` when the surface warrants it. If the checkout does not build or start, report that and skip verification-skill generation; do not repair product code. For a linked external harness, record the verified procedure under `.methodrail/control/` instead; do not claim a host-native skill outside the host's discovery root. If the surface is not meaningful, document static verification and do not invent runtime infrastructure.
 7. Preview conflicts. Never overwrite existing instructions or curated prose.
 8. Generate or merge files through the git root's canonical `.methodrail/` path using [merge semantics](references/merge-semantics.md). Prefer templates in `templates/project/` as skeletons to fill from evidence, not as files to copy blindly. The link routes external writes to sibling storage.
 9. Install exactly one thin, supported integration described in [integrations](references/integrations.md). A linked external harness relies on the globally installed Methodrail integration plus the canonical repository-root link; do not edit tracked instruction files merely to advertise it. If a supported integration already exists, update only the Methodrail-owned pointer or leave it intact.
@@ -61,13 +61,13 @@ determine whether the project has a meaningful executable surface
 - `.methodrail/PROJECT.md` is a concise index, not the entire knowledge base.
 - Keep PROJECT.md pointer-oriented: links, durable facts, and paths. Do not clone the README or generate a giant summary.
 - For linked external placement, use the bundled deterministic script from [harness location](references/harness-location.md). The only repository entry is the locally ignored `.methodrail` link; all harness contents live outside the repository, and `HARNESS.yaml` owns the binding.
-- Recognize typed notes and legacy untyped notes. Validate that typed notes are indexed. Report potentially stale notes. Do not rewrite them automatically. Do not create typed notes during init.
+- Recognize typed notes and legacy untyped notes. Validate that typed notes are indexed. Report potentially stale notes. Do not rewrite them automatically. Do not create files under `.methodrail/knowledge/` during init (typed or untyped).
 - Record commands the repository already supports; do not invent infrastructure.
 - Preserve existing `AGENTS.md`, `CLAUDE.md`, Cursor rules, copilot instructions, and local skills. Repository-specific instructions outrank generic Methodrail assumptions.
 - Do not copy generic Methodrail doctrine into the project.
 - Do not create a skill for every command.
 - Do not install multiple integrations “for compatibility.”
-- Distinguish documentation/control drift from actual product regression.
+- Distinguish documentation/control drift from actual product regression. Do not repair product code during init.
 - Write generated `AGENTS.md`, `CLAUDE.md`, Cursor rules, project verification skills, and `.methodrail/PROJECT.md` as indexes and pointers. Do not copy canonical docs into them.
 
 ## Progressive disclosure

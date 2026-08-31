@@ -57,7 +57,7 @@ One synthesized artifact. One short synthesis note: base, grafts, rejections, dr
 
 ```text
 Different slices              → swarm
-Adversarial review            → interrogate
+Adversarial review            → name `interrogate` and wait
 Must finish with              → verify-change
 ```
 

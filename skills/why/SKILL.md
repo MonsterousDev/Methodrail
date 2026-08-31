@@ -67,9 +67,13 @@ git log --oneline -20 -- <file>
 
 Pull PR bodies via `gh` when the project uses GitHub and `gh` is available. Capture seed context for investigators.
 
+## Cheap path
+
+A narrow question does not require every category. If one file or symbol, recent `git log` / `git blame`, or an identified ADR or decision record can answer it with citations, stop there. Fan out the remaining categories only when that search is insufficient, contradictory, or the question is broader than that local record. Do not invent intent from current code; the cheap path is still historical evidence.
+
 ## Step 3. Search evidence categories (default posture)
 
-Historical context spreads across seven categories. You cannot predict from the question alone which one holds the answer. Enumerate what this environment can actually search, map each source to a category, query available categories in parallel, then synthesize. Null results are first-class evidence. See [host capabilities](../../references/host-capabilities.md).
+When the cheap path is not enough, historical context spreads across seven categories. You cannot predict from the remaining question alone which one holds the answer. Enumerate what this environment can actually search, map each source to a category, query available categories in parallel, then synthesize. Null results are first-class evidence. See [host capabilities](../../references/host-capabilities.md).
 
 Categories:
 

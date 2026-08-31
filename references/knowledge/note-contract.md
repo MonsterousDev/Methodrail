@@ -26,7 +26,7 @@ Keep the note at or below 80 lines and 4000 characters. Index it from `.methodra
 
 ## Legacy notes
 
-Markdown under `.methodrail/knowledge/` without typed frontmatter remains loadable as **legacy**, with reduced confidence. Initialization may propose migration. Never silently rewrite a legacy note.
+Markdown under `.methodrail/knowledge/` without typed frontmatter remains loadable as **legacy**, with reduced confidence. Initialization may propose migration. Never silently rewrite a legacy note into typed form, and do not create new untyped notes. A living glossary that already exists at `knowledge/domain.md` may be updated in place by `domain-modeling`.
 
 ## Freshness
 

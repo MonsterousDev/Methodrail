@@ -11,6 +11,6 @@ Read as needed:
 - [freshness](knowledge/freshness.md) — how code-derived claims go stale
 - [provenance](knowledge/provenance.md) — how we know a claim
 
-`.methodrail/PROJECT.md` is a short index. Deeper notes belong in `.methodrail/knowledge/` only when they earn their keep.
+`.methodrail/PROJECT.md` is a short index. Deeper notes belong in `.methodrail/knowledge/` only when they earn their keep. New files there are typed notes after approval, or decision records. Do not add untyped notes.
 
 Do not copy manifests, directory listings, or generic framework documentation into project knowledge.

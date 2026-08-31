@@ -14,5 +14,6 @@ expected:
   behaviors:
     - separate current behavior from historical motivation
     - cite historical evidence or say unknown
+    - use a cheap local-history path for a narrow question
     - treat the user's suggested reason as a hypothesis
   baseline_failure: confirming a performance origin story from current code shape

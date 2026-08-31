@@ -1,28 +1,11 @@
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { join, relative, resolve, sep } from "node:path";
+import { existsSync, statSync } from "node:fs";
+import { join, resolve, sep } from "node:path";
+import { findMethodrailDirs } from "../fs-walk.js";
 import { inspectHarnessBinding } from "../harness.js";
 import { evaluateFreshness } from "./freshness.js";
 import { knowledgeIndexEntries, loadKnowledgeNotes, loadProjectMd } from "./load.js";
 import { validateNote } from "./validate.js";
 import type { KnowledgeDiagnostic, KnowledgeReport } from "./types.js";
-
-function walkMethodrailDirs(root: string): string[] {
-  const found: string[] = [];
-  const visit = (dir: string): void => {
-    if (!existsSync(dir)) return;
-    for (const entry of readdirSync(dir)) {
-      if ([".git", "dist", "node_modules"].includes(entry)) continue;
-      const path = join(dir, entry);
-      const rel = relative(root, path).split(sep).join("/");
-      if (rel.startsWith("evals/runners/artifacts/")) continue;
-      if (!statSync(path).isDirectory()) continue;
-      if (entry === ".methodrail") found.push(path);
-      else visit(path);
-    }
-  };
-  visit(root);
-  return found;
-}
 
 export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
   const notes = loadKnowledgeNotes(projectRoot);
@@ -84,7 +67,7 @@ export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
 }
 
 export function evaluateRepositoryKnowledge(repoRoot: string): KnowledgeReport {
-  const dirs = walkMethodrailDirs(repoRoot);
+  const dirs = findMethodrailDirs(repoRoot);
   const notes = [];
   const errors: KnowledgeDiagnostic[] = [];
   const warnings: KnowledgeDiagnostic[] = [];

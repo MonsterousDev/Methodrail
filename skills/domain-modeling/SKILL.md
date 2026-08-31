@@ -12,10 +12,10 @@ Actively build and sharpen the project's domain model. This is the *active* disc
 Do not force a filename. Prefer the project's established source of truth, in this order:
 
 1. An existing canonical glossary (`CONTEXT.md`, `CONTEXT-MAP.md`, `docs/domain.md`, or another project-native vocabulary the repository already uses)
-2. `.methodrail/knowledge/domain.md` when Methodrail is the knowledge home and no project glossary exists
-3. Create lazily: only when the first term is actually resolved
+2. Existing `.methodrail/knowledge/domain.md` only when that file is already the glossary
+3. Create lazily as a project-native file (`docs/domain.md` or `CONTEXT.md`) when the first term is actually resolved. Do not create a new untyped file under `.methodrail/knowledge/`.
 
-If a `CONTEXT-MAP.md` (or equivalent) exists, the repo has multiple contexts. Follow that map. System-wide decisions may live in `docs/adr/` or `.methodrail/knowledge/decisions/`; context-specific decisions stay with that context.
+If a `CONTEXT-MAP.md` (or equivalent) exists, the repo has multiple contexts. Follow that map. System-wide decisions may live in `docs/adr/` or `.methodrail/knowledge/decisions/`; context-specific decisions stay with that context. Durable typed notes still go through `reflect` after approval.
 
 `PROJECT.md` should point at whichever glossary is canonical. Do not copy the glossary into Methodrail-only duplicates.
 

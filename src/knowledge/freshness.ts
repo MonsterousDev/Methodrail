@@ -30,6 +30,13 @@ export function evaluateFreshness(note: KnowledgeNote, projectRoot: string): Fre
   if (!resolved) {
     return { state: "unknown", evidence: `Git revision ${validated_at} is not available in this repository` };
   }
+  const ignored = relevant_paths.filter((path) => git(projectRoot, ["check-ignore", "-q", "--", path]) !== null);
+  if (ignored.length > 0) {
+    return {
+      state: "unknown",
+      evidence: `Relevant path is ignored by Git, so freshness cannot be proven: ${ignored.join(", ")}`,
+    };
+  }
   const changedTracked = git(projectRoot, ["diff", "--name-only", validated_at, "--", ...relevant_paths]);
   const changedUntracked = git(projectRoot, ["ls-files", "--others", "--exclude-standard", "--", ...relevant_paths]);
   if (changedTracked === null || changedUntracked === null) {

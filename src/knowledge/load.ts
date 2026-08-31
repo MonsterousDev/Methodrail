@@ -1,30 +1,27 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { basename, join, relative, sep } from "node:path";
 import { parse } from "yaml";
-import type { KnowledgeNote, NoteClassification, NoteFrontmatter, NoteKind, NoteStatus } from "./types.js";
+import { walkFiles } from "../fs-walk.js";
+import type { KnowledgeNote, NoteClassification, NoteKind, NoteStatus } from "./types.js";
 import { NOTE_KINDS, NOTE_STATUSES } from "./types.js";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-function walkMarkdown(root: string): string[] {
-  if (!existsSync(root)) return [];
-  const files: string[] = [];
-  for (const entry of readdirSync(root)) {
-    if ([".git", "node_modules", "dist"].includes(entry)) continue;
-    const path = join(root, entry);
-    const stat = statSync(path);
-    if (stat.isDirectory()) files.push(...walkMarkdown(path));
-    else if (entry.endsWith(".md")) files.push(path);
-  }
-  return files;
-}
-
-export function parseFrontmatter(source: string): { data?: Record<string, unknown>; body: string } {
+export function parseFrontmatter(source: string): {
+  data?: Record<string, unknown>;
+  body: string;
+  parseError?: string;
+} {
   const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(source);
   if (!match?.[1]) return { body: source };
-  const parsed: unknown = parse(match[1]);
+  let parsed: unknown;
+  try {
+    parsed = parse(match[1]);
+  } catch (error) {
+    return { body: source, parseError: error instanceof Error ? error.message : String(error) };
+  }
   if (!isRecord(parsed)) return { body: source };
   return { data: parsed, body: source.slice(match[0].length) };
 }
@@ -64,8 +61,22 @@ function asPaths(value: unknown): string[] | undefined {
 export function parseNote(absolutePath: string, source: string, projectRoot: string): KnowledgeNote {
   const relativePath = relative(projectRoot, absolutePath).split(sep).join("/");
   const underDecisions = relativePath.includes("/knowledge/decisions/") || relativePath.endsWith("/knowledge/decisions");
-  const { data, body } = parseFrontmatter(source);
+  const { data, body, parseError } = parseFrontmatter(source);
   const title = headingTitle(body, basename(absolutePath, ".md"));
+  if (parseError) {
+    return {
+      absolutePath,
+      relativePath,
+      classification: "invalid-typed",
+      title,
+      claim: "",
+      evidence: "",
+      reuseGuidance: "",
+      refreshTriggers: "",
+      source,
+      parseError,
+    };
+  }
   const claim = section(body, "Claim");
   const evidence = section(body, "Evidence");
   const reuseGuidance = section(body, "Reuse guidance");
@@ -131,7 +142,9 @@ export function knowledgeRoot(projectRoot: string): string {
 
 export function loadKnowledgeNotes(projectRoot: string): KnowledgeNote[] {
   const root = knowledgeRoot(projectRoot);
-  return walkMarkdown(root).map((path) => parseNote(path, readFileSync(path, "utf8"), projectRoot));
+  return walkFiles(root, (path) => path.endsWith(".md")).map((path) =>
+    parseNote(path, readFileSync(path, "utf8"), projectRoot),
+  );
 }
 
 export function loadProjectMd(projectRoot: string): string | null {

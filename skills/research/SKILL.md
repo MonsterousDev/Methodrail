@@ -1,6 +1,6 @@
 ---
 name: research
-description: "Investigate a question against high-trust primary sources and capture cited findings. Use for external docs, specs, APIs, or first-party references. Do not use for current-codebase how, historical why, or live observe."
+description: "Investigate a question against high-trust primary sources and return cited findings in chat. Use for external docs, specs, APIs, or first-party references. Do not use for current-codebase how, historical why, or live observe. Do not write a file unless the user asks to persist."
 ---
 
 # Research
@@ -16,13 +16,13 @@ research = external/reference sources
 
 ## Method
 
-If the host supports a background or child agent, spin one up so this context can keep working. Otherwise do the research here. See [host capabilities](../../references/host-capabilities.md).
+If the question is narrow and one primary source is obvious, investigate it in this context. If the host supports a background or child agent, spin one up only when several sources compete, the search is broad, or this context cannot wait. The child returns findings here; it does not write a repository file. Otherwise do the research here. See [host capabilities](../../references/host-capabilities.md).
 
 1. Investigate the question against **primary sources** (official docs, source of the dependency, specs, first-party APIs), not a secondary write-up. Follow every claim back to the source that owns it.
-2. Write the findings to a single Markdown file, citing each claim's source.
-3. Save it where the repo already keeps such notes. If there is none, put it in `.methodrail/knowledge/` or another sensible project location and say where.
+2. Return the cited findings in this conversation.
+3. Persist a Markdown file only when the user asks to save the findings. Use the project's existing notes location (`docs/`, `specs/`, `.scratch/`). If none exists, ask where to put it. Even then, do not write `.methodrail/knowledge/`.
 
-Findings may become a knowledge candidate. Do not promote them to standing rules automatically. See [knowledge lifecycle](../../references/knowledge/lifecycle.md).
+Findings may become a knowledge candidate in the answer. Do not promote them to standing rules. Typed notes go through `reflect` after approval. See [knowledge lifecycle](../../references/knowledge/lifecycle.md).
 
 ## Neighbors
 

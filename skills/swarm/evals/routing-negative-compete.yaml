@@ -1,0 +1,9 @@
+id: skill.swarm.routing-negative-compete
+kind: routing
+skill: swarm
+description: "Competing on one artifact is arena, not swarm."
+input:
+  prompt: "Race three identical attempts at the billing ledger and pick the best."
+expected:
+  skills:
+    forbidden: [swarm]

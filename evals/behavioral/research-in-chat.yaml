@@ -1,0 +1,18 @@
+id: behavioral.research.in-chat-default
+kind: behavioral
+skill: research
+description: Research returns cited findings in chat and does not write a repository file unless asked.
+input:
+  prompt: "What does the official OAuth 2.1 spec say about refresh token rotation?"
+conditions:
+  baseline: native agent without research
+  treatment: native agent with research loaded
+expected:
+  skills:
+    required: [research]
+  behaviors:
+    - cite primary sources in the answer
+    - return findings in chat
+    - use this context for a narrow one-source question
+    - do not write a repository Markdown file unless asked
+  baseline_failure: answering from secondary blogs or writing a notes file unprompted

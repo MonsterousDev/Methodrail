@@ -8,6 +8,7 @@ Upstream is explicit-only and writes a temp-dir travel document. Methodrail keep
 
 Methodrail changes:
 - integrated with references/context-management.md continue/clear/isolate/handoff/compact
+- handoff is a travel document, not durable project knowledge
 - reference `.methodrail` artifacts instead of copying them
 - Methodrail suggested-skills wording
 - added Methodrail routing and behavioral evals

@@ -29,7 +29,16 @@ Promote knowledge when it is:
 - a non-obvious invariant
 - a consequential decision
 
-Classify it using the [knowledge model](model.md) before promoting. A hypothesis can be recorded as a hypothesis; it must not be filed as a fact. Reflect proposes a typed note and waits for explicit approval. Initialization does not create typed notes.
+Classify it using the [knowledge model](model.md) before promoting. A hypothesis can be recorded as a hypothesis; it must not be filed as a fact. Reflect proposes a typed note and waits for explicit approval.
+
+## Who may write `.methodrail/knowledge/`
+
+- **Typed notes:** only `reflect`, after explicit human approval, using the [note contract](note-contract.md).
+- **Decision records:** `.methodrail/knowledge/decisions/` when that is the project's ADR home.
+- **Init:** recognize and index existing notes. Do not create files there (typed or untyped). Report useful missing knowledge as a candidate.
+- **Other skills:** do not create untyped files there. Living glossaries belong in project-native docs, or in an already-existing `knowledge/domain.md`. Specs, research notes, and scratch writing stay in `docs/`, `specs/`, or `.scratch/`.
+
+Backward-compatible **reading** of legacy untyped notes is required. New untyped writes are not.
 
 ## What not to persist
 

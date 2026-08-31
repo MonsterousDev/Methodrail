@@ -42,7 +42,7 @@ Compare viable candidates on:
 
 ## Phase C: Agree (opt-in)
 
-Default: proceed to implementation with the synthesized design. Opt in to a checkpoint when the invoker asks to stop and show the sketch first. For adversarial pressure before implementing, run `interrogate` on the sketch.
+Default: proceed to implementation with the synthesized design. Opt in to a checkpoint when the invoker asks to stop and show the sketch first. For adversarial pressure before implementing, name `interrogate` and wait for the user to invoke it.
 
 ## Phase D: Implement against the sketch
 
@@ -63,8 +63,8 @@ Caller's usage written first, type sketch derived from it. Rationale shaped per 
 ```text
 Usually follows:              how, domain-modeling, develop (uncertain design)
 Often produces:               decision; rationale
-Escalate to:                  prototype, arena, interrogate
-Avoid combining automatically with: develop restart, tdd
+Escalate to:                  prototype, arena
+Avoid combining automatically with: develop restart, tdd, interrogate
 ```
 
 ```text
@@ -73,9 +73,9 @@ Historical rationale          → why
 Domain vocabulary             → domain-modeling / existing glossary
 Empirical claim               → prototype
 Competing sketches            → arena
-Adversarial pressure          → interrogate (explicit)
+Adversarial pressure          → name `interrogate` and wait
 ```
 
 Use existing ADRs, domain vocabulary, and current implementation. Do not invent architecture from scratch. Must not restart `/develop`.
 
-Complexity alone is not a reason to invoke this skill.
+Complexity alone is not a reason to invoke this skill. Crossing a function boundary is not by itself a reason.

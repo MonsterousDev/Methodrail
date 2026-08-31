@@ -12,6 +12,7 @@ expected:
     required: [domain-modeling]
   behaviors:
     - challenge overloaded terms against the glossary
-    - record canonical terms and rejected synonyms
+    - record canonical terms and rejected synonyms in the existing glossary or a project-native file
+    - not create a new untyped file under .methodrail/knowledge/
     - stress-test with a concrete edge-case scenario
   baseline_failure: treating organization and account as the same concept and coding immediately

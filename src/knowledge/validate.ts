@@ -54,6 +54,15 @@ export function validateNote(
 
   if (note.classification === "decision") return diagnostics;
 
+  if (note.parseError) {
+    diagnostics.push({
+      level: "error",
+      path,
+      message: `Note frontmatter is not valid YAML: ${note.parseError}`,
+    });
+    return diagnostics;
+  }
+
   if (note.classification === "legacy") {
     diagnostics.push({
       level: "warning",
@@ -91,9 +100,6 @@ export function validateNote(
 
   if (fm.kind === "hypothesis" && fm.status !== "provisional") {
     diagnostics.push({ level: "error", path, message: "A hypothesis must be provisional" });
-  }
-  if (fm.status === "verified" && fm.kind === "hypothesis") {
-    diagnostics.push({ level: "error", path, message: "A verified hypothesis is not allowed" });
   }
   if (!meaningful(note.claim)) {
     diagnostics.push({ level: "error", path, message: "Claim must be present and non-empty" });

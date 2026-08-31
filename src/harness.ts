@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
-import { join, relative, resolve, sep } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { parseLinkedHarnessManifest } from "../skills/methodrail-init/scripts/harness-manifest.mjs";
 
 export const HARNESS_MANIFEST = "HARNESS.yaml";
@@ -30,12 +30,35 @@ function inside(parent: string, child: string): boolean {
   return child === parent || child.startsWith(parent + sep);
 }
 
-function gitSucceeds(repositoryRoot: string, args: string[]): boolean {
+function gitCommand(repositoryRoot: string, args: string[]) {
   return spawnSync("git", args, {
     cwd: repositoryRoot,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
-  }).status === 0;
+  });
+}
+
+function gitSucceeds(repositoryRoot: string, args: string[]): boolean {
+  return gitCommand(repositoryRoot, args).status === 0;
+}
+
+function localExcludeIgnoresMethodrail(repositoryRoot: string): { ignored: boolean; source: string } {
+  const result = gitCommand(repositoryRoot, ["check-ignore", "-v", "--", ".methodrail"]);
+  if (result.status !== 0) return { ignored: false, source: "" };
+  const line = (result.stdout ?? "").trim().split(/\r?\n/).pop() ?? "";
+  const beforeTab = line.split("\t")[0] ?? "";
+  const match = /^(.*):(\d+):(.*)$/.exec(beforeTab);
+  const source = match?.[1] ?? "";
+  if (!source) return { ignored: false, source: "" };
+  const exclude = join(repositoryRoot, ".git", "info", "exclude");
+  const resolvedSource = isAbsolute(source) ? resolve(source) : resolve(repositoryRoot, source);
+  let matchesExclude = false;
+  try {
+    matchesExclude = realpathSync(resolvedSource) === realpathSync(exclude);
+  } catch {
+    matchesExclude = resolve(resolvedSource) === resolve(exclude);
+  }
+  return { ignored: matchesExclude, source };
 }
 
 export function inspectHarnessBinding(repositoryRoot: string): HarnessBindingResult {
@@ -136,11 +159,14 @@ export function inspectHarnessBinding(repositoryRoot: string): HarnessBindingRes
       message: "Linked external .methodrail must not be tracked by Git",
     });
   }
-  if (!gitSucceeds(repository, ["check-ignore", "-q", ".methodrail"])) {
+  const ignore = localExcludeIgnoresMethodrail(repository);
+  if (!ignore.ignored) {
     diagnostics.push({
       level: "error",
       path: logicalHarnessRoot,
-      message: "Linked external .methodrail must be ignored through Git's local exclude file",
+      message: ignore.source
+        ? `Linked external .methodrail must be ignored through Git's local exclude file (.git/info/exclude), not ${ignore.source}`
+        : "Linked external .methodrail must be ignored through Git's local exclude file (.git/info/exclude)",
     });
   }
 

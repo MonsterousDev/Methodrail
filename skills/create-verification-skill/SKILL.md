@@ -21,7 +21,7 @@ Answer these from the codebase and only ask the user what you cannot observe:
 - **Isolate:** can two instances run side by side? If not, say so: refusing to double-drive a shared instance beats corrupting the user's session.
 - **Reset / stop:** how is state restored and the process torn down?
 
-If the checkout doesn't build or start as-is, fix that first (or report it precisely) before generating.
+If the checkout doesn't build or start as-is, report it precisely and stop. Do not repair product code from this skill. Under `methodrail-init`, that is a blocker, not a license to edit the app.
 
 If there is no meaningful executable surface (pure library, docs-only, generated bindings), do **not** invent runtime infrastructure. Document appropriate static verification instead and stop.
 

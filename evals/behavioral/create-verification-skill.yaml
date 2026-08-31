@@ -14,4 +14,5 @@ expected:
     - interview the repository before the user
     - discover launch, readiness, drive, evidence, reset, and stop from the repo
     - ask only for what cannot be observed
+    - report a broken checkout and stop; do not repair product code
   baseline_failure: asking the user for package scripts and README quickstart facts

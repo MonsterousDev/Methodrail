@@ -187,6 +187,44 @@ repository:
 `,
 };
 
+test("linked harness ignored only through .gitignore is not sufficient", (t) => {
+  const item = fixture();
+  t.after(() => rmSync(item.base, { recursive: true, force: true }));
+  const created = create(item.repository, item.storage);
+  writeFileSync(created.exclude!, "");
+  writeFileSync(join(item.repository, ".gitignore"), "/.methodrail\n");
+  const binding = inspectHarnessBinding(item.repository);
+  assert.equal(binding.binding, undefined);
+  assert.ok(
+    binding.diagnostics.some((entry) => /info\/exclude/i.test(entry.message) && /gitignore/i.test(entry.message)),
+    binding.diagnostics.map((entry) => entry.message).join("\n"),
+  );
+});
+
+test("duplicate HARNESS.yaml mapping keys are rejected", () => {
+  assert.throws(
+    () =>
+      parseLinkedHarnessManifest(`schema_version: 1
+placement: linked-external
+repository:
+  path: "../../my-app"
+repository:
+  path: "../../other-app"
+`),
+    /Duplicate YAML key 'repository'/,
+  );
+  assert.throws(
+    () =>
+      parseLinkedHarnessManifest(`schema_version: 1
+placement: linked-external
+repository:
+  path: "../../my-app"
+  path: "../../other-app"
+`),
+    /Duplicate YAML key 'path'/,
+  );
+});
+
 test("create and inspect share one parser that reads repository.path", () => {
   for (const [name, source] of Object.entries(MANIFESTS)) {
     const yamlValue = parseYaml(source) as { schema_version: unknown; repository?: { path?: unknown } };

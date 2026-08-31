@@ -7,4 +7,5 @@ License: MIT (Copyright (c) 2026 Matt Pocock)
 Methodrail changes:
 - distinguished from how / why / observe
 - background agent optional per host capabilities
-- findings may become knowledge candidates, not automatic rules
+- findings return in chat by default; persist only when the user asks, never to `.methodrail/knowledge/`
+- cheap path: one obvious primary source stays in this context; spawn a child only for broad searches

@@ -9,7 +9,7 @@ Canonical Methodrail surface. One owner per capability. Provenance is metadata, 
 | Feature delivery | `develop` | Methodrail-native | explicit | `grill-with-docs`, `domain-modeling`, `wayfinder`, `architect`, `prototype`, `tdd`, `code-review`, `verify-change`, `blast-radius` | humans |
 | Failure diagnosis and fix | `debug` | Methodrail-native | explicit | `diagnosing-bugs`, `observe`, `runtime-forensics`, `trace-forensics`, `performance`, `hillclimb`, `tdd`, `verify-change` | humans |
 | Behavior-preserving restructure | `refactor` | Methodrail-native | explicit | `how`, `codebase-design`, `improve-codebase-architecture`, `blast-radius`, `code-review`, `verify-change` | humans |
-| Change review workflow | `review` | Methodrail-native | explicit | `code-review`, `blast-radius`, `verify-change`, `interrogate` | humans |
+| Change review workflow | `review` | Methodrail-native | explicit | `code-review`, `blast-radius`, `verify-change` | humans |
 | Current codebase understanding | `how` | pstack | model-invoked | `observe` | `investigate`, `develop`, `refactor`, `architect` |
 | Historical motivation | `why` | pstack | model-invoked | — | `investigate`, `architect` |
 | Live behavior | `observe` | Methodrail-native | model-invoked | `runtime-forensics` | `investigate`, `debug`, `verify-change` |
@@ -19,7 +19,7 @@ Canonical Methodrail surface. One owner per capability. Provenance is metadata, 
 | Ambiguous requirements interview | `grill-with-docs` | Matt Pocock | explicit | `domain-modeling` | `develop`, `wayfinder` |
 | Large uncertain planning | `wayfinder` | Matt Pocock | explicit | `grill-with-docs`, `research`, `prototype` | `develop` |
 | Empirical experiment | `prototype` | Matt Pocock + Methodrail evidence semantics | explicit | — | `investigate`, `develop`, `wayfinder` |
-| Architecture decision exercise | `architect` | pstack | explicit | `how`, `why`, `arena`, `interrogate` | `develop` |
+| Architecture decision exercise | `architect` | pstack | explicit | `how`, `why`, `arena` | `develop` |
 | Deep-module design vocabulary | `codebase-design` | Matt Pocock | model-invoked | `architect` when a decision exists | `tdd`, `refactor`, `improve-codebase-architecture` |
 | Hot-spot deepening hunt | `improve-codebase-architecture` | Matt Pocock | explicit | `grill-with-docs`, `codebase-design` | `refactor` |
 | Test-first implementation | `tdd` | Matt Pocock | model-invoked | `codebase-design`, `verify-change` | `develop`, `debug` |
@@ -50,7 +50,8 @@ Typical artifacts, not process nesting: `how` → implementation understanding; 
 - **Debugging baseline:** `diagnosing-bugs` (Matt). Superpowers `systematic-debugging` and the previous Methodrail skill are not public. Superpowers tracing/pressure techniques are composed into `diagnosing-bugs`.
 - **TDD:** `tdd` (Matt). Superpowers TDD and pstack TDD are not public. Superpowers pressure material is a `tdd` reference. Verification-without-TDD remains `verify-change`.
 - **Prototype:** one public `prototype`. Matt's throwaway branches plus Methodrail evidence semantics. pstack prototype playbook is a reference, not a competing skill.
-- **Review:** `/review` is the workflow; `code-review` is the two-axis leaf. `interrogate` is explicit-only.
+- **Invocation:** `explicit` means host discovery is off (`disable-model-invocation: true`). Workflows and other parent skills may still load that skill when their procedure's conditions match. `interrogate` is suggest-only: name it and wait. Canonical rules: [SKILL-MECHANICS](../skills/writing-for-agents/SKILL-MECHANICS.md).
+- **Review:** `/review` is the workflow; `code-review` is the two-axis leaf. `interrogate` is suggest-only.
 - **Implement:** Matt `implement` is not shipped. `/develop` owns the lifecycle and reuses `tdd` / `code-review` / `verify-change`.
 - **Control planes:** `poteto-mode`, `ask-matt`, `using-superpowers`, and `setup-*` global routers are not imported.
 - **Skill authoring:** `writing-for-agents` subsumes the earlier `writing-great-skills` concept. Do not ship both.

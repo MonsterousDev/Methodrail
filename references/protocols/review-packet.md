@@ -12,7 +12,7 @@ Acceptance criteria
 Relevant design/decision
 Base revision
 Head revision
-Relevant diff
+Relevant diff (committed range plus staged, unstaged, and untracked)
 Implementation summary
 Verification evidence
 Known deviations

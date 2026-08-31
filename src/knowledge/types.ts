@@ -28,6 +28,7 @@ export interface KnowledgeNote {
   reuseGuidance: string;
   refreshTriggers: string;
   source: string;
+  parseError?: string;
 }
 
 export interface KnowledgeDiagnostic {

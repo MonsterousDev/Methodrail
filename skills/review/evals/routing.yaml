@@ -7,3 +7,4 @@ input:
 expected:
   skills:
     required: [review]
+    forbidden: [interrogate]

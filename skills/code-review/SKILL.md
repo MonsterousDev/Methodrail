@@ -5,14 +5,14 @@ description: "Two-axis review of the diff since a fixed point: Standards (repo c
 
 # Code review
 
-Two-axis review of the diff between `HEAD` and a fixed point:
+Two-axis review of the requested range since a fixed point, including uncommitted work when it exists:
 
 - **Standards**: does the code conform to this repo's documented coding standards?
 - **Spec**: does the code faithfully implement the originating issue, spec, or request?
 
 Both axes should run as **parallel sub-agents** when the host supports them, so they don't pollute each other's context. If not, run them sequentially as separate passes and keep the reports unmerged. See [host capabilities](../../references/host-capabilities.md).
 
-`/review` is the Methodrail workflow that may also invoke `blast-radius`, `verify-change`, and `interrogate`. This skill is the leaf that performs the two-axis inspection.
+`/review` is the Methodrail workflow that may also invoke `blast-radius` and `verify-change`, and may name `interrogate` and wait. This skill is the leaf that performs the two-axis inspection.
 
 Give reviewers a [review packet](../../references/protocols/review-packet.md) of deterministic facts when one exists.
 
@@ -22,7 +22,16 @@ Give reviewers a [review packet](../../references/protocols/review-packet.md) of
 
 Whatever the user said is the fixed point (commit SHA, branch, tag, `main`, `HEAD~5`). If they didn't specify one, ask.
 
-Capture `git diff <fixed-point>...HEAD` (three-dot, merge-base) and `git log <fixed-point>..HEAD --oneline`. Confirm the ref resolves and the diff is non-empty before spawning reviewers.
+Capture the **union** of committed and working-tree changes:
+
+1. Committed range: `git diff <fixed-point>...HEAD` (three-dot, merge-base) and `git log <fixed-point>..HEAD --oneline`
+2. Staged: `git diff --cached`
+3. Unstaged tracked: `git diff`
+4. Untracked (non-ignored): `git status --short` and `git ls-files --others --exclude-standard`. Read those files; they do not appear in `git diff`.
+
+Confirm the ref resolves. Spawn reviewers only when that union is non-empty. An empty committed range is not an empty review when staged, unstaged, or untracked files exist. If the union is empty, say so and stop.
+
+Do not treat `git diff <fixed-point>...HEAD` as the whole change. That command never includes the working tree.
 
 ### 2. Identify the spec source
 
@@ -74,7 +83,7 @@ Avoid combining automatically with: interrogate, arena
 ```text
 Consume                       → review packet, project constraints, verification evidence
 Need impact beyond the diff   → blast-radius
-Do not auto-invoke            → interrogate
+Name `interrogate` and wait   → interrogate
 ```
 
 Do not rerun unrelated exploration when verification evidence is already supplied.

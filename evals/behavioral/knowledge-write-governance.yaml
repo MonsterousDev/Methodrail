@@ -1,0 +1,15 @@
+id: behavioral.knowledge.write-governance
+kind: behavioral
+skill: methodrail-init
+description: Init, domain-modeling, research, and to-spec do not create new untyped files under .methodrail/knowledge/.
+input:
+  prompt: "Initialize Methodrail here, sharpen the domain glossary, and write a spec for the billing change."
+expected:
+  skills:
+    required: [methodrail-init]
+  behaviors:
+    - index existing knowledge rather than creating .methodrail/knowledge/ files
+    - write a new glossary to project-native docs if none exists
+    - publish the spec to tracker, docs/, specs/, or .scratch/
+    - not create untyped notes under .methodrail/knowledge/
+  baseline_failure: writing domain.md, architecture.md, or the spec into .methodrail/knowledge/

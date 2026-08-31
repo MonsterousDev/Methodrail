@@ -7,5 +7,6 @@ License: MIT (Copyright (c) 2026 Lauren Tan)
 Methodrail changes:
 - model-invoked so Methodrail workflows can compose it (pstack ships it explicit under poteto-mode)
 - removed unslop dependency
-- Methodrail evidence labeling; arena optional when host lacks parallel candidates
+- Methodrail evidence labeling; arena optional when the parent may edit and the host supports competing candidates
+- read-only parent uses existing checks or temp probes; no repository writes
 - added Methodrail behavioral evals

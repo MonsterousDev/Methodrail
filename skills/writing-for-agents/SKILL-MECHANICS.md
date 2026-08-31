@@ -6,28 +6,40 @@ Methodrail workflow skills are the lifecycle entrypoints. Do not create a compet
 
 ## Invocation
 
+`disable-model-invocation` controls **host discovery**, not whether an already-active skill may load another named skill.
+
+### Host discovery
+
 Two choices, trading the two loads:
 
-- A **model-invoked** skill keeps a `description`, so the agent can fire it autonomously, and other skills can reach it. You can still type its name: model-invocation always _includes_ user reach. The description is the skill's top-level context pointer, forced to stay loaded at all times. Mechanics: omit `disable-model-invocation`, and write a model-facing description carrying the trigger branches.
-- A **user-invoked** skill strips the description from the agent's autonomous reach: only the human typing its name can invoke it. Zero discovery load, but the human must remember it exists. Mechanics: set `disable-model-invocation: true`; the `description` becomes human-facing.
+- **Model-invoked** — omit `disable-model-invocation`. The host may load the skill from its `description` without the user naming it. Typing the name still works. The description is an always-loaded context pointer; write it for mixed-intent trigger branches.
+- **Explicit** — set `disable-model-invocation: true`. The host must not load the skill from mixed intent or from the description alone. The description is human-facing. Zero autonomous discovery load.
 
-Pick model-invocation only when the agent must reach the skill on its own, or another skill must. If it only ever fires by hand, or it is expensive, make it user-invoked.
+Pick model-invocation when mixed-intent discovery must reach the skill. If the skill is expensive, or should appear only after a human or an already-active parent named it, make it explicit.
 
 Methodrail already marks workflow entry skills and high-cost operators explicit. Do not silently flip those to model-invoked.
 
-Shared reference that two user-invoked skills both need can live in neither. Push it to a Methodrail `references/` file any skill can point at.
+### Parent composition
+
+An already-active skill loads a named skill when **its own procedure** says to and the procedure's conditions match. That is **workflow-callable**, not host discovery. `disable-model-invocation` does not mean "only a human typing the name may ever cause this skill to run."
+
+A human-started workflow may therefore load listed explicit skills on the path that justifies them: `/develop` → `wayfinder` / `architect` / `prototype`; `/methodrail-init` → `create-verification-skill`.
+
+**Suggest-only** is a stricter explicit skill: the active skill names it and waits for the user to invoke it. `interrogate` is suggest-only.
+
+Shared reference that two explicit skills both need can live in neither. Push it to a Methodrail `references/` file any skill can point at.
 
 ## Splitting by invocation
 
-Split off a model-invoked skill when you have a distinct leading word that should trigger it on its own, or another skill must reach it. You pay context load for the new always-loaded description, so that independent reach has to be worth it.
+Split off a model-invoked skill when you have a distinct leading word that should trigger it from mixed intent. You pay context load for the new always-loaded description, so that independent host discovery has to be worth it. Parent composition does not require flipping a skill to model-invoked.
 
 ## Router skills
 
-When user-invoked skills multiply past what a human can remember, a **router skill** names the others and when to reach for each. Methodrail's routers are the native workflow skills: `methodrail-init`, `investigate`, `develop`, `debug`, `refactor`, `review`.
+When explicit skills multiply past what a human can remember, a **router skill** names the others and when to reach for each. Methodrail's routers are the native workflow skills: `methodrail-init`, `investigate`, `develop`, `debug`, `refactor`, `review`.
 
 Do not add `ask-matt`, `poteto-mode`, or `using-superpowers`. Do not let `wayfinder` or `architect` become global routers.
 
-A router can hint at explicit skills. It must not auto-fire them.
+A router follows its procedure: load a listed skill when that procedure's conditions match, including explicit skills that are not suggest-only. Keep expensive explicit skills off the cheap path. Host discovery of those explicit skills stays off.
 
 ## Methodrail evals
 

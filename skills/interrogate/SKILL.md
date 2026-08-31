@@ -10,7 +10,7 @@ Spawn independent reviewers to adversarially review code changes. Each reviewer 
 
 The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
-Proceed only when the user explicitly names or invokes `interrogate`. A request to "review" or implement high-risk code is not sufficient. `/review` may suggest this skill; it must not invoke it automatically.
+Proceed only when the user explicitly names or invokes `interrogate`. A request to "review" or implement high-risk code is not sufficient. Other skills may name this skill; they must wait for that invocation.
 
 ## Step 1. Determine scope
 
@@ -73,7 +73,7 @@ Keep it expensive and conservative. Do not simulate reviewers with personas.
 ```text
 Receive                       → review packet with project context
 Must not                      → auto-apply patches
-Must not                      → auto-trigger from /review
+Must not                      → run because a parent named it
 ```
 
 Rigor 0–1 work must not invoke this skill.

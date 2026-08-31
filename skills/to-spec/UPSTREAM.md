@@ -6,5 +6,5 @@ License: MIT (Copyright (c) 2026 Matt Pocock)
 
 Methodrail changes:
 - no setup-matt-pocock-skills requirement
-- publish to existing tracker or project-local markdown
+- publish to existing tracker or project-local markdown (`docs/`, `specs/`, `.scratch/`), never `.methodrail/knowledge/`
 - distinct from grill-with-docs (this skill does not interview)

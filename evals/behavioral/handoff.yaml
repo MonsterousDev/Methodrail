@@ -14,6 +14,7 @@ expected:
   behaviors:
     - reference existing spec, ADR, commits, and diffs
     - carry only the live thread
+    - write to the OS temp directory unless asked for a project-local file
     - include next steps and relevant skills
     - do not duplicate durable artifacts
     - do not leak secrets

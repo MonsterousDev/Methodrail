@@ -1,0 +1,10 @@
+id: skill.arena.routing-positive-race
+kind: routing
+skill: arena
+description: "Racing identical briefs for one artifact activates arena, not swarm."
+input:
+  prompt: "Race three identical attempts at the billing ledger and pick the best."
+expected:
+  skills:
+    required: [arena]
+    forbidden: [swarm]

@@ -7,4 +7,5 @@ License: MIT (Copyright (c) 2026 Lauren Tan)
 Methodrail changes:
 - generated skill lives in the project's established native location (.agents/skills/verify-<app>/ preferred)
 - methodrail-init invokes this when the project has a meaningful executable surface
+- does not repair product code; a broken checkout is reported and blocks generation
 - CONTROL.md may still be generated for non-obvious coordination

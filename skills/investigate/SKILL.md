@@ -60,7 +60,7 @@ Do not call source reading observed behavior.
 
 ## Constraints
 
-- Read-only unless the user explicitly authorizes a disposable prototype.
+- Read-only unless the user explicitly authorizes a disposable prototype. `research` findings stay in chat unless the user asks to persist them. `blast-radius` uses existing checks or temp probes, not repository writes.
 - Ask only for information unavailable from the repository or environment.
 - Do not turn an investigation into implementation.
 - See [observation record](../../references/protocols/observation-record.md) and [skill composition](../../references/skill-composition.md).

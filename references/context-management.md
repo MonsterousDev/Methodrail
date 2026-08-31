@@ -24,9 +24,9 @@ Use a fresh child context for bounded work. Give the child a [task packet](proto
 
 ## Handoff
 
-Use explicit durable state when work moves between sessions or agents. The operational skill is `handoff`. Write what the next agent must know: intent, known facts, open frontier, evidence, and next action. Reference specs, ADRs, issues, commits, and diffs. Do not duplicate them. Redact secrets.
+Use a travel document when work moves between sessions or agents. The operational skill is `handoff`. It is continuity for the next agent, not a durable project record. Write what the next agent must know: intent, known facts, open frontier, evidence, and next action. Reference specs, ADRs, issues, commits, and diffs. Do not duplicate them. Redact secrets.
 
-`handoff` is explicit-only.
+`handoff` is explicit-only. Save it outside the workspace unless the user asked for a project-local file. Facts that must survive beyond that travel document belong in the project harness, an evidence/decision record, or a task/review packet.
 
 ## Compact
 

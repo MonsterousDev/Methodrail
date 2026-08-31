@@ -1,9 +1,10 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parse } from "yaml";
 import { REQUIRED_COMPOSITION_FIXTURES } from "./eval/load.js";
 import { hostProjections, readCanonicalInvariant } from "./family-invariant.js";
+import { walkFiles } from "./fs-walk.js";
 import { evaluateRepositoryKnowledge } from "./knowledge/report.js";
 import { evaluateProjectMd } from "./project-md.js";
 
@@ -61,7 +62,18 @@ const REQUIRED_SKILLS = new Set([
   "writing-for-agents",
   "handoff",
 ]);
-const EXPLICIT_SKILLS = new Set([
+export const WORKFLOW_SKILLS = [
+  "methodrail-init",
+  "investigate",
+  "develop",
+  "debug",
+  "refactor",
+  "review",
+] as const;
+
+export const SUGGEST_ONLY_SKILLS = ["interrogate"] as const;
+
+export const EXPLICIT_SKILLS = new Set([
   "methodrail-init",
   "investigate",
   "develop",
@@ -158,17 +170,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function walk(root: string, predicate: (path: string) => boolean): string[] {
-  if (!existsSync(root)) return [];
-
-  const files: string[] = [];
-  for (const entry of readdirSync(root)) {
-    if ([".git", "dist", "node_modules"].includes(entry)) continue;
-    const path = join(root, entry);
-    const stat = statSync(path);
-    if (stat.isDirectory()) files.push(...walk(path, predicate));
-    else if (predicate(path)) files.push(path);
-  }
-  return files;
+  return walkFiles(root, predicate);
 }
 
 function issue(path: string, message: string): ValidationIssue {

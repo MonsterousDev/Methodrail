@@ -50,6 +50,9 @@ function parseMapping(rows, index, indent) {
     if (typeof key !== "string" || key.length === 0) {
       throw new Error(`Invalid YAML key at line ${row.line}`);
     }
+    if (Object.hasOwn(value, key)) {
+      throw new Error(`Duplicate YAML key '${key}' at line ${row.line}`);
+    }
     const rest = match[2];
     index += 1;
     if (rest === "") {

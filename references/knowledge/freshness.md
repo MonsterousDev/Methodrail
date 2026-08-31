@@ -24,7 +24,7 @@ reuse or selectively refresh
 2. If `validated_at` is a 40-character Git SHA, inspect git history or diffs for those paths since that revision.
 3. If nothing relevant changed, reuse the note and say so (`fresh`).
 4. If relevant sources changed, re-validate the claim against current evidence (`review-required`).
-5. If provenance is missing, `unversioned:`, or the SHA cannot be resolved, treat confidence as reduced (`unknown`) until checked against current source.
+5. If provenance is missing, `unversioned:`, the SHA cannot be resolved, or a `relevant_paths` entry is ignored by Git, treat confidence as reduced (`unknown`) until checked against current source. Ignored paths can change without appearing in `git diff`.
 
 See [reuse](reuse.md).
 

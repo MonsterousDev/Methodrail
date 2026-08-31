@@ -25,7 +25,7 @@ Guidance, not a scheduler. Explicit user invocation remains allowed.
 | 0–1 | Prefer one context |
 | 2 | Isolated subagents only where they improve context quality or independence |
 | 3 | Parallel exploration may be justified |
-| 4 | Arena/interrogate may be justified for consequential uncertainty or review |
+| 4 | Arena may be justified; name `interrogate` and wait |
 | 5 | Strong independent evidence/review is expected where available |
 
 Keep parallel semantics distinct: swarm partitions work; arena competes candidates; interrogate reviews adversarially; how explorers partition understanding; code-review axes split review dimensions.

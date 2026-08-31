@@ -12,6 +12,7 @@ expected:
     required: [code-review]
   behaviors:
     - pin a fixed point and inspect that range
+    - include staged, unstaged, and untracked work when reviewing WIP
     - report Standards and Spec separately
     - not merge or rerank findings across axes
   baseline_failure: a single blended style-and-intent review
