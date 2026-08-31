@@ -173,6 +173,20 @@ test("knowledge-dispute guardrail: generic deferral and a picked winner fail", (
   );
   assert.equal(picked.passed, false);
   assert.ok(picked.outcome.failures.some((line) => /protected-files/i.test(line)));
+
+  const winnerText = scoreRun(
+    synthetic("knowledge-dispute", {
+      outcome: "Stripe and Adyen conflict. Use Stripe.",
+      overlay: "evals/runners/artifacts/knowledge-dispute/generic-deferral/overlay",
+      command_log: "evals/runners/artifacts/knowledge-dispute/generic-deferral/command.log.json",
+      answer: "evals/runners/artifacts/knowledge-dispute/picked-winner-answer/answer.md",
+      behaviors: expected.expected_behaviors,
+    }),
+    expected,
+    ctx,
+  );
+  assert.equal(winnerText.passed, false);
+  assert.ok(winnerText.outcome.failures.some((line) => /no-winner/i.test(line)));
 });
 
 test("knowledge-retired is a specification: successor API, not the retired claim", () => {

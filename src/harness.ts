@@ -42,6 +42,13 @@ function gitSucceeds(repositoryRoot: string, args: string[]): boolean {
   return gitCommand(repositoryRoot, args).status === 0;
 }
 
+function gitPath(repositoryRoot: string, path: string): string {
+  const result = gitCommand(repositoryRoot, ["rev-parse", "--git-path", path]);
+  const value = (result.stdout ?? "").trim();
+  if (result.status !== 0 || !value) return join(repositoryRoot, ".git", path);
+  return isAbsolute(value) ? resolve(value) : resolve(repositoryRoot, value);
+}
+
 function localExcludeIgnoresMethodrail(repositoryRoot: string): { ignored: boolean; source: string } {
   const result = gitCommand(repositoryRoot, ["check-ignore", "-v", "--", ".methodrail"]);
   if (result.status !== 0) return { ignored: false, source: "" };
@@ -50,7 +57,7 @@ function localExcludeIgnoresMethodrail(repositoryRoot: string): { ignored: boole
   const match = /^(.*):(\d+):(.*)$/.exec(beforeTab);
   const source = match?.[1] ?? "";
   if (!source) return { ignored: false, source: "" };
-  const exclude = join(repositoryRoot, ".git", "info", "exclude");
+  const exclude = gitPath(repositoryRoot, "info/exclude");
   const resolvedSource = isAbsolute(source) ? resolve(source) : resolve(repositoryRoot, source);
   let matchesExclude = false;
   try {

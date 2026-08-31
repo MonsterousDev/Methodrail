@@ -77,12 +77,19 @@ export function validateNote(
   }
 
   const fm = note.frontmatter;
+  if (note.governanceErrors) {
+    for (const message of note.governanceErrors) {
+      diagnostics.push({ level: "error", path, message });
+    }
+  }
   if (note.classification === "invalid-typed" || !fm) {
-    diagnostics.push({
-      level: "error",
-      path,
-      message: "Typed note requires kind, status, validated_at, and relevant_paths",
-    });
+    if (!note.governanceErrors?.length) {
+      diagnostics.push({
+        level: "error",
+        path,
+        message: "Typed note requires kind, status, validated_at, and relevant_paths",
+      });
+    }
     return diagnostics;
   }
 
@@ -100,12 +107,6 @@ export function validateNote(
       path,
       message: "Git revision cannot be resolved; unversioned provenance has reduced confidence",
     });
-  }
-
-  if (note.governanceErrors) {
-    for (const message of note.governanceErrors) {
-      diagnostics.push({ level: "error", path, message });
-    }
   }
 
   if (fm.kind === "hypothesis" && fm.status !== "provisional") {

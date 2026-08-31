@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0 — 2026-08-31
+
+Knowledge Governance: scoped, disputed, and retired typed notes with deterministic eligibility. Constructed applicability, dispute, and retirement specs pass. The live C7 battery is declared and not yet executed.
+
+- Add optional typed-note `lifecycle` (`active` | `disputed` | `retired`) and path-segment `scope`; omitted fields stay active/unbounded so v0.7 notes need no migration
+- Evaluate applicability and eligibility in TypeScript; malformed lifecycle or scope is invalid-typed and not eligible
+- Refuse retired notes; present disputed claims without selecting a winner
+- Fail closed on linked-harness inspect in Git worktrees (`git rev-parse --git-path`) and do not load notes from an invalid linked target
+- Grade constructed knowledge-governance fixtures; reject a dispute answer that names both processors then picks a winner
+- Align `verify-change` with the family rule: verification in this turn against unchanged relevant state
+- Public-repo dogfood on Express, Deno std, and Flask was qualitative and is not a live-pilot result
+
 ## 0.7.1 — 2026-08-27
 
 Linked-external harness packaging for Harness Intelligence. Repository-bound sibling storage stays out of commits and PR review while agents still open git-root `.methodrail/`.

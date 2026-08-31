@@ -8,8 +8,6 @@ import { validateNote } from "./validate.js";
 import type { KnowledgeDiagnostic, KnowledgeReport } from "./types.js";
 
 export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
-  const notes = loadKnowledgeNotes(projectRoot);
-  const projectMd = loadProjectMd(projectRoot);
   const errors: KnowledgeDiagnostic[] = [];
   const warnings: KnowledgeDiagnostic[] = [];
   const harness = inspectHarnessBinding(projectRoot);
@@ -17,6 +15,11 @@ export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
     if (diagnostic.level === "error") errors.push(diagnostic);
     else warnings.push(diagnostic);
   }
+  if (errors.length > 0 && !harness.binding) {
+    return { notes: [], errors, warnings };
+  }
+  const notes = loadKnowledgeNotes(projectRoot);
+  const projectMd = loadProjectMd(projectRoot);
   if (projectMd) {
     const methodrailRoot = resolve(projectRoot, ".methodrail");
     for (const entry of knowledgeIndexEntries(projectMd)) {

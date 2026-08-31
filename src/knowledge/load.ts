@@ -202,8 +202,9 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
   const validated_at = typeof data?.validated_at === "string" ? data.validated_at.trim() : "";
   const relevant_paths = asPaths(data?.relevant_paths);
   const typed = Boolean(kind && status && validated_at && relevant_paths);
-  const classification: NoteClassification = typed ? "typed" : "invalid-typed";
   const governance = parseGovernance(data);
+  const classification: NoteClassification =
+    typed && governance.errors.length === 0 ? "typed" : "invalid-typed";
   const note: KnowledgeNote = {
     absolutePath,
     relativePath,
@@ -218,7 +219,7 @@ export function parseNote(absolutePath: string, source: string, projectRoot: str
     retirement,
   };
   if (governance.errors.length > 0) note.governanceErrors = governance.errors;
-  if (typed && kind && status && relevant_paths) {
+  if (classification === "typed" && kind && status && relevant_paths) {
     note.frontmatter = {
       kind,
       status,

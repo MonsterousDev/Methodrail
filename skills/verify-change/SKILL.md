@@ -15,7 +15,9 @@ Violating the letter of this rule is violating the spirit of this rule.
 NO COMPLETION CLAIM WITHOUT FRESH RELEVANT EVIDENCE
 ```
 
-If you haven't run the verification in this message, you cannot claim it passes.
+If you haven't run the verification in this turn, you cannot claim it passes.
+
+Verification must be produced in this turn against unchanged relevant state. A prior message, a stale test run, or a check taken before later edits does not count.
 
 The upstream Superpowers gate function is the operating procedure. Keep it. The full original is in [superpowers-verification-before-completion.md](references/superpowers-verification-before-completion.md).
 

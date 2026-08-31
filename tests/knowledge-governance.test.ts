@@ -168,6 +168,15 @@ const MATRIX: {
   },
 ];
 
+test("eligibility fails closed when governanceErrors are present even if the note looks typed", () => {
+  const malformed = note({ scope: { include_paths: ["src/notifications"] } });
+  malformed.governanceErrors = ["lifecycle must be active, disputed, or retired"];
+  assert.equal(
+    evaluateKnowledgeEligibility(malformed, ["src/notifications/send.ts"], FRESH).disposition,
+    "unknown",
+  );
+});
+
 for (const row of MATRIX) {
   test(`eligibility matrix: ${row.name}`, () => {
     assert.equal(

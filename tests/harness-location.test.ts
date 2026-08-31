@@ -6,6 +6,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -129,6 +130,34 @@ test("linked harness validation fails when the local Git exclusion is removed", 
   assert.ok(binding.diagnostics.some((entry) => /local exclude/i.test(entry.message)));
 });
 
+test("linked harness inspect accepts a Git worktree that shares the common exclude file", (t) => {
+  const item = fixture();
+  t.after(() => rmSync(item.base, { recursive: true, force: true }));
+  const worktree = join(item.base, "wt");
+  git(item.repository, ["worktree", "add", "--detach", worktree]);
+  const storage = join(item.base, "wt-methodrail");
+  create(worktree, storage);
+  const binding = inspectHarnessBinding(worktree);
+  assert.deepEqual(binding.diagnostics, [], binding.diagnostics.map((entry) => entry.message).join("\n"));
+  assert.equal(binding.binding?.placement, "linked-external");
+});
+
+test("invalid linked storage does not return notes from the target", (t) => {
+  const item = fixture();
+  t.after(() => rmSync(item.base, { recursive: true, force: true }));
+  const storage = join(item.base, "foreign-methodrail", ".methodrail");
+  mkdirSync(join(storage, "knowledge"), { recursive: true });
+  writeFileSync(join(storage, "PROJECT.md"), "# Foreign\n\n- [foreign](knowledge/foreign.md)\n");
+  writeFileSync(
+    join(storage, "knowledge", "foreign.md"),
+    typedNote(item.revision).replace("Application version boundary", "Foreign claim"),
+  );
+  symlinkSync(storage, join(item.repository, ".methodrail"));
+  const report = evaluateProjectKnowledge(item.repository);
+  assert.ok(report.errors.some((entry) => /HARNESS.yaml/i.test(entry.message)));
+  assert.equal(report.notes.length, 0);
+});
+
 test("linked harness fails closed when its manifest names another repository", (t) => {
   const item = fixture();
   t.after(() => rmSync(item.base, { recursive: true, force: true }));
@@ -144,6 +173,7 @@ test("linked harness fails closed when its manifest names another repository", (
   assert.ok(binding.diagnostics.some((entry) => /different repository/i.test(entry.message)));
   const report = evaluateProjectKnowledge(item.repository);
   assert.ok(report.errors.some((entry) => /different repository/i.test(entry.message)));
+  assert.equal(report.notes.length, 0);
 });
 
 test("an unrelated sibling harness is never discovered without the repository link", (t) => {

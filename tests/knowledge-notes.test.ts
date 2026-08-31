@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { evaluateKnowledgeEligibility } from "../src/knowledge/eligibility.js";
 import { evaluateFreshness } from "../src/knowledge/freshness.js";
 import { loadKnowledgeNotes, parseNote } from "../src/knowledge/load.js";
 import { evaluateProjectKnowledge } from "../src/knowledge/report.js";
@@ -578,6 +579,38 @@ test("unknown lifecycle and malformed scope arrays fail", () => {
     const report = evaluateProjectKnowledge(dir);
     assert.ok(report.errors.some((item) => /lifecycle must be active/i.test(item.message)));
     assert.ok(report.errors.some((item) => /include_paths must be a non-empty array/i.test(item.message)));
+    assert.equal(report.notes[0]?.classification, "invalid-typed");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("malformed lifecycle or empty scope is invalid-typed and not eligible", () => {
+  const dir = tempProject();
+  try {
+    writeNote(dir, "webhooks.md", withGovernance("lifecycle: retiredd\n"));
+    const retiredTypo = loadKnowledgeNotes(dir)[0];
+    assert.equal(retiredTypo?.classification, "invalid-typed");
+    assert.ok(retiredTypo?.governanceErrors?.some((item) => /lifecycle must be active/i.test(item)));
+    assert.equal(
+      evaluateKnowledgeEligibility(retiredTypo!, ["src/webhooks.js"], {
+        state: "fresh",
+        evidence: "No relevant_paths changes",
+      }).disposition,
+      "unknown",
+    );
+
+    writeNote(dir, "webhooks.md", withGovernance("scope:\n  include_paths: []\n"));
+    const emptyScope = loadKnowledgeNotes(dir)[0];
+    assert.equal(emptyScope?.classification, "invalid-typed");
+    assert.ok(emptyScope?.governanceErrors?.some((item) => /include_paths must be a non-empty array/i.test(item)));
+    assert.equal(
+      evaluateKnowledgeEligibility(emptyScope!, ["src/webhooks.js"], {
+        state: "fresh",
+        evidence: "No relevant_paths changes",
+      }).disposition,
+      "unknown",
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

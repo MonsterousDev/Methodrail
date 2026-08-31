@@ -37,6 +37,9 @@ export function evaluateKnowledgeEligibility(
     reasons: extra,
   });
 
+  if (note.governanceErrors && note.governanceErrors.length > 0) {
+    return result("unknown", note.governanceErrors);
+  }
   if (note.classification === "typed" && note.frontmatter?.lifecycle === "retired") {
     return result("blocked-retired", ["Note lifecycle is retired"]);
   }
