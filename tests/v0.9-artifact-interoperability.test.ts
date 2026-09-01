@@ -429,7 +429,9 @@ test("nested eval and overlay decoys are not project artifacts", () => {
       "evals/runners/artifacts/shop/overlay/decisions.tsv",
       `${TSV_HEADER}\n2026-09-01T00:00:00Z\tsetup\tdecoy overlay\tx\tfile:x\topen\n`,
     );
+    write(dir, "evals/fixtures/shop/.scratch/notes.md", "# Decoy scratch\n");
     write(dir, "evals/fixtures/shop/docs/glossary.md", "# Glossary\n\n**Decoy** is not the shop glossary.\n");
+    write(dir, ".scratch/notes.md", "# Project scratch\n");
     const report = discoverProjectArtifacts(dir);
     assert.equal(
       report.artifacts.some((item) => item.path.startsWith("evals/")),
@@ -442,6 +444,7 @@ test("nested eval and overlay decoys are not project artifacts", () => {
     );
     assert.ok(report.artifacts.some((item) => item.path === "decisions.tsv"));
     assert.ok(report.artifacts.some((item) => item.path === "CONTEXT.md"));
+    assert.ok(report.artifacts.some((item) => item.path === ".scratch/notes.md" && item.role === "scratch"));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -579,4 +582,3 @@ test("in-repository PROJECT.md create is git visible; linked-external writes are
     rmSync(base, { recursive: true, force: true });
   }
 });
-

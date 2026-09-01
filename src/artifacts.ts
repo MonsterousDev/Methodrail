@@ -137,7 +137,7 @@ function classifyFile(rel: string, absolute: string): DiscoveredArtifact | null 
       return { path: rel, role: "plan", evidence: "project plan directory with content" };
     }
   }
-  if (/\.scratch\//i.test(rel) || /^scratch\//i.test(rel)) {
+  if (/^(?:\.scratch|scratch)\//i.test(rel)) {
     return { path: rel, role: "scratch", evidence: "scratch convention" };
   }
   if (/^(?:docs\/)?(?:tickets|issues)\//i.test(rel)) {
