@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.0 — 2026-09-01
+
+Project Artifact Interoperability: one initialization workflow, separate canonical artifacts, explicit governed bridges. Constructed mixed-artifact, decision-ladder, knowledge-reconciliation, and architecture-deepening specs pass. A 9-pair live battery (2026-09-01) was 1 helped, 8 incomplete, 0 harmed. No live `harmed`. No general empirical-improvement claim.
+
+- Safer `methodrail-init` discovery, preview, and confirmation (repository-root layouts, exact PROJECT.md pointers, bind-fail zero writes)
+- Pointer adoption without copying or converting canonical project artifacts
+- pstack-compatible TSV/ADR decision ladder without changing the six-column TSV schema
+- Knowledge and verification interoperability without treating those artifacts as interchangeable
+- Evidence-backed architecture surveys that do not edit source and hand off a verification-ready refactor brief
+- Deterministic mixed-repository and linked-external dogfood
+- Constructed specifications passing; historical v0.6–v0.8 evals unchanged
+- Live pilot: 1 helped, 8 incomplete, 0 harmed
+- No general empirical-improvement claim
+
 ## 0.8.0 — 2026-08-31
 
 Knowledge Governance: scoped, disputed, and retired typed notes with deterministic eligibility. Constructed applicability, dispute, and retirement specs pass. A 9-pair live C7 battery (2026-08-31) was empirical-neutral on applicability and retirement, helped on Cursor dispute, and incomplete on Codex dispute (both conditions patched `refunds.js`). No live `harmed`.
