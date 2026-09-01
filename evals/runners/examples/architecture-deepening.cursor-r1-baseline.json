@@ -1,0 +1,52 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "ls -la && git log --oneline -20 -- . 2>/dev/null; git log --follow --oneline -- src/orderIntake.js src/billing/ledger.js src/quiet/format.js src/db.js src/userService.js 2>/dev/null | head -50; echo \"---\"; git rev-parse --is-inside-work-tree 2>/dev/null",
+      "exit_status": 128
+    },
+    {
+      "command": "find src docs -type f | sort && echo \"==== orderIntake ====\" && cat src/orderIntake.js && echo \"==== ledger ====\" && cat src/billing/ledger.js && echo \"==== userService ====\" && cat src/userService.js && echo \"==== db ====\" && cat src/db.js && echo \"==== format ====\" && cat src/quiet/format.js && echo \"==== ADR ====\" && cat docs/adr/0001-ledger-owns-money.md && echo \"==== CHURN ====\" && cat CHURN.md && echo \"==== callers of format ====\" && grep -R \"quiet/format\\|formatSku\" --include='*.js' . || true && echo \"==== callers of orderIntake ====\" && grep -R \"orderIntake\\|fromCart\\|fromApi\\|fromCli\" --include='*.js' . || true",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c \"import json; json.load(open('COMMANDS.json')); print('COMMANDS.json valid')\" && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Refactor brief: deepen order intake",
+    "## Survey",
+    "High-churn this month (from `CHURN.md`):",
+    "| File | Commits | Role |",
+    "|---|---|---|",
+    "| `src/orderIntake.js` | 14 | Order entry; four nearly identical functions that leak pricing internals into `ledger.record` |",
+    "| `src/billing/ledger.js` | 12 | Money movement: tax, net, reverse, balance |",
+    "Other code is not a deepening candidate:",
+    "- `src/quiet/format.js` — no callers, no commits this quarter. Dead, not hot.",
+    "- `src/userService.js` / `src/db.js` — pass-through, but not in the churn set.",
+    "ADR-0001 keeps money behind the ledger's small interface (`record`, `balance`, `reverse`) and forbids splitting ledger into pass-through helpers. Ledger is already the deep module. Churn there is expected; splitting it would make the architecture shallower.",
+    "**Top candidate: `src/orderIntake.js`.**"
+  ],
+  "outcome": "# Refactor brief: deepen order intake ## Survey High-churn this month (from `CHURN.md`): | File | Commits | Role | |---|---|---| | `src/orderIntake.js` | 14 | Order entry; four nearly identical functions that leak pricing internals into `ledger.record` | | `src/billing/ledger.js` | 12 | Money movement: tax, net, reverse, balance | Other code is not a deepening candidate: - `src/quiet/format.js` — no callers, no commits this quarter. Dead, not hot. - `src/userService.js` / `src/db.js` — pass-thro",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/architecture-deepening/cursor-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-deepening/cursor-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/architecture-deepening/cursor-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/cursor-r1-baseline/answer.md"
+  }
+}

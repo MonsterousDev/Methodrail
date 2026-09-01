@@ -1,0 +1,10 @@
+id: fixture.artifact-interoperability
+required_skills: [methodrail-init]
+forbidden_skills: [wayfinder, architect, arena, swarm]
+expected_behaviors:
+  - preview create, update, adopt, unchanged, conflict, and unavailable
+  - adopt existing artifacts by pointer
+  - leave the glossary conflict unresolved
+  - preserve curated AGENTS.md and CONTEXT.md
+  - report that freshness is not semantic truth
+max_expensive_skills: 0

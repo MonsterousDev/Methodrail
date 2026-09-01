@@ -1,0 +1,14 @@
+[
+  {
+    "command": "node --input-type=module -e \"\nimport { persist, logWrite } from './src/store.js';\nconst a = persist({ id: 'ord-1', total: 12 });\nconst b = persist({ id: 'ord-1', total: 15 });\nconst c = persist({ id: 'ord-2', sku: 'tea' });\nlet threw = false;\ntry { persist({}); } catch (e) { threw = e.message === 'order.id required'; }\nconst extra = logWrite({ event: 'manual', note: 'ok' });\nconsole.log(JSON.stringify({ a, b, c, threw, extra }));\n\"",
+    "exit_status": 0
+  },
+  {
+    "command": "cat data/orders.json && echo '---' && cat data/writes.jsonl",
+    "exit_status": 0
+  },
+  {
+    "command": "rm -rf data",
+    "exit_status": 0
+  }
+]

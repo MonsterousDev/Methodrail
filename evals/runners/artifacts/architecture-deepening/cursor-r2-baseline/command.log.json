@@ -1,0 +1,14 @@
+[
+  {
+    "command": "ls -la && git log --oneline -20 && git status",
+    "exit_status": 128
+  },
+  {
+    "command": "wc -l src/*.js src/**/*.js && find src -type f -name '*.js' -print",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+    "exit_status": 0
+  }
+]

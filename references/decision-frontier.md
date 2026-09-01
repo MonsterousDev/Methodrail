@@ -61,4 +61,6 @@ Examples:
 
 Downstream questions stay in fog until their prerequisites move into Known.
 
+A frontier choice that is hard to reverse, surprising without context, and a real trade-off may be offered as an ADR after approval. Reversible operational choices stay in the TSV trail. See [decision-record](protocols/decision-record.md).
+
 Do not implement this as a graph engine. The native agent can reason with this model. `develop`, `architect`, `prototype`, and `domain-modeling` should use it when planning work.

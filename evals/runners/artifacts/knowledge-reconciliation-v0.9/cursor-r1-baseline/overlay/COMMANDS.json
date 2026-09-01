@@ -1,0 +1,10 @@
+[
+  {
+    "command": "node -e \"\nconst m = require('./repo/src/mailer.js');\nconst e = { id: 'evt-1', type: 'ticket.closed', customerEmail: 'c@example.com', ticketId: 'T-9' };\nconst a = m.handle(e);\nconst dup = m.handle(e);\nm.failSend('evt-1');\nconst beforeBackoff = m.retry('evt-1');\nconst other = m.handle({ id: 'evt-2', type: 'order.paid' });\nconsole.log(JSON.stringify({\n  keyedOnEventId: a.eventId === 'evt-1',\n  customerChannel: a.channel === 'customer',\n  mailTo: a.mail && a.mail.to,\n  template: a.mail && a.mail.template,\n  deduped: dup === a && m.countFor('ticket.closed') === 1,\n  failedStaysInOutbox: m.outbox.length === 2 && m.outbox[0].failed === true,\n  backoffMs: m.backoffMs(),\n  retryWaits: beforeBackoff.failed === true && beforeBackoff.retryAt > Date.now(),\n  otherHasNoCustomerMail: other.mail == null\n}, null, 2));\n\"",
+    "exit_status": 0
+  },
+  {
+    "command": "node repo/src/mailer.js",
+    "exit_status": 0
+  }
+]

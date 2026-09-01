@@ -1,0 +1,4 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T00:00:00Z	implementation	use JSON file for order store	Dependency-free local persistence is enough now; SQLite remains a deliberate migration if volume or concurrent writers appear	file:docs/adr/0002-order-store-json.md	accepted
+2026-09-01T00:00:00Z	implementation	log order writes as JSON Lines	Structured append logs are easy to inspect and parse while remaining reversible	file:src/store.js	implemented

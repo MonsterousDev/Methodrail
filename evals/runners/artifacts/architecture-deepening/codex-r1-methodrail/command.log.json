@@ -1,0 +1,110 @@
+[
+  {
+    "command": "pwd && ls",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' rules/methodrail.mdc",
+    "exit_status": 0
+  },
+  {
+    "command": "if [ -f .methodrail/PROJECT.md ]; then sed -n '1,220p' .methodrail/PROJECT.md; else true; fi",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' CHURN.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files -g '!TASK.md' -g '!OPERATOR.md' -g '!RUN.json'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' skills/improve-codebase-architecture/SKILL.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' skills/codebase-design/SKILL.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' docs/adr/0001-ledger-owns-money.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' .methodrail/knowledge/intake.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' src/orderIntake.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,320p' src/billing/ledger.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' src/userService.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' src/db.js",
+    "exit_status": 0
+  },
+  {
+    "command": "rg -n \"orderIntake|fromCart|fromApi|fromCli|intake\\(|ledger|record\\(|balance\\(|reverse\\(\" src docs .methodrail package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 3 -type f \\( -name '*test*' -o -name '*spec*' -o -name 'package.json' \\) -print",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "nl -ba src/orderIntake.js",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba src/billing/ledger.js",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba docs/adr/0001-ledger-owns-money.md",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba CHURN.md",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba .methodrail/knowledge/intake.md",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba src/quiet/format.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' ANSWER.md",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e \"JSON.parse(require('fs').readFileSync('COMMANDS.json','utf8')); console.log('COMMANDS.json ok')\"",
+    "exit_status": 0
+  }
+]

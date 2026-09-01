@@ -1,0 +1,18 @@
+[
+  {
+    "command": "git log --oneline -20 2>/dev/null; echo \"---\"; git log --pretty=format:'%h %ad %s' --date=short -- src/orderIntake.js src/billing/ledger.js src/quiet/format.js src/userService.js src/db.js 2>/dev/null | head -50; echo \"---STATUS---\"; git status --short; echo \"---REV-PARSE---\"; git rev-parse --show-toplevel 2>/dev/null",
+    "exit_status": 128
+  },
+  {
+    "command": "find . -type f \\( -name '*.js' -o -name '*.md' -o -name '*.json' \\) ! -path './skills/*' ! -path './rules/*' | sort; echo \"---\"; rg -n \"orderIntake|userService|billing/ledger|quiet/format|fromCart|fromApi|fromCli\" --glob '!skills/**' --glob '!rules/**' .",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e \"\nconst intake = require('./src/orderIntake.js');\nconst ledger = require('./src/billing/ledger.js');\nconst userService = require('./src/userService.js');\nconst db = require('./src/db.js');\nconst formatSku = require('./src/quiet/format.js');\n\nconst a = intake.fromCart({ sku: 'SKU-1' }, { priceCents: 1000, taxCode: 'std' });\nconst b = intake.fromApi({ sku: 'SKU-2' }, { priceCents: 1000, taxCode: 'exempt' });\nconst c = intake.fromCli({ sku: 'SKU-3' }, { priceCents: 250, taxCode: 'std' });\nconst d = intake.intake({ sku: 'SKU-4' }, { priceCents: 100, taxCode: 'std' });\nconsole.log(JSON.stringify({ a, b, c, d, balance: ledger.balance(), reverse: ledger.reverse(a.id), missing: ledger.reverse('nope'), user: userService.getUser('u1'), db: db.getUser('u1'), sku: formatSku('  x  ') }, null, 2));\n\"",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c \"import json; a=json.load(open('COMMANDS.json')); assert isinstance(a,list) and all('command' in x and 'exit_status' in x for x in a); print('commands', len(a)); print('answer_bytes', __import__('os').path.getsize('ANSWER.md'))\" && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+    "exit_status": 0
+  }
+]

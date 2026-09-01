@@ -1,0 +1,1 @@
+Routed ticket.closed through event-id keying. Note is reconcile-required: the event-id claim is still valid; immediate retry is stale against backoffMs() and the retry-closed feature. Provider Retry-After is a non-path trigger. Did not rewrite mail.md. Proposed one reflect update. Evidence proves current retry backoff, not that Retry-After headers are ignored.

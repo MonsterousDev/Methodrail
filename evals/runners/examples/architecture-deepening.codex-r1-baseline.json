@@ -1,0 +1,117 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'pyproject.toml' -g 'Cargo.toml' -g 'go.mod' -g 'README*'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files",
+      "exit_status": 0
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "git log --pretty=format: --name-only --since='90 days ago' | sort | uniq -c | sort -nr | head -40",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' CHURN.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/orderIntake.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/billing/ledger.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' src/userService.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' src/db.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' src/quiet/format.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' docs/adr/0001-ledger-owns-money.md",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba src/orderIntake.js",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba src/billing/ledger.js",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba docs/adr/0001-ledger-owns-money.md",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba CHURN.md",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Refactor brief: stabilize the order-to-ledger boundary",
+    "## Churn signal",
+    "The current churn record identifies `src/orderIntake.js` as the hottest file this month with 14 commits, followed closely by `src/billing/ledger.js` with 12 commits. There is no `.git` repository metadata in this worktree, so this brief uses `CHURN.md` as the available churn source.",
+    "## Top candidate",
+    "Deepen the boundary between order intake and billing by introducing a single explicit ledger command/value object at the intake boundary.",
+    "Today, `src/orderIntake.js` reaches into `pricingInternals` and forwards selected internal pricing fields directly to `ledger.record()`:",
+    "- `priceCents`",
+    "- `taxCode`",
+    "- `sku`",
+    "That makes order intake aware of pricing internals and ledger input shape at the same time. The three entrypoints, `fromCart`, `fromApi`, and `fromCli`, are currently identical pass-through wrappers around `intake()`, so any future channel-specific behavior is likely to keep accumulating in this hot file unless the boundary is clarified.",
+    "`src/billing/ledger.js` also owns tax calculation and money persistence, which matches `docs/adr/0001-ledger-owns-money.md`: \"Ledger owns money\" and should not be split into pass-through helpers. The refactor should preserve that decision. The goal is not to move money logic out of ledger; it is to stop upstream intake code from depending on loose pricing internals.",
+    "## Proposed shape"
+  ],
+  "outcome": "# Refactor brief: stabilize the order-to-ledger boundary ## Churn signal The current churn record identifies `src/orderIntake.js` as the hottest file this month with 14 commits, followed closely by `src/billing/ledger.js` with 12 commits. There is no `.git` repository metadata in this worktree, so this brief uses `CHURN.md` as the available churn source. ## Top candidate Deepen the boundary between order intake and billing by introducing a single explicit ledger command/value object at the intak",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/architecture-deepening/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-deepening/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/architecture-deepening/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/architecture-deepening/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

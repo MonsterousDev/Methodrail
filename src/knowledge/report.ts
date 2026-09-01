@@ -1,11 +1,57 @@
 import { existsSync, statSync } from "node:fs";
-import { join, resolve, sep } from "node:path";
+import { dirname, join, resolve, sep } from "node:path";
 import { findMethodrailDirs } from "../fs-walk.js";
 import { inspectHarnessBinding } from "../harness.js";
 import { evaluateFreshness } from "./freshness.js";
 import { knowledgeIndexEntries, loadKnowledgeNotes, loadProjectMd } from "./load.js";
 import { validateNote } from "./validate.js";
-import type { KnowledgeDiagnostic, KnowledgeReport } from "./types.js";
+import type { KnowledgeDiagnostic, KnowledgeNote, KnowledgeReport } from "./types.js";
+
+function markdownHrefs(source: string): string[] {
+  const hrefs: string[] = [];
+  for (const match of source.matchAll(/(?<!!)\[[^\]]*]\(([^)]+)\)/g)) {
+    const href = match[1]?.trim().replace(/^<|>$/g, "") ?? "";
+    if (href) hrefs.push(href);
+  }
+  return hrefs;
+}
+
+function evidencePointerWarnings(note: KnowledgeNote): KnowledgeDiagnostic[] {
+  if (note.classification !== "typed") return [];
+  const warnings: KnowledgeDiagnostic[] = [];
+  const text = `${note.evidence}\n${note.reuseGuidance}\n${note.refreshTriggers}`;
+  const noteDir = dirname(note.absolutePath);
+  for (const href of markdownHrefs(text)) {
+    if (href.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(href)) continue;
+    let local: string;
+    try {
+      local = decodeURIComponent(href.split("#", 1)[0] ?? "");
+    } catch {
+      warnings.push({
+        level: "warning",
+        path: note.relativePath,
+        message: `Broken evidence or verification pointer (malformed encoding): ${href}`,
+      });
+      continue;
+    }
+    if (!local) continue;
+    const resolved = resolve(noteDir, local);
+    let missing = false;
+    try {
+      missing = !existsSync(resolved) || !statSync(resolved).isFile();
+    } catch {
+      missing = true;
+    }
+    if (missing) {
+      warnings.push({
+        level: "warning",
+        path: note.relativePath,
+        message: `Broken evidence or verification pointer: ${href}`,
+      });
+    }
+  }
+  return warnings;
+}
 
 export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
   const errors: KnowledgeDiagnostic[] = [];
@@ -56,6 +102,7 @@ export function evaluateProjectKnowledge(projectRoot: string): KnowledgeReport {
       else warnings.push(diagnostic);
     }
     if (note.classification === "typed") {
+      warnings.push(...evidencePointerWarnings(note));
       const freshness = evaluateFreshness(note, projectRoot);
       if (freshness.state !== "fresh") {
         warnings.push({

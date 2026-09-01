@@ -9,6 +9,7 @@ Read as needed:
 - [note contract](knowledge/note-contract.md) — typed frontmatter, identity, and legacy notes
 - [reuse](knowledge/reuse.md) — how later sessions find, freshness-check, and reconcile notes
 - [freshness](knowledge/freshness.md) — how code-derived claims go stale
+- [maintenance](knowledge/maintenance.md) — evidence, refresh triggers, and release-time audit
 - [provenance](knowledge/provenance.md) — how we know a claim
 
 `.methodrail/PROJECT.md` is a short index. Deeper notes belong in `.methodrail/knowledge/` only when they earn their keep. New files there are typed notes after approval, or decision records. Do not add untyped notes.

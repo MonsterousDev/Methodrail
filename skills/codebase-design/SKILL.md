@@ -38,7 +38,8 @@ When designing an interface, ask:
 ## Principles
 
 - **Depth is a property of the interface, not the implementation.** A deep module can be internally composed of small parts; they just aren't part of the interface.
-- **The deletion test.** Imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across N callers, it was earning its keep.
+- **The deletion test.** Imagine deleting the module. If complexity vanishes, it was a pass-through (delete/consolidate). If complexity reappears across N callers, it earns existence; then ask whether it is deep enough.
+- **Already-deep is not a candidate.** High churn on a deep module is not a reason to rewrite it.
 - **The interface is the test surface.** Callers and tests cross the same seam.
 - **One adapter means a hypothetical seam. Two adapters means a real one.** Don't introduce a seam unless something actually varies across it.
 

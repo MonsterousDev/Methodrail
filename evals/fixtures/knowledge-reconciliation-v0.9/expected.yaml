@@ -1,0 +1,9 @@
+id: fixture.knowledge-reconciliation-v0.9
+required_skills: []
+forbidden_skills: [arena, swarm]
+expected_behaviors:
+  - treat the note as reconcile-required
+  - keep the valid event-id claim
+  - name the stale immediate-retry claim
+  - do not rewrite the note without approval
+max_expensive_skills: 0

@@ -31,7 +31,7 @@ blast-radius/review proportional to risk
 1. Name the friction. Prefer refactors that support current work, reduce repeated mistakes, improve high-churn areas, clarify ownership, remove recurring agent/human confusion, or improve testability.
 2. Read `.methodrail/PROJECT.md` if present. If a knowledge pointer is relevant, follow [knowledge reuse](../../references/knowledge/reuse.md). Use `how` to understand current structure and `codebase-design` for depth/seam vocabulary.
 3. Establish a behavioral baseline with existing tests or `observe` when behavior is not already characterized.
-4. Stop if the code is quiet, unused, or unrelated to current work. Use `improve-codebase-architecture` only when the user wants a structured hunt across hot spots.
+4. Stop if the code is quiet, unused, or unrelated to current work. Use `improve-codebase-architecture` only when the user wants a structured hunt across hot spots. Behavior-preserving work stays in this workflow; do not implement survey candidates from the hunt itself.
 5. Add characterization coverage when existing checks would not catch an accidental behavior change.
 6. Change structure in small increments. Preserve public contracts unless the request explicitly includes a contract change.
 7. Re-run the baseline after each increment. Use `verify-change` before claiming success.

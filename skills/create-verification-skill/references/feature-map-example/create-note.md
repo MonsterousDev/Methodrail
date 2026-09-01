@@ -9,6 +9,10 @@ Create note lets a user save a titled note from the browser or CLI, cancel an un
 - `create-cancel` discards an unfinished browser draft.
 - `create-cli` creates the same note shape from the terminal.
 
+## Related project knowledge
+
+- [Note title identity](glossary.md) — glossary: the rendered title is the stored identity, not the draft input.
+
 ## How to get to it (user POV)
 
 - Choose the `New note` button in the browser toolbar.

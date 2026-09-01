@@ -1,0 +1,40 @@
+{
+  "fixture_id": "decision-ladder",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "node --input-type=module -e \"\nimport { persist, logWrite } from './src/store.js';\nconst a = persist({ id: 'ord-1', total: 12 });\nconst b = persist({ id: 'ord-2', total: 40 });\nlet threw = false;\ntry { persist({}); } catch (e) { threw = e.message === 'order.id required'; }\nconst logged = logWrite({ action: 'manual', id: 'ord-1' });\nconsole.log(JSON.stringify({ a, b, threw, logged }));\n\"",
+      "exit_status": 0
+    },
+    {
+      "command": "rm -rf data",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Order persistence is in place. `persist(order)` writes the order to `data/orders.json` (created on first write) and returns `{ ok: true, id }`. Missing `order.id` still throws.",
+    "Store choice: a JSON file, not SQLite. This shop has no query load, no concurrent writers, and no native dependency to add. SQLite would matter later for transactions, indexes, or multi-process writers; switching then is a migration, so the choice is recorded in `docs/adr/0002-file-store.md`.",
+    "Write logs are JSON lines in `data/writes.jsonl` — one JSON object per write, not free-form text. `logWrite` returns `\"ok\"` after appending.",
+    "No extra product features were added: no checkout flow, no indexes, no schema beyond id-keyed order records."
+  ],
+  "outcome": "Order persistence is in place. `persist(order)` writes the order to `data/orders.json` (created on first write) and returns `{ ok: true, id }`. Missing `order.id` still throws. Store choice: a JSON file, not SQLite. This shop has no query load, no concurrent writers, and no native dependency to add. SQLite would matter later for transactions, indexes, or multi-process writers; switching then is a migration, so the choice is recorded in `docs/adr/0002-file-store.md`. Write logs are JSON lines in ",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/decision-ladder/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/decision-ladder/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/decision-ladder/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/decision-ladder/cursor-r2-baseline/answer.md"
+  }
+}

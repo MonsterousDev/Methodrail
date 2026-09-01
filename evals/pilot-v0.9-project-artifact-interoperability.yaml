@@ -1,0 +1,13 @@
+id: pilot-v0.9-project-artifact-interoperability
+# Frozen 2026-09-01 before live trials. Do not add to evals/runners/cli.ts
+# default integrity loop until extras exist. Completeness is then mandatory.
+pairs:
+  - { fixture: decision-ladder, host: cursor, repeat: 1 }
+  - { fixture: decision-ladder, host: cursor, repeat: 2 }
+  - { fixture: decision-ladder, host: codex, repeat: 1 }
+  - { fixture: knowledge-reconciliation-v0.9, host: cursor, repeat: 1 }
+  - { fixture: knowledge-reconciliation-v0.9, host: cursor, repeat: 2 }
+  - { fixture: knowledge-reconciliation-v0.9, host: codex, repeat: 1 }
+  - { fixture: architecture-deepening, host: cursor, repeat: 1 }
+  - { fixture: architecture-deepening, host: cursor, repeat: 2 }
+  - { fixture: architecture-deepening, host: codex, repeat: 1 }

@@ -6,7 +6,7 @@ Skeletons live in `templates/project/`. Fill them from repository evidence; omit
 
 ## Knowledge
 
-`.methodrail/PROJECT.md` remains a concise index. It may point to existing canonical docs, ADRs, and existing `.methodrail/knowledge/` notes.
+`.methodrail/PROJECT.md` remains a concise index. It may point to existing canonical glossary/domain docs, ADRs, specs/plans, operational decision-log conventions, verification skills and feature maps, and existing `.methodrail/knowledge/` notes. Adopt those artifacts by pointer. Do not copy them and do not mark an adopted artifact as Methodrail-owned.
 
 Do not create files under `.methodrail/knowledge/` during init (typed or untyped). Reflect promotes typed notes after real work using [note.md](../../../templates/project/knowledge/note.md). Existing architecture, domain, behavior, and operations files remain valid legacy notes: index them, do not invent new ones.
 

@@ -1,0 +1,41 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "node -e \"\nconst m = require('./repo/src/mailer.js');\nconst e = { id: 'evt-1', type: 'ticket.closed', customerEmail: 'c@example.com', ticketId: 'T-9' };\nconst a = m.handle(e);\nconst dup = m.handle(e);\nm.failSend('evt-1');\nconst beforeBackoff = m.retry('evt-1');\nconst other = m.handle({ id: 'evt-2', type: 'order.paid' });\nconsole.log(JSON.stringify({\n  keyedOnEventId: a.eventId === 'evt-1',\n  customerChannel: a.channel === 'customer',\n  mailTo: a.mail && a.mail.to,\n  template: a.mail && a.mail.template,\n  deduped: dup === a && m.countFor('ticket.closed') === 1,\n  failedStaysInOutbox: m.outbox.length === 2 && m.outbox[0].failed === true,\n  backoffMs: m.backoffMs(),\n  retryWaits: beforeBackoff.failed === true && beforeBackoff.retryAt > Date.now(),\n  otherHasNoCustomerMail: other.mail == null\n}, null, 2));\n\"",
+      "exit_status": 0
+    },
+    {
+      "command": "node repo/src/mailer.js",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Added `ticket.closed` customer mail in `repo/src/mailer.js`.",
+    "Reuse that still holds: customer mail is keyed on the provider event id (`event.id`). Duplicate events with the same id return the existing outbox row and do not enqueue a second send.",
+    "Reuse that does not hold: stored knowledge claimed a failed send is retried immediately. Current source uses `backoffMs()` = 5000, and the verify-mail `retry-closed` feature says failed `ticket.closed` mail stays in the outbox and waits. I left that policy in place: `failSend` marks the row failed without removing it; `retry` is a no-op until `retryAt`.",
+    "What changed: `handle({ type: \"ticket.closed\", ... })` now attaches `channel: \"customer\"` and a customer mail payload (`to`, subject, `ticket.closed` template). Other event types still go through the same event-id outbox path but do not get customer mail.",
+    "Verified with a node script: event-id keying, dedupe, customer template, failed row stays in outbox, 5000ms backoff, retry waits."
+  ],
+  "outcome": "Added `ticket.closed` customer mail in `repo/src/mailer.js`. Reuse that still holds: customer mail is keyed on the provider event id (`event.id`). Duplicate events with the same id return the existing outbox row and do not enqueue a second send. Reuse that does not hold: stored knowledge claimed a failed send is retried immediately. Current source uses `backoffMs()` = 5000, and the verify-mail `retry-closed` feature says failed `ticket.closed` mail stays in the outbox and waits. I left that poli",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-baseline/answer.md"
+  }
+}

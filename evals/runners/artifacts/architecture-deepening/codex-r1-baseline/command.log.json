@@ -1,0 +1,78 @@
+[
+  {
+    "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'pyproject.toml' -g 'Cargo.toml' -g 'go.mod' -g 'README*'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "git log --pretty=format: --name-only --since='90 days ago' | sort | uniq -c | sort -nr | head -40",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' CHURN.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' src/orderIntake.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' src/billing/ledger.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,240p' src/userService.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' src/db.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' src/quiet/format.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' docs/adr/0001-ledger-owns-money.md",
+    "exit_status": 0
+  },
+  {
+    "command": "find . -maxdepth 3 -type f | sort",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba src/orderIntake.js",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba src/billing/ledger.js",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba docs/adr/0001-ledger-owns-money.md",
+    "exit_status": 0
+  },
+  {
+    "command": "nl -ba CHURN.md",
+    "exit_status": 0
+  }
+]

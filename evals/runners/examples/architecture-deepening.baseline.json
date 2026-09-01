@@ -1,0 +1,21 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": [],
+  "references_loaded": ["CHURN.md"],
+  "tools_used": ["write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [],
+  "outcome": "Rewrote the already-deep ledger during the survey.",
+  "failure_modes": ["source-edit", "deep-module-target"],
+  "behaviors_observed": [],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-deepening/baseline/overlay",
+    "command_log": "evals/runners/artifacts/architecture-deepening/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/baseline/answer.md"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "fixture_id": "decision-ladder",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["show-me-your-work", "domain-modeling"],
+  "references_loaded": ["references/protocols/decision-record.md", "docs/adr/0001-billing-owner.md"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["JSON-lines TSV row", "standalone ADR-0002 after approval"],
+  "outcome": "Logged the reversible format in TSV and wrote an approved standalone store ADR.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "log the reversible log-format choice in TSV only",
+    "offer a standalone ADR for the store trade-off",
+    "wait for approval before writing the ADR",
+    "keep the six-column TSV header"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/decision-ladder/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/decision-ladder/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/decision-ladder/methodrail/answer.md"
+  }
+}

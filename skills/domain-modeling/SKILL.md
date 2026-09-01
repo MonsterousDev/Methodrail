@@ -60,7 +60,7 @@ Only offer to create an ADR when all three are true:
 2. **Surprising without context**: a future reader will wonder why
 3. **The result of a real trade-off**: genuine alternatives, picked for specific reasons
 
-If any of the three is missing, skip the ADR. Use [ADR-FORMAT.md](references/ADR-FORMAT.md). Write the ADR next to the project's existing decision records, or `.methodrail/knowledge/decisions/` if that is the home. See the [decision frontier](../../references/decision-frontier.md).
+If any of the three is missing, skip the ADR. Do not write the file until the user approves the draft. Use [ADR-FORMAT.md](references/ADR-FORMAT.md). Write the ADR next to the project's existing decision records, or `.methodrail/knowledge/decisions/` if that is the home. See the [decision record](../../references/protocols/decision-record.md) promotion ladder and the [decision frontier](../../references/decision-frontier.md).
 
 Ask humans only for preference or intent the environment cannot resolve.
 

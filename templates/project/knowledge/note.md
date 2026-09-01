@@ -19,8 +19,9 @@ One sentence that a later agent can reuse without rediscovering the work.
 
 ## Evidence
 
-- The source path, test, or observation that supports the claim.
-- Enough detail that a later agent can re-check it.
+- The source path, test, verification feature, or observation that supports the claim.
+- What this evidence establishes. When ambiguity is likely, what it does not establish.
+- Enough detail that a later agent can re-check it without init executing the recipe.
 
 ## Reuse guidance
 
@@ -30,3 +31,4 @@ When a future task should load this note, and what it should preserve.
 
 - A relevant path changes.
 - The boundary named in the claim changes.
+- Non-path invalidators when they exist (schema, ADR, linked verification, dependency).

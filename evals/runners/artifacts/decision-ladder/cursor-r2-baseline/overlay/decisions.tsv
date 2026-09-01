@@ -1,0 +1,5 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T13:25:00Z	persist	JSON file store, not SQLite	enough for this shop; reversing later is a migration	file:docs/adr/0002-file-store.md	accepted
+2026-09-01T13:25:00Z	persist	log writes as JSON lines	one format, append-only	file:data/writes.jsonl	accepted
+

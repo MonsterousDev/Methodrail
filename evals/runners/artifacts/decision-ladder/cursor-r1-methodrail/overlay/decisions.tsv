@@ -1,0 +1,6 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T13:20:32Z	persist	log each write as JSON not text	reversible parseable trail; not hard to reverse	file:src/store.js	open
+2026-09-01T13:20:32Z	persist	store orders in a JSON file not SQLite	no db dependency, single-process persist API, proportional for current risk	file:src/store.js	open
+2026-09-01T13:20:42Z	persist	promoted JSON file store choice to ADR-0002	hard to reverse, surprising without context, real trade-off; operator approved after classification	file:docs/adr/0002-file-store.md	accepted
+2026-09-01T13:20:52Z	persist	verified JSON file persist and JSON write log	node persist round-trip wrote data/orders.json and data/writes.jsonl	file:data/orders.json	tests green

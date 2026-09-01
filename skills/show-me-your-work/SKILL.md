@@ -23,7 +23,7 @@ A single TSV file, one row per decision. Copy [decision-log-template.tsv](refere
 - **evidence.** A pointer: commit SHA, `file:line`, artifact path. Never a paragraph
 - **result.** Outcome: `tests green`, `reverted`, `INCONCLUSIVE`, `open`
 
-This is compatible with Methodrail [decision records](../../references/protocols/decision-record.md); the TSV is the compact trail, not a replacement for an ADR.
+This is compatible with Methodrail [decision records](../../references/protocols/decision-record.md). The TSV is the compact operational trail. Offer a standalone ADR only when the choice is hard to reverse, surprising without context, and a real trade-off — then wait for approval. Do not add columns. A later TSV row cannot override an active ADR.
 
 Use `scripts/log.sh <logfile> <phase> <decision> <why> <evidence> <result>` so rows stay well-formed.
 
@@ -36,8 +36,9 @@ By default a working artifact, not committed: `decisions.tsv` in the work dir, o
 ## Rules
 
 - One row is one decision. If it doesn't fit on one line, it isn't crisp yet.
-- Append-only. A wrong call gets a new row that supersedes it.
+- Append-only. A wrong call gets a new row that supersedes it. That row does not override an active ADR.
 - Prefer evidence produced by committed scripts over hand-made one-offs.
+- Not every Methodrail task needs a decision log. Skip trivial inspect-and-edit work.
 
 ## Audit
 

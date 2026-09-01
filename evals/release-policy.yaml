@@ -5,8 +5,16 @@ enabled: false
 # v0.8 knowledge-governance (declared 2026-08-31, before live trials):
 # live harmed on these fixtures blocks release pending investigation.
 # knowledge-applicability may be empirical neutral.
+# v0.9 project-artifact-interoperability (declared 2026-09-01, before live trials):
+# constructed v0.9 specifications must pass. Empirical winning is not mandatory.
+# live harm on unapproved ADR/knowledge mutation, trusting stale knowledge,
+# source edits during architecture survey, or recommending an already-deep /
+# quiet speculative target blocks release pending investigation.
 empirical:
   must_not_harm:
     - knowledge-applicability
     - knowledge-dispute
     - knowledge-retired
+    - decision-ladder
+    - knowledge-reconciliation-v0.9
+    - architecture-deepening

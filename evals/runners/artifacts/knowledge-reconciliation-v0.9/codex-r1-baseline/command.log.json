@@ -1,0 +1,58 @@
+[
+  {
+    "command": "pwd && sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files",
+    "exit_status": 0
+  },
+  {
+    "command": "rg -n \"ticket\\.|closed|mail|email|customer\" .",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/mailer.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' repo/package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,120p' repo/index.js",
+    "exit_status": 0
+  },
+  {
+    "command": "find repo -maxdepth 3 -type f -print",
+    "exit_status": 0
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "find . -maxdepth 3 -type f -not -path './TRANSCRIPT*' -not -name 'OPERATOR.md' -not -name 'TASK.md' -not -name 'RUN.json' -print",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' .methodrail/knowledge/mail.md",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e 'const mailer=require(\"./repo\"); const before=Date.now(); const row=mailer.handle({id:\"evt_1\",type:\"ticket.closed\",customer:{email:\"cust@example.com\"}}); if(row.eventId!==\"evt_1\"||row.type!==\"ticket.closed\"||row.audience!==\"customer\"||row.template!==\"ticket.closed.customer\"||row.to!==\"cust@example.com\") throw new Error(\"closed customer row mismatch\"); if(mailer.handle({id:\"evt_1\",type:\"ticket.closed\",customer:{email:\"other@example.com\"}})!==row) throw new Error(\"not idempotent\"); mailer.failSend(\"evt_1\"); if(!row.failed) throw new Error(\"failed flag missing\"); if(row.retryAt < before || row.retryAt > Date.now()) throw new Error(\"retryAt not immediate\"); if(mailer.countFor(\"ticket.closed\")!==1) throw new Error(\"wrong count\");'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' repo/src/mailer.js",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e 'JSON.parse(require(\"fs\").readFileSync(\"COMMANDS.json\",\"utf8\"));'",
+    "exit_status": 0
+  }
+]

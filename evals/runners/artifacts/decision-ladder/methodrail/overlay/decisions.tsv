@@ -1,0 +1,4 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T12:00:00Z	implement	log writes as JSON lines	easy to reverse later	src/store.js:logWrite	open
+2026-09-01T12:05:00Z	implement	promoted store choice to ADR-0002	hard to reverse file vs sqlite	docs/adr/0002-file-store.md	open

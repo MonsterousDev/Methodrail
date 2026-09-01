@@ -1,0 +1,56 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "git log --oneline -20 -- src/orderIntake.js src/billing/ledger.js src/userService.js src/quiet/format.js src/db.js 2>&1; echo \"---STATUS---\"; git status --short; echo \"---TEST-FILES---\"; find . -name '*test*' -o -name '*spec*' | grep -v node_modules | grep -v skills | grep -v '.git'",
+      "exit_status": 1
+    },
+    {
+      "command": "node -e '\nconst intake = require(\"./src/orderIntake.js\");\nconst ledger = require(\"./src/billing/ledger.js\");\nconst userService = require(\"./src/userService.js\");\nconst format = require(\"./src/quiet/format.js\");\n\nconst order = { sku: \"SKU-1\" };\nconst pricing = { priceCents: 1000, taxCode: \"standard\" };\nconst a = intake.fromCart(order, pricing);\nconst b = intake.fromApi(order, { priceCents: 1000, taxCode: \"exempt\" });\nconst c = intake.fromCli(order, { priceCents: 500, taxCode: \"standard\" });\nconst d = intake.intake(order, { priceCents: 200, taxCode: \"standard\" });\nconsole.log(JSON.stringify({ a, b, c, d, balance: ledger.balance(), reverse: ledger.reverse(\"1\"), reverseMissing: ledger.reverse(\"missing\"), user: userService.getUser(\"u1\"), format: format(\"  x  \") }, null, 2));\n'",
+      "exit_status": 0
+    },
+    {
+      "command": "find . \\( -name '*test*' -o -name '*spec*' \\) ! -path './skills/*' ! -path './.git/*'",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c 'import json,sys; p=json.load(open(\"COMMANDS.json\")); assert isinstance(p,list) and all(\"command\" in x and \"exit_status\" in x for x in p); print(\"ok\", len(p), \"commands\")' && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Architecture survey and refactor brief",
+    "Survey of current high-churn code only. Source was not edited. Claims are labeled **observed** (read from files in this tree), **test-confirmed** (exercised with `node` this turn), or **historically-confirmed** (`CHURN.md`; this tree is not a git repository, so commit counts were not re-derived).",
+    "Knowledge note `.methodrail/knowledge/intake.md` was freshness-checked against `src/orderIntake.js`. The claim that callers pass pricing internals across the intake seam still holds. The note’s evidence line (“returns priceCents and taxCode to three callers”) is imprecise: the three channel wrappers **require** `pricingInternals` on the way in and forward `priceCents` / `taxCode` to the ledger; they return `{ id, total }`, not those fields.",
+    "## Candidates",
+    "| Module | Churn / relevance | Deletion test | Classification | Strength |",
+    "| --- | --- | --- | --- | --- |",
+    "| `src/orderIntake.js` | Hot this month (**historically-confirmed**: 14 commits). PROJECT.md: hot shallow intake. | Delete `fromCart` / `fromApi` / `fromCli` and complexity vanishes (identical pass-throughs). Delete `intake` and quoting + pricing-field assembly reappear at every caller. Earned seam, still shallow. | **deepen** (and consolidate the three wrappers) | **Strong** |",
+    "| `src/billing/ledger.js` | Hot this month (**historically-confirmed**: 12 commits). | Delete it and tax, totals, in-memory rows, `balance`, and `reverse` reappear across callers. Small interface already hides that. | **preserve** | — |",
+    "| `src/userService.js` | Not in current-work churn. | Delete it and callers just call `db.getUser`. Pass-through. | **delete/consolidate** | Speculative (quiet, not current work) |",
+    "| `src/quiet/format.js` | No callers, no commits this quarter (**historically-confirmed**). | Unused helper. | **reject** | — |",
+    "**Ledger is not a rewrite candidate.** High churn on an already-deep module is not a reason to split it. ADR-0001: keep money movement behind the ledger’s small interface; do not split ledger into pass-through helpers.",
+    "**Top recommendation:** deepen `orderIntake`. The rest of this document is the refactor brief for that candidate."
+  ],
+  "outcome": "# Architecture survey and refactor brief Survey of current high-churn code only. Source was not edited. Claims are labeled **observed** (read from files in this tree), **test-confirmed** (exercised with `node` this turn), or **historically-confirmed** (`CHURN.md`; this tree is not a git repository, so commit counts were not re-derived). Knowledge note `.methodrail/knowledge/intake.md` was freshness-checked against `src/orderIntake.js`. The claim that callers pass pricing internals across the int",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/architecture-deepening/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-deepening/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/architecture-deepening/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/cursor-r1-methodrail/answer.md"
+  }
+}

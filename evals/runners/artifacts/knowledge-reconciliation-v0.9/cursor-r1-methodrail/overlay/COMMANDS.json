@@ -1,0 +1,6 @@
+[
+  {"command": "node repo/src/mailer.js", "exit_status": 0},
+  {"command": "node -e \"const m=require('./repo'); const e={id:'a',type:'ticket.closed'}; const r=m.handle(e); if(!r||r.eventId!=='a') process.exit(2); if(m.handle(e)!==r) process.exit(3); if(m.handle({id:'b',type:'other'})!==null) process.exit(4); m.failSend('a'); if(!m.outbox[0].failed) process.exit(5); if(!(m.outbox[0].retryAt>Date.now())) process.exit(6); console.log('api ok', m.countFor('ticket.closed'), m.backoffMs());\"", "exit_status": 0},
+  {"command": "node repo/src/mailer.js", "exit_status": 0},
+  {"command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c \"import json,sys; json.load(open('COMMANDS.json')); print('ok')\" && ls -l ANSWER.md COMMANDS.json", "exit_status": 0}
+]

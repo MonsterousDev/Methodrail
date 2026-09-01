@@ -1,0 +1,66 @@
+[
+  {
+    "command": "pwd && ls",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' OPERATOR.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' TASK.md",
+    "exit_status": 0
+  },
+  {
+    "command": "rg --files",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' package.json",
+    "exit_status": 0
+  },
+  {
+    "command": "find src -maxdepth 3 -type f -print",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,260p' src/store.js",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' docs/adr/0001-billing-owner.md",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' decisions.tsv",
+    "exit_status": 0
+  },
+  {
+    "command": "ORDER_STORE_PATH=.tmp-test/orders.json ORDER_WRITE_LOG_PATH=.tmp-test/order-writes.jsonl node --input-type=module -e 'import { persist } from \"./src/store.js\"; persist({ id: \"o-1\", total: 42 }); persist({ id: \"o-1\", total: 43 });'",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' .tmp-test/orders.json",
+    "exit_status": 0
+  },
+  {
+    "command": "sed -n '1,220p' .tmp-test/order-writes.jsonl",
+    "exit_status": 0
+  },
+  {
+    "command": "node --check src/store.js",
+    "exit_status": 0
+  },
+  {
+    "command": "rm -rf .tmp-test",
+    "exit_status": 126
+  },
+  {
+    "command": "git status --short",
+    "exit_status": 128
+  },
+  {
+    "command": "node --check src/store.js",
+    "exit_status": 0
+  }
+]

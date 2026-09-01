@@ -38,8 +38,8 @@ architect              → architecture decision
 tdd                    → executable behavioral evidence
 verify-change          → fresh verification evidence
 code-review            → findings
-show-me-your-work      → decision/evidence trail
-reflect                → learning candidates
+show-me-your-work      → operational TSV trail; ADR only via the three-part gate
+reflect                → learning candidates; sole writer of typed notes after approval
 handoff                → bounded continuity artifact
 ```
 
@@ -156,6 +156,14 @@ develop → wayfinder → domain-modeling → how → architect
 → code-review → verify
 → name interrogate if risk warrants; wait
 ```
+
+## Decision ladder
+
+Operational TSV rows and durable ADRs are one ladder, not two competing stores. `show-me-your-work` owns the six-column trail. `domain-modeling` / `grill-with-docs` offer ADRs through the shared [decision-record](protocols/decision-record.md) gate. Do not auto-promote.
+
+## Knowledge and verification
+
+Feature maps may link canonical project knowledge. They do not copy claims and they do not write notes. Fresh verification evidence may feed `reflect`; it never crosses the durable knowledge boundary automatically.
 
 ## Control planes
 

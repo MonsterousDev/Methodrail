@@ -16,6 +16,8 @@ Constructed pairs must never be quoted as `helped`. Current Codex pilot JSON is 
 
 `evals/pilot-v0.8-knowledge-governance.yaml` is the executable v0.8 knowledge-governance live-pilot manifest. Rubric: [v0.8-knowledge-governance-protocol.md](./v0.8-knowledge-governance-protocol.md). The default integrity gate rescores it.
 
+`evals/pilot-v0.9-project-artifact-interoperability.yaml` is the executable v0.9 live-pilot manifest. Rubric: [v0.9-project-artifact-interoperability-protocol.md](./v0.9-project-artifact-interoperability-protocol.md). The default integrity gate rescores it.
+
 Layers:
 
 - **Outcome** — derived from the resulting tree, patch/overlay, tests, and final answer

@@ -23,15 +23,15 @@ One or two sentences describing what this repository builds.
 
 - Smallest useful checks by change type
 - Environment limits or required services
-- Link to the project-local verify skill when one exists
+- Link to the project-local verify skill and feature-map root when they exist
 
 ## Domain vocabulary
 
-- Terms whose project-specific meaning is not obvious
+- Link to the canonical glossary or domain doc when one exists
 
 ## Architecture pointers
 
-- Links to canonical source, docs, ADRs, or package notes
+- Links to canonical source, specs, plans, ADRs, or package notes
 
 ## Runtime and control
 
@@ -39,7 +39,7 @@ One or two sentences describing what this repository builds.
 
 ## Decision records
 
-- Links to ADRs or `.methodrail/knowledge/decisions/` when consequential choices exist
+- Links to the ADR index and, separately, the operational `decisions.tsv` convention when either exists
 
 ## Important constraints
 
@@ -53,4 +53,4 @@ One or two sentences describing what this repository builds.
 
 - Links to authoritative repository instruction files
 
-Keep this file operational and concise. Link to authoritative docs rather than duplicating them. Do not include generic advice such as “write clean code.”
+Keep this file operational and concise. Link to authoritative docs rather than duplicating them. Name the role of each pointer. Do not include generic advice such as “write clean code.”

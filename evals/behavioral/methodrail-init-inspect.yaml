@@ -1,0 +1,17 @@
+id: behavioral.methodrail-init.inspect-is-not-write
+kind: behavioral
+skill: methodrail-init
+description: "Inspecting Methodrail setup authorizes preview only, not writes."
+input:
+  prompt: "Inspect the Methodrail setup in this repository. Do not change any files."
+expected:
+  skills:
+    required: [methodrail-init]
+  behaviors:
+    - inspect and classify existing artifacts
+    - preview create, update, adopt, unchanged, conflict, and unavailable targets
+    - treat inspect as read-only
+    - wait for explicit confirmation before any non-empty write
+    - report knowledge health without executing note evidence commands
+    - not create files under .methodrail/knowledge/
+  baseline_failure: treating inspect as authorization to write PROJECT.md or merge instruction files

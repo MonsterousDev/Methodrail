@@ -1,0 +1,45 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "baseline",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 2,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "node -e '\nconst path = require(\"path\");\nprocess.chdir(\"/tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-baseline\");\nconst m = require(\"./repo/src/mailer.js\");\n\nconst event = { id: \"evt-1\", type: \"ticket.closed\", ticketId: \"T-9\", customerEmail: \"a@example.com\" };\nconst first = m.handle(event);\nconst dup = m.handle(event);\nif (!first || !first.mail) { console.error(\"missing ticket.closed mail\"); process.exit(1); }\nif (first.mail.kind !== \"customer\") { console.error(\"mail is not customer\"); process.exit(1); }\nif (dup !== first) { console.error(\"not keyed on event.id\"); process.exit(1); }\nif (m.countFor(\"ticket.closed\") !== 1) { console.error(\"duplicate outbox row\"); process.exit(1); }\n\nconst beforeRetryAt = first.retryAt;\nm.failSend(\"evt-1\");\nif (!first.failed) { console.error(\"failSend did not mark failed\"); process.exit(1); }\nif (!m.outbox.includes(first)) { console.error(\"failed row left outbox\"); process.exit(1); }\nif (first.retryAt < beforeRetryAt) { console.error(\"retryAt moved backwards\"); process.exit(1); }\n\nconst tooSoon = m.retry(\"evt-1\", Date.now());\nif (!tooSoon.failed) { console.error(\"retried immediately\"); process.exit(1); }\n\nconst afterWait = m.retry(\"evt-1\", Date.now() + m.backoffMs());\nif (afterWait.failed) { console.error(\"did not retry after backoff\"); process.exit(1); }\nif (!afterWait.retried) { console.error(\"retry flag missing\"); process.exit(1); }\nif (m.backoffMs() !== 5000) { console.error(\"unexpected backoff\"); process.exit(1); }\n\nconsole.log(JSON.stringify({\n  ok: true,\n  eventId: first.eventId,\n  mail: first.mail,\n  backoffMs: m.backoffMs(),\n  count: m.countFor(\"ticket.closed\")\n}, null, 2));\n'",
+      "exit_status": 1
+    },
+    {
+      "command": "node -e '\nconst m = require(\"./repo/src/mailer.js\");\n\nconst event = { id: \"evt-1\", type: \"ticket.closed\", ticketId: \"T-9\", customerEmail: \"a@example.com\" };\nconst first = m.handle(event);\nconst dup = m.handle(event);\nif (!first || !first.mail) { console.error(\"missing ticket.closed mail\"); process.exit(1); }\nif (first.mail.kind !== \"customer\") { console.error(\"mail is not customer\"); process.exit(1); }\nif (dup !== first) { console.error(\"not keyed on event.id\"); process.exit(1); }\nif (m.countFor(\"ticket.closed\") !== 1) { console.error(\"duplicate outbox row\"); process.exit(1); }\n\nconst beforeRetryAt = first.retryAt;\nm.failSend(\"evt-1\");\nif (!first.failed) { console.error(\"failSend did not mark failed\"); process.exit(1); }\nif (!m.outbox.includes(first)) { console.error(\"failed row left outbox\"); process.exit(1); }\nif (first.retryAt < beforeRetryAt) { console.error(\"retryAt moved backwards\"); process.exit(1); }\n\nconst tooSoon = m.retry(\"evt-1\", Date.now());\nif (!tooSoon.failed) { console.error(\"retried immediately\"); process.exit(1); }\n\nconst afterWait = m.retry(\"evt-1\", Date.now() + m.backoffMs());\nif (afterWait.failed) { console.error(\"did not retry after backoff\"); process.exit(1); }\nif (!afterWait.retried) { console.error(\"retry flag missing\"); process.exit(1); }\nif (m.backoffMs() !== 5000) { console.error(\"unexpected backoff\"); process.exit(1); }\n\nconsole.log(JSON.stringify({\n  ok: true,\n  eventId: first.eventId,\n  mail: first.mail,\n  backoffMs: m.backoffMs(),\n  count: m.countFor(\"ticket.closed\")\n}, null, 2));\n'",
+      "exit_status": 0
+    },
+    {
+      "command": "node repo/src/mailer.js; node -e 'const m = require(\"./repo\"); if (typeof m.handle !== \"function\" || typeof m.composeTicketClosedMail !== \"function\") { console.error(\"index export missing\"); process.exit(1); } console.log(\"index ok\");'",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Added `ticket.closed` customer mail in `repo/src/mailer.js`.",
+    "Stored knowledge still holds for keying: dispatch is keyed on provider `event.id`, so a second `handle` for the same id returns the existing outbox row and does not enqueue a duplicate. That half was reused.",
+    "The stored retry claim does not hold. Knowledge said a failed send is retried immediately; current source already uses `backoffMs()` of 5000, and the retry-closed feature says failed `ticket.closed` mail stays in the outbox and waits. Failed sends now stay in the outbox, `retryAt` is set from backoff, and `retry` will not resend until that time.",
+    "A `ticket.closed` event composes customer mail (`kind: \"customer\"`, subject/body for the closed ticket). Knowledge in `.methodrail/knowledge/mail.md` was updated so the retry policy matches source.",
+    "Checked in this run: same event id is not double-queued; after `failSend` the row remains; a retry before backoff is a no-op; a retry after 5000ms proceeds."
+  ],
+  "outcome": "Added `ticket.closed` customer mail in `repo/src/mailer.js`. Stored knowledge still holds for keying: dispatch is keyed on provider `event.id`, so a second `handle` for the same id returns the existing outbox row and does not enqueue a duplicate. That half was reused. The stored retry claim does not hold. Knowledge said a failed send is retried immediately; current source already uses `backoffMs()` of 5000, and the retry-closed feature says failed `ticket.closed` mail stays in the outbox and wai",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r2-baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r2-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r2-baseline/answer.md"
+  }
+}

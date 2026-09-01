@@ -1,0 +1,22 @@
+[
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv store-choice \"use a JSON file store not SQLite\" \"hard to reverse, surprising without context, real trade-off; no db dependency or query surface yet\" file:docs/adr/0002-file-store.md promoted",
+    "exit_status": 0
+  },
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv write-log \"log each persist as one JSON line\" \"reversible format pick; JSON matches the order payload\" file:src/store.js open",
+    "exit_status": 0
+  },
+  {
+    "command": "node --input-type=module -e '\nimport { persist, logWrite } from \"./src/store.js\";\nimport { readFileSync, existsSync } from \"node:fs\";\n\nlet threw = false;\ntry { persist({}); } catch (e) { threw = e.message === \"order.id required\"; }\nif (!threw) throw new Error(\"expected persist to require order.id\");\n\nconst a = persist({ id: \"ord-1\", total: 12 });\nif (!a.ok || a.id !== \"ord-1\") throw new Error(\"persist return\");\n\nconst b = persist({ id: \"ord-2\", total: 40 });\nif (!b.ok) throw new Error(\"second persist\");\n\nconst orders = JSON.parse(readFileSync(\"data/orders.json\", \"utf8\"));\nif (!orders[\"ord-1\"] || orders[\"ord-1\"].total !== 12) throw new Error(\"ord-1 missing\");\nif (!orders[\"ord-2\"] || orders[\"ord-2\"].total !== 40) throw new Error(\"ord-2 missing\");\n\nconst logged = logWrite({ action: \"manual\", id: \"ord-1\" });\nif (logged !== \"json\") throw new Error(\"logWrite should return json\");\n\nconst lines = readFileSync(\"data/writes.log\", \"utf8\").trim().split(\"\\n\");\nif (lines.length < 3) throw new Error(\"expected persist logs plus manual\");\nfor (const line of lines) JSON.parse(line);\n\nif (!existsSync(\"docs/adr/0002-file-store.md\")) throw new Error(\"ADR missing\");\nconsole.log(\"ok\", { orders: Object.keys(orders), logLines: lines.length });\n'",
+    "exit_status": 0
+  },
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv verify \"persist writes data/orders.json and JSON write log\" \"node import persist plus JSON.parse of both files\" file:data/orders.json \"tests green\"",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c 'import json,sys; json.load(open(\"COMMANDS.json\")); print(\"ANSWER.md and COMMANDS.json exist; COMMANDS.json is valid JSON\")'",
+    "exit_status": 0
+  }
+]

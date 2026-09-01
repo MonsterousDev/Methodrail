@@ -1,0 +1,5 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T13:16:00Z	store	json-file order store, not sqlite	no native deps; inspectable; small shop	file:docs/adr/0002-file-store.md	accepted
+2026-09-01T13:16:00Z	log	json lines for write log	structured one object per write	file:data/writes.jsonl	accepted
+

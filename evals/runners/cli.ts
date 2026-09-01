@@ -116,6 +116,7 @@ function examples(): void {
     "evals/pilot-t5-t10.yaml",
     "evals/pilot-v0.7-knowledge.yaml",
     "evals/pilot-v0.8-knowledge-governance.yaml",
+    "evals/pilot-v0.9-project-artifact-interoperability.yaml",
   ]) {
     const path = join(repoRoot, manifest);
     if (existsSync(path)) integrityErrors.push(...pilot(path));

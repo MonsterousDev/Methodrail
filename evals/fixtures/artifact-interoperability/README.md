@@ -1,0 +1,1 @@
+Mixed-artifact init fixture. Task A (`task-a.md`) withholds write approval. Task B (`task.md`) approves only the non-conflicting pointer plan. `CONTEXT.md` and `docs/glossary.md` compete as glossary roots.

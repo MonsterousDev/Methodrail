@@ -32,4 +32,4 @@ Given the same repository evidence and user decisions, a second run must:
 - add no duplicate links or sections;
 - report no new decisions.
 
-If ownership cannot be established, skip the edit and explain what requires confirmation.
+If ownership cannot be established, classify `conflict`, skip the edit, and explain what requires confirmation. A preview that would write waits for explicit confirmation. If the files named in the plan change after preview, recompute rather than applying a stale plan.

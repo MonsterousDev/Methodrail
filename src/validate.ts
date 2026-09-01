@@ -6,7 +6,7 @@ import { REQUIRED_COMPOSITION_FIXTURES } from "./eval/load.js";
 import { hostProjections, readCanonicalInvariant } from "./family-invariant.js";
 import { walkFiles } from "./fs-walk.js";
 import { evaluateRepositoryKnowledge } from "./knowledge/report.js";
-import { evaluateProjectMd } from "./project-md.js";
+import { evaluateProjectMd, evaluateProjectMdFile } from "./project-md.js";
 
 export interface ValidationIssue {
   path: string;
@@ -203,7 +203,13 @@ function validateMarkdownLinks(path: string, source: string): ValidationIssue[] 
       continue;
     }
 
-    const localPath = decodeURIComponent(target.split("#", 1)[0] ?? "");
+    let localPath: string;
+    try {
+      localPath = decodeURIComponent(target.split("#", 1)[0] ?? "");
+    } catch {
+      issues.push(issue(path, `Referenced Markdown path is not valid URL-encoded text: ${target}`));
+      continue;
+    }
     const resolved = resolve(dirname(path), localPath);
     if (!existsSync(resolved) || !statSync(resolved).isFile()) {
       issues.push(issue(path, `Referenced Markdown file does not exist: ${localPath}`));
@@ -692,7 +698,10 @@ function validateProjectMdQuality(root: string): ValidationIssue[] {
     if (normalized.startsWith("evals/runners/artifacts/")) continue;
     if (!normalized.includes(".methodrail/")) continue;
     if (!normalized.endsWith("PROJECT.md")) continue;
-    const quality = evaluateProjectMd(readFileSync(path, "utf8"));
+    const quality =
+      normalized.startsWith("evals/") || normalized.startsWith("tests/")
+        ? evaluateProjectMd(readFileSync(path, "utf8"))
+        : evaluateProjectMdFile(path, root);
     for (const message of quality.issues) {
       issues.push(issue(path, message));
     }

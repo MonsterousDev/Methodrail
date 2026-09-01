@@ -1,0 +1,3 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T00:00:00Z	implementation	use JSON file order store	keeps persistence file-backed and dependency-free while documenting the SQLite trade-off	file:docs/adr/0002-order-persistence.md	open

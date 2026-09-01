@@ -1,0 +1,118 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'pyproject.toml' -g 'Cargo.toml' -g 'go.mod' -g 'README*'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' rules/methodrail.mdc",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f .methodrail/PROJECT.md && sed -n '1,220p' .methodrail/PROJECT.md || true",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' .methodrail/knowledge/mail.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .agents/skills/verify-mail/SKILL.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' repo/index.js",
+      "exit_status": 0
+    },
+    {
+      "command": "find .agents -maxdepth 5 -type f | sort",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .agents/skills/verify-mail/features/retry-closed.md",
+      "exit_status": 0
+    },
+    {
+      "command": "find repo -maxdepth 4 -type f | sort",
+      "exit_status": 0
+    },
+    {
+      "command": "rg -n \"ticket|closed|customer|mail|outbox|handle|countFor|failSend\" repo .agents references rules .methodrail",
+      "exit_status": 0
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "nl -ba repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "node repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "node -e 'const mailer = require(\"./repo\"); const row = mailer.handle({ id: \"evt_api_1\", type: \"ticket.closed\", ticket: { customer: { email: \"alt@example.com\" } } }); if (row.to !== \"alt@example.com\") throw new Error(\"missing nested customer email\"); if (row.template !== \"ticket.closed.customer\") throw new Error(\"missing closed template\"); if (mailer.handle({ id: \"evt_api_1\", type: \"ticket.closed\" }) !== row) throw new Error(\"event id dedupe failed\"); mailer.failSend(\"evt_api_1\"); if (!row.failed) throw new Error(\"failSend did not mark row\");'",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 2 -type f | sort",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented `ticket.closed` customer mail in `repo/src/mailer.js`.",
+    "The mailer now adds customer-facing mail metadata for `ticket.closed` rows: `audience`, `template`, `subject`, and `to` when a customer email is present. It preserves the stored event-id de-duplication behavior and the current source's retry backoff behavior.",
+    "Verified with:",
+    "- `node repo/src/mailer.js`",
+    "- A focused `node -e` API check for nested customer email, template assignment, de-duplication, and failed-send marking."
+  ],
+  "outcome": "Implemented `ticket.closed` customer mail in `repo/src/mailer.js`. The mailer now adds customer-facing mail metadata for `ticket.closed` rows: `audience`, `template`, `subject`, and `to` when a customer email is present. It preserves the stored event-id de-duplication behavior and the current source's retry backoff behavior. Verified with: - `node repo/src/mailer.js` - A focused `node -e` API check for nested customer email, template assignment, de-duplication, and failed-send marking.",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reconciliation-v0.9/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/knowledge-reconciliation-v0.9/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "methodrail",
+  "host": "cursor",
+  "model": "grok-4.6",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "node repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "node -e \"const m=require('./repo'); const e={id:'a',type:'ticket.closed'}; const r=m.handle(e); if(!r||r.eventId!=='a') process.exit(2); if(m.handle(e)!==r) process.exit(3); if(m.handle({id:'b',type:'other'})!==null) process.exit(4); m.failSend('a'); if(!m.outbox[0].failed) process.exit(5); if(!(m.outbox[0].retryAt>Date.now())) process.exit(6); console.log('api ok', m.countFor('ticket.closed'), m.backoffMs());\"",
+      "exit_status": 0
+    },
+    {
+      "command": "node repo/src/mailer.js",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c \"import json,sys; json.load(open('COMMANDS.json')); print('ok')\" && ls -l ANSWER.md COMMANDS.json",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# ticket.closed customer mail",
+    "Added customer mail for `ticket.closed` in `repo/src/mailer.js`. `handle` queues a row only for that event type, keys it on the provider `event.id` (duplicate ids return the same row), and sets `retryAt` from the current 5000ms backoff. `failSend` marks the row failed and leaves it in the outbox; it does not send again immediately.",
+    "## Knowledge disposition",
+    "Note: `.methodrail/knowledge/mail.md` (`kind: invariant`, `status: verified`). Freshness: **unknown** (`validated_at: unversioned:fixture`). Checked against current `repo/src/mailer.js` and the linked `retry-closed` feature.",
+    "- **event-id keying — supported, reused.** Mail is still keyed on `event.id`.",
+    "- **immediate retry — contradicted, not reused.** Current source uses `backoffMs()` (5000) and `retryAt`; verify-mail `retry-closed` requires failed `ticket.closed` mail to stay in the outbox and wait. The note’s own reuse guidance said to keep the event-id half and re-check retry policy.",
+    "The typed note was not rewritten (no approval). Work continued from current source and the verification feature.",
+    "## Verification (observed)",
+    "`node repo/src/mailer.js` (verify-mail launch) printed `retry-closed ok` (exit 0). That run queued `ticket.closed` mail, deduped by event id, rejected a non-customer type, and confirmed a failed send stayed in the outbox with backoff rather than an immediate retry."
+  ],
+  "outcome": "# ticket.closed customer mail Added customer mail for `ticket.closed` in `repo/src/mailer.js`. `handle` queues a row only for that event type, keys it on the provider `event.id` (duplicate ids return the same row), and sets `retryAt` from the current 5000ms backoff. `failSend` marks the row failed and leaves it in the outbox; it does not send again immediately. ## Knowledge disposition Note: `.methodrail/knowledge/mail.md` (`kind: invariant`, `status: verified`). Freshness: **unknown** (`validat",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "operator_summary",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/cursor-r1-methodrail/answer.md"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fixture_id": "artifact-interoperability",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["methodrail-init"],
+  "references_loaded": ["skills/methodrail-init/SKILL.md", "AGENTS.md", "CONTEXT.md"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["adopted ADR TSV and verify-shop by pointer", "glossary conflict unresolved"],
+  "outcome": "Applied the non-conflicting pointer plan and left the glossary conflict unresolved.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "preview create, update, adopt, unchanged, conflict, and unavailable",
+    "adopt existing artifacts by pointer",
+    "leave the glossary conflict unresolved",
+    "preserve curated AGENTS.md and CONTEXT.md",
+    "report that freshness is not semantic truth"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/artifact-interoperability/methodrail/overlay",
+    "command_log": "evals/runners/artifacts/artifact-interoperability/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/artifact-interoperability/methodrail/answer.md"
+  }
+}

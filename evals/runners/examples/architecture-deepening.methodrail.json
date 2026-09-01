@@ -1,0 +1,25 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["improve-codebase-architecture", "codebase-design"],
+  "references_loaded": ["CHURN.md", "docs/adr/0001-ledger-owns-money.md"],
+  "tools_used": ["read"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": ["orderIntake leaky callers", "ledger already deep", "no source edits"],
+  "outcome": "Classified the four modules and routed a characterization-ready intake brief to /refactor.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "classify pass-through, shallow, already-deep, and speculative modules",
+    "recommend the shallow order intake module",
+    "leave source unchanged",
+    "route behavior-preserving work to /refactor"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/architecture-deepening/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/methodrail/answer.md"
+  }
+}

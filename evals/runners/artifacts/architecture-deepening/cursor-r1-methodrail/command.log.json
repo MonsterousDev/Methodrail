@@ -1,0 +1,18 @@
+[
+  {
+    "command": "git log --oneline -20 -- src/orderIntake.js src/billing/ledger.js src/userService.js src/quiet/format.js src/db.js 2>&1; echo \"---STATUS---\"; git status --short; echo \"---TEST-FILES---\"; find . -name '*test*' -o -name '*spec*' | grep -v node_modules | grep -v skills | grep -v '.git'",
+    "exit_status": 1
+  },
+  {
+    "command": "node -e '\nconst intake = require(\"./src/orderIntake.js\");\nconst ledger = require(\"./src/billing/ledger.js\");\nconst userService = require(\"./src/userService.js\");\nconst format = require(\"./src/quiet/format.js\");\n\nconst order = { sku: \"SKU-1\" };\nconst pricing = { priceCents: 1000, taxCode: \"standard\" };\nconst a = intake.fromCart(order, pricing);\nconst b = intake.fromApi(order, { priceCents: 1000, taxCode: \"exempt\" });\nconst c = intake.fromCli(order, { priceCents: 500, taxCode: \"standard\" });\nconst d = intake.intake(order, { priceCents: 200, taxCode: \"standard\" });\nconsole.log(JSON.stringify({ a, b, c, d, balance: ledger.balance(), reverse: ledger.reverse(\"1\"), reverseMissing: ledger.reverse(\"missing\"), user: userService.getUser(\"u1\"), format: format(\"  x  \") }, null, 2));\n'",
+    "exit_status": 0
+  },
+  {
+    "command": "find . \\( -name '*test*' -o -name '*spec*' \\) ! -path './skills/*' ! -path './.git/*'",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c 'import json,sys; p=json.load(open(\"COMMANDS.json\")); assert isinstance(p,list) and all(\"command\" in x and \"exit_status\" in x for x in p); print(\"ok\", len(p), \"commands\")' && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+    "exit_status": 0
+  }
+]

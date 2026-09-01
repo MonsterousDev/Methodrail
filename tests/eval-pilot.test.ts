@@ -60,3 +60,24 @@ test("live v0.8 knowledge-governance pilot is complete and rescored from its art
   assert.equal(results["knowledge-retired:codex:r1"], "neutral");
   assert.equal(grade.pairs.some((pair) => pair.report.empirical === "harmed"), false);
 });
+
+test("live v0.9 project-artifact-interoperability pilot is complete and rescored from its artifact manifest", () => {
+  const manifestPath = join(root, "evals/pilot-v0.9-project-artifact-interoperability.yaml");
+  const grade = gradePilotManifest(manifestPath, ctx);
+  assert.deepEqual(grade.integrity_errors, []);
+  assert.equal(grade.pairs.length, 9);
+
+  const results = Object.fromEntries(
+    grade.pairs.map((pair) => [`${pair.fixture}:${pair.host}:r${pair.repeat}`, pair.report.empirical]),
+  );
+  assert.equal(results["decision-ladder:cursor:r1"], "incomplete");
+  assert.equal(results["decision-ladder:cursor:r2"], "incomplete");
+  assert.equal(results["decision-ladder:codex:r1"], "incomplete");
+  assert.equal(results["knowledge-reconciliation-v0.9:cursor:r1"], "incomplete");
+  assert.equal(results["knowledge-reconciliation-v0.9:cursor:r2"], "incomplete");
+  assert.equal(results["knowledge-reconciliation-v0.9:codex:r1"], "incomplete");
+  assert.equal(results["architecture-deepening:cursor:r1"], "helped");
+  assert.equal(results["architecture-deepening:cursor:r2"], "incomplete");
+  assert.equal(results["architecture-deepening:codex:r1"], "incomplete");
+  assert.equal(grade.pairs.some((pair) => pair.report.empirical === "harmed"), false);
+});

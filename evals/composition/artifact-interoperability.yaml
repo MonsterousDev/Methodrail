@@ -1,0 +1,14 @@
+id: composition.artifact-interoperability
+kind: composition
+description: Init should preview and adopt mixed artifacts without copying or guessing conflicts.
+fixture: evals/fixtures/artifact-interoperability
+input:
+  prompt: "Refresh Methodrail in this repository. Adopt existing project artifacts by pointer. I approve the non-conflicting plan only. Do not resolve the glossary conflict."
+expected:
+  skills:
+    required: [methodrail-init]
+    forbidden: [wayfinder, architect, arena, swarm]
+  behaviors:
+    - adopt by pointer
+    - leave glossary conflict unresolved
+    - preserve curated AGENTS.md

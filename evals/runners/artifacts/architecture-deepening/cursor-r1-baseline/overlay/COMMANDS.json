@@ -1,0 +1,14 @@
+[
+  {
+    "command": "ls -la && git log --oneline -20 -- . 2>/dev/null; git log --follow --oneline -- src/orderIntake.js src/billing/ledger.js src/quiet/format.js src/db.js src/userService.js 2>/dev/null | head -50; echo \"---\"; git rev-parse --is-inside-work-tree 2>/dev/null",
+    "exit_status": 128
+  },
+  {
+    "command": "find src docs -type f | sort && echo \"==== orderIntake ====\" && cat src/orderIntake.js && echo \"==== ledger ====\" && cat src/billing/ledger.js && echo \"==== userService ====\" && cat src/userService.js && echo \"==== db ====\" && cat src/db.js && echo \"==== format ====\" && cat src/quiet/format.js && echo \"==== ADR ====\" && cat docs/adr/0001-ledger-owns-money.md && echo \"==== CHURN ====\" && cat CHURN.md && echo \"==== callers of format ====\" && grep -R \"quiet/format\\|formatSku\" --include='*.js' . || true && echo \"==== callers of orderIntake ====\" && grep -R \"orderIntake\\|fromCart\\|fromApi\\|fromCli\" --include='*.js' . || true",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c \"import json; json.load(open('COMMANDS.json')); print('COMMANDS.json valid')\" && ls -l ANSWER.md COMMANDS.json TASK.md OPERATOR.md RUN.json",
+    "exit_status": 0
+  }
+]

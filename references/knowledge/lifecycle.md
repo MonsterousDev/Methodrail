@@ -43,7 +43,7 @@ Retired notes remain at their path for provenance and are never reused. Do not m
 
 If a governance transaction is only partly applied, show the incomplete diff. Do not guess the missing half. Ask whether to complete or revert it.
 
-Init reports disputed, retired, malformed, and unbounded notes. It does not resolve or migrate them.
+Init reports disputed, retired, malformed, unbounded, and dependency-fresh vs stale notes. It does not resolve, migrate, or revalidate them. Freshness is not semantic truth.
 
 ## Who may write `.methodrail/knowledge/`
 

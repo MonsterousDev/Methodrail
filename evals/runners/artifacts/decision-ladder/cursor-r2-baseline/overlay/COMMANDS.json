@@ -1,0 +1,10 @@
+[
+  {
+    "command": "node --input-type=module -e \"\nimport { persist, logWrite } from './src/store.js';\nconst a = persist({ id: 'ord-1', total: 12 });\nconst b = persist({ id: 'ord-2', total: 40 });\nlet threw = false;\ntry { persist({}); } catch (e) { threw = e.message === 'order.id required'; }\nconst logged = logWrite({ action: 'manual', id: 'ord-1' });\nconsole.log(JSON.stringify({ a, b, threw, logged }));\n\"",
+    "exit_status": 0
+  },
+  {
+    "command": "rm -rf data",
+    "exit_status": 0
+  }
+]

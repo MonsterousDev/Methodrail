@@ -1,0 +1,1 @@
+Implement order persistence for this shop. Log each write as JSON or text — pick one. Choose a file-backed store; SQLite vs a JSON file is a real trade-off that is hard to reverse and would surprise a later reader. Do not wait for extra product features.

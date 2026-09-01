@@ -1,3 +1,7 @@
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { dirname, resolve, sep } from "node:path";
+import { pathInside } from "./fs-walk.js";
+
 export interface ProjectMdQuality {
   ok: boolean;
   issues: string[];
@@ -22,5 +26,82 @@ export function evaluateProjectMd(source: string): ProjectMdQuality {
   if (fenceMarkers > 4) {
     issues.push("PROJECT.md should stay an index; it contains too many code fences");
   }
+  const starts = (source.match(/<!--\s*methodrail:start\s*-->/g) ?? []).length;
+  const ends = (source.match(/<!--\s*methodrail:end\s*-->/g) ?? []).length;
+  if (starts !== ends) {
+    issues.push("Methodrail-owned block markers are unmatched");
+  }
+  return { ok: issues.length === 0, issues };
+}
+
+function markdownLinks(source: string): { title: string; href: string }[] {
+  const entries: { title: string; href: string }[] = [];
+  for (const match of source.matchAll(/(?<!!)\[[^\]]*]\(([^)]+)\)/g)) {
+    const href = match[1]?.trim().replace(/^<|>$/g, "") ?? "";
+    const title = match[0]?.replace(/^\[/, "").replace(/]\([^)]*\)$/, "") ?? "";
+    if (!href) continue;
+    entries.push({ title, href });
+  }
+  return entries;
+}
+
+/**
+ * Extra PROJECT.md checks that need the file's directory.
+ * Optional artifact roles may be absent; a written link must still resolve.
+ */
+export function evaluateProjectMdLinks(source: string, projectMdPath: string, projectRoot: string): ProjectMdQuality {
+  const issues: string[] = [];
+  const seen = new Set<string>();
+  for (const entry of markdownLinks(source)) {
+    const href = entry.href;
+    if (!href || href.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(href)) continue;
+    let local: string;
+    try {
+      local = decodeURIComponent(href.split("#", 1)[0] ?? "");
+    } catch {
+      issues.push(`Link is not valid URL-encoded text: ${href}`);
+      continue;
+    }
+    if (!local) continue;
+    const key = local.replace(/\/$/, "");
+    const isKnowledgeIndex = /knowledge\/.+\.md$/i.test(key) && !/knowledge\/decisions\//i.test(key);
+    if (isKnowledgeIndex) {
+      if (seen.has(key)) {
+        issues.push(`Duplicate Methodrail index entry: ${local}`);
+      }
+      seen.add(key);
+    }
+    const resolved = resolve(dirname(projectMdPath), local);
+    if (!pathInside(projectRoot, resolved)) {
+      issues.push(`Link escapes the intended repository root: ${local}`);
+      continue;
+    }
+    if (!existsSync(resolved)) {
+      issues.push(`Broken repository-relative link: ${local}`);
+      continue;
+    }
+    try {
+      const st = statSync(resolved);
+      if (!st.isFile() && !st.isDirectory()) {
+        issues.push(`Broken repository-relative link: ${local}`);
+      }
+      if (st.isFile()) {
+        const target = readFileSync(resolved, "utf8").trim();
+        if (target.length > 200 && source.includes(target)) {
+          issues.push(`PROJECT.md copies artifact contents from ${local}`);
+        }
+      }
+    } catch {
+      issues.push(`Broken repository-relative link: ${local}`);
+    }
+  }
+  return { ok: issues.length === 0, issues };
+}
+
+export function evaluateProjectMdFile(projectMdPath: string, projectRoot: string): ProjectMdQuality {
+  const source = readFileSync(projectMdPath, "utf8");
+  const quality = evaluateProjectMd(source);
+  const links = evaluateProjectMdLinks(source, projectMdPath, projectRoot);
+  const issues = [...quality.issues, ...links.issues];
   return { ok: issues.length === 0, issues };
 }

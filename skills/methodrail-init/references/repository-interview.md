@@ -5,7 +5,7 @@ Inspect evidence in this order, stopping when the project is understood well eno
 1. Existing AI guidance: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursor/skills/`, `.claude/`, `.codex/`, `.agents/skills/`, `.github/copilot-instructions.md`, other local skills, and `.methodrail/` at the git root. If `.methodrail` is linked, validate its `HARNESS.yaml`; do not search arbitrary sibling folders.
 2. Project identity: README, contribution guide, manifests, lockfiles, workspace definitions, and directory shape.
 3. Supported operations: package scripts, Makefiles, task runners, CI jobs, container configuration, deployment configuration, and test configuration.
-4. Representative implementation: runtime entrypoints, source layout, one core module, one test, and architecture docs or ADRs when relevant.
+4. Representative implementation: runtime entrypoints, source layout, one core module, one test, and architecture docs or ADRs when relevant. Confirm each by content, not filename: glossaries, ADR homes, spec/plan/ticket/scratch trees, pstack-compatible `decisions.tsv` / `.audit/*.tsv`, verification feature maps, Matt-shaped domain/ADR layouts, Superpowers `docs/superpowers/specs/` and `plans/`, Methodrail knowledge/control, and existing host instructions. If two artifacts plausibly own the same role, record a conflict and do not guess.
 5. Domain terminology as used in code, docs, and tests — not guessed from folder names alone.
 6. Repository history only for material unknowns (why a boundary exists, when a risky subsystem landed).
 

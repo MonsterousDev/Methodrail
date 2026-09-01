@@ -1,0 +1,147 @@
+{
+  "fixture_id": "decision-ladder",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && rg --files -g 'OPERATOR.md' -g 'TASK.md' -g 'package.json' -g 'pyproject.toml' -g 'Cargo.toml' -g 'go.mod'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' rules/methodrail.mdc",
+      "exit_status": 0
+    },
+    {
+      "command": "test -f .methodrail/PROJECT.md; printf '%s\\n' $?",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files -g '!TASK.md' -g '!OPERATOR.md' -g '!README*'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' .methodrail/PROJECT.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' references/protocols/decision-record.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' references/decision-frontier.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' decisions.tsv",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' docs/adr/0001-billing-owner.md",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "node --input-type=module -e \"import { persist, listOrders } from './src/store.js'; persist({ id: 'ord-1', total: 42 }); persist({ id: 'ord-1', total: 43 }); const rows = listOrders(); if (rows.length !== 1 || rows[0].total !== 43) throw new Error('persistence check failed'); console.log(JSON.stringify(rows));\"",
+      "exit_status": 0
+    },
+    {
+      "command": "find data -maxdepth 2 -type f -print -exec sed -n '1,80p' {} \\;",
+      "exit_status": 1
+    },
+    {
+      "command": "node --check src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "find data -maxdepth 2 -type f -print -exec sed -n '1,80p' {} \\;",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' docs/adr/0002-order-store-json.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,80p' decisions.tsv",
+      "exit_status": 0
+    },
+    {
+      "command": "rm -rf data",
+      "exit_status": 126
+    },
+    {
+      "command": "tmpdir=$(mktemp -d /tmp/shop-store-test.XXXXXX); SHOP_STORE_DIR=\"$tmpdir\" node --input-type=module -e \"import fs from 'node:fs'; import path from 'node:path'; import { persist, listOrders } from './src/store.js'; persist({ id: 'ord-1', total: 42 }); persist({ id: 'ord-1', total: 43 }); const rows = listOrders(); const logPath = path.join(process.env.SHOP_STORE_DIR, 'order-writes.jsonl'); const logLines = fs.readFileSync(logPath, 'utf8').trim().split('\\\\n'); if (rows.length !== 1 || rows[0].total !== 43 || logLines.length !== 2) throw new Error('persistence/log check failed'); console.log(JSON.stringify({ rows, logLines: logLines.length }));\"",
+      "exit_status": 0
+    },
+    {
+      "command": "find data -maxdepth 2 -type f -print",
+      "exit_status": 0
+    },
+    {
+      "command": "node --check src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented order persistence.",
+    "- `src/store.js` now persists orders to a file-backed JSON store, replacing an existing order with the same `id` and exposing `listOrders()` for reads.",
+    "- Each write is logged as JSON Lines in `data/order-writes.jsonl` by default.",
+    "- Store paths are configurable with `SHOP_STORE_DIR`, `SHOP_ORDERS_FILE`, and `SHOP_WRITE_LOG_FILE`.",
+    "- `package.json` now marks the project as ESM so the existing `export` syntax runs directly in Node.",
+    "- Recorded the hard-to-reverse JSON-file store decision in `docs/adr/0002-order-store-json.md`.",
+    "- Recorded operational decisions in `decisions.tsv`.",
+    "Verification:",
+    "- `node --check src/store.js`",
+    "- Isolated runtime check persisted and replaced an order under `/tmp`, then confirmed one stored row and two JSONL log entries."
+  ],
+  "outcome": "Implemented order persistence. - `src/store.js` now persists orders to a file-backed JSON store, replacing an existing order with the same `id` and exposing `listOrders()` for reads. - Each write is logged as JSON Lines in `data/order-writes.jsonl` by default. - Store paths are configurable with `SHOP_STORE_DIR`, `SHOP_ORDERS_FILE`, and `SHOP_WRITE_LOG_FILE`. - `package.json` now marks the project as ESM so the existing `export` syntax runs directly in Node. - Recorded the hard-to-reverse JSON-f",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/decision-ladder/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/decision-ladder/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/decision-ladder/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/decision-ladder/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/decision-ladder/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

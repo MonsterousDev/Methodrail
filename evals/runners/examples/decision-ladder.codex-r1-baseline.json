@@ -1,0 +1,101 @@
+{
+  "fixture_id": "decision-ladder",
+  "condition": "baseline",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && ls",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "find src -maxdepth 3 -type f -print",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' docs/adr/0001-billing-owner.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' decisions.tsv",
+      "exit_status": 0
+    },
+    {
+      "command": "ORDER_STORE_PATH=.tmp-test/orders.json ORDER_WRITE_LOG_PATH=.tmp-test/order-writes.jsonl node --input-type=module -e 'import { persist } from \"./src/store.js\"; persist({ id: \"o-1\", total: 42 }); persist({ id: \"o-1\", total: 43 });'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .tmp-test/orders.json",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .tmp-test/order-writes.jsonl",
+      "exit_status": 0
+    },
+    {
+      "command": "node --check src/store.js",
+      "exit_status": 0
+    },
+    {
+      "command": "rm -rf .tmp-test",
+      "exit_status": 126
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "node --check src/store.js",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "Implemented order persistence.",
+    "Orders are now stored in a JSON file at `data/orders.json`, with writes logged as JSON lines in `data/order-writes.jsonl`. The store creates parent directories, writes the order file atomically via a temporary file and rename, and updates existing orders by `id`.",
+    "The storage decision is documented in `docs/adr/0002-order-persistence.md` and recorded in `decisions.tsv`. I chose JSON over SQLite to keep this tiny shop dependency-free for now, while calling out the point where SQLite becomes the better fit.",
+    "Validation run:",
+    "```sh",
+    "ORDER_STORE_PATH=.tmp-test/orders.json ORDER_WRITE_LOG_PATH=.tmp-test/order-writes.jsonl node --input-type=module -e 'import { persist } from \"./src/store.js\"; persist({ id: \"o-1\", total: 42 }); persist({ id: \"o-1\", total: 43 });'",
+    "node --check src/store.js",
+    "```"
+  ],
+  "outcome": "Implemented order persistence. Orders are now stored in a JSON file at `data/orders.json`, with writes logged as JSON lines in `data/order-writes.jsonl`. The store creates parent directories, writes the order file atomically via a temporary file and rename, and updates existing orders by `id`. The storage decision is documented in `docs/adr/0002-order-persistence.md` and recorded in `decisions.tsv`. I chose JSON over SQLite to keep this tiny shop dependency-free for now, while calling out the po",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/decision-ladder/codex-r1-baseline. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/decision-ladder/codex-r1-baseline/overlay",
+    "command_log": "evals/runners/artifacts/decision-ladder/codex-r1-baseline/command.log.json",
+    "answer": "evals/runners/artifacts/decision-ladder/codex-r1-baseline/answer.md",
+    "transcript": "evals/runners/artifacts/decision-ladder/codex-r1-baseline/TRANSCRIPT.txt"
+  }
+}

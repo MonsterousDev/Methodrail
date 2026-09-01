@@ -1,0 +1,149 @@
+{
+  "fixture_id": "architecture-deepening",
+  "condition": "methodrail",
+  "host": "codex",
+  "model": "gpt-5.5",
+  "repeat": 1,
+  "skills_invoked": [],
+  "references_loaded": [],
+  "tools_used": [
+    "edit",
+    "shell"
+  ],
+  "subagents_used": 0,
+  "verification_steps": [
+    {
+      "command": "pwd && ls",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' OPERATOR.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' TASK.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' rules/methodrail.mdc",
+      "exit_status": 0
+    },
+    {
+      "command": "if [ -f .methodrail/PROJECT.md ]; then sed -n '1,220p' .methodrail/PROJECT.md; else true; fi",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' CHURN.md",
+      "exit_status": 0
+    },
+    {
+      "command": "rg --files -g '!TASK.md' -g '!OPERATOR.md' -g '!RUN.json'",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' skills/improve-codebase-architecture/SKILL.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,240p' skills/codebase-design/SKILL.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' docs/adr/0001-ledger-owns-money.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' .methodrail/knowledge/intake.md",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/orderIntake.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,320p' src/billing/ledger.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' src/userService.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' src/db.js",
+      "exit_status": 0
+    },
+    {
+      "command": "rg -n \"orderIntake|fromCart|fromApi|fromCli|intake\\(|ledger|record\\(|balance\\(|reverse\\(\" src docs .methodrail package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f \\( -name '*test*' -o -name '*spec*' -o -name 'package.json' \\) -print",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,220p' package.json",
+      "exit_status": 0
+    },
+    {
+      "command": "git status --short",
+      "exit_status": 128
+    },
+    {
+      "command": "nl -ba src/orderIntake.js",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba src/billing/ledger.js",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba docs/adr/0001-ledger-owns-money.md",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba CHURN.md",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba .methodrail/knowledge/intake.md",
+      "exit_status": 0
+    },
+    {
+      "command": "nl -ba src/quiet/format.js",
+      "exit_status": 0
+    },
+    {
+      "command": "sed -n '1,260p' ANSWER.md",
+      "exit_status": 0
+    },
+    {
+      "command": "node -e \"JSON.parse(require('fs').readFileSync('COMMANDS.json','utf8')); console.log('COMMANDS.json ok')\"",
+      "exit_status": 0
+    }
+  ],
+  "evidence": [
+    "# Refactor Brief: Deepen `src/orderIntake.js`",
+    "## Top candidate",
+    "`src/orderIntake.js` is the strongest architecture-deepening candidate.",
+    "Recommendation strength: **Strong**.",
+    "## Evidence-backed friction statement",
+    "Observed churn: `CHURN.md:1` names `src/orderIntake.js` as hot with 14 commits this month. It is also marked in project context as \"hot shallow intake\" and in `.methodrail/knowledge/intake.md:13-21` as a verified leakage point where order intake callers pass pricing internals across the seam.",
+    "Observed source friction: `src/orderIntake.js:3-9` accepts `pricingInternals`, manually extracts `priceCents` and `taxCode`, adds `sku`, then forwards the shape to `ledger.record`. Its exported channel functions, `fromCart`, `fromApi`, and `fromCli`, are pass-through wrappers at `src/orderIntake.js:12-21`, so each caller-facing entry point still requires knowledge of pricing internals.",
+    "Inferred architectural issue: intake earns existence because it represents multiple intake channels, but its current interface is shallow. The caller-visible contract includes billing/pricing details that should be hidden behind intake or ledger-facing preparation.",
+    "## Current interface",
+    "Current exports: `intake(order, pricingInternals)`, `fromCart(order, pricingInternals)`, `fromApi(order, pricingInternals)`, `fromCli(order, pricingInternals)`.",
+    "Current caller burden: every entry path must supply an `order` plus a pricing-internal object containing at least `priceCents` and `taxCode`. That duplicates knowledge of the ledger entry shape outside the ledger-facing module.",
+    "## Proposed interface"
+  ],
+  "outcome": "# Refactor Brief: Deepen `src/orderIntake.js` ## Top candidate `src/orderIntake.js` is the strongest architecture-deepening candidate. Recommendation strength: **Strong**. ## Evidence-backed friction statement Observed churn: `CHURN.md:1` names `src/orderIntake.js` as hot with 14 commits this month. It is also marked in project context as \"hot shallow intake\" and in `.methodrail/knowledge/intake.md:13-21` as a verified leakage point where order intake callers pass pricing internals across the se",
+  "failure_modes": [],
+  "notes": "Live v0.9 project-artifact-interoperability pilot 2026-09-01. Freeze HEAD 046342b4cfa012dc33ca5527ef680900bd3e2161 (uncommitted v0.9 graders). Worktree /tmp/methodrail-pilot-20260901-v09/architecture-deepening/codex-r1-methodrail. Cursor runs used isolated Task subagents on /tmp copies. Codex used codex exec --ignore-user-config --skip-git-repo-check --sandbox workspace-write --ignore-rules -m gpt-5.5. Extra copy; canonical example JSON was not replaced.",
+  "provenance": "live",
+  "capture": "runner_captured",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/architecture-deepening/codex-r1-methodrail/overlay",
+    "command_log": "evals/runners/artifacts/architecture-deepening/codex-r1-methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/architecture-deepening/codex-r1-methodrail/answer.md",
+    "transcript": "evals/runners/artifacts/architecture-deepening/codex-r1-methodrail/TRANSCRIPT.txt"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "methodrail",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": ["how"],
+  "references_loaded": [".methodrail/knowledge/mail.md", "references/knowledge/reuse.md"],
+  "tools_used": ["read", "shell"],
+  "subagents_used": 0,
+  "verification_steps": ["ticket.closed evt_closed_grade twice stayed 1", "backoffMs 5000"],
+  "evidence": ["event-id still true", "immediate retry stale", "note untouched"],
+  "outcome": "Reconciled the mixed note against current backoff without rewriting it.",
+  "failure_modes": [],
+  "behaviors_observed": [
+    "treat the note as reconcile-required",
+    "keep the valid event-id claim",
+    "name the stale immediate-retry claim",
+    "do not rewrite the note without approval"
+  ],
+  "notes": "constructed",
+  "artifacts": {
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/methodrail/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/methodrail/answer.md"
+  }
+}

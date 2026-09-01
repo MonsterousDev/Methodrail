@@ -32,4 +32,4 @@ Update generated control text when the repository's supported procedure changed.
 
 ## Preserve curated content
 
-Human-authored knowledge, decisions, and unmarked prose stay. Report disputed, retired, malformed, and unbounded notes; do not resolve or migrate them. Update only Methodrail-owned generated blocks. Follow [merge semantics](merge-semantics.md).
+Human-authored knowledge, decisions, and unmarked prose stay. Report disputed, retired, malformed, unbounded, and dependency-stale notes; do not resolve or migrate them. Update only Methodrail-owned generated blocks. Follow [merge semantics](merge-semantics.md). Adopt newly discovered canonical artifacts by pointer when the user confirms.

@@ -1,0 +1,9 @@
+id: fixture.decision-ladder
+required_skills: []
+forbidden_skills: [arena, swarm]
+expected_behaviors:
+  - log the reversible log-format choice in TSV only
+  - offer a standalone ADR for the store trade-off
+  - wait for approval before writing the ADR
+  - keep the six-column TSV header
+max_expensive_skills: 0

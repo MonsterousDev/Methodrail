@@ -8,7 +8,10 @@ read .methodrail/PROJECT.md
 → read kind, status, lifecycle, scope, evidence, and provenance
 → decide eligibility for the task-relevant paths
 → reuse, narrow, reconcile, refuse, or escalate
-→ explore only remaining unknowns
+→ inspect only implicated sources and linked verification
+→ continue from current evidence
+→ optionally hand one mutation to reflect
+→ wait for approval
 ```
 
 1. Read `.methodrail/PROJECT.md` at the git root if it exists. It may be a repository-bound link to external storage; do not search arbitrary workspace folders.
@@ -19,8 +22,8 @@ read .methodrail/PROJECT.md
 6. If the note is disputed, present the competing claims and current evidence without selecting a winner. Do not edit either note.
 7. If `validated_at` is a Git SHA, inspect `git diff` / `git log` for `relevant_paths` since that revision. If it is `unversioned:` or the revision cannot be resolved, treat confidence as reduced and verify against current source.
 8. Apply an eligible scoped note only inside its applicable paths. Exclusion wins. `src/mail` does not match `src/mailer.ts`.
-9. Reconcile partial, provisional, stale, or unknown knowledge against current source and tests. Do not reject the whole repository or discard the whole note.
-10. If current source contradicts the note: keep any still-valid part, name the stale claim, base the task on current source and tests, and propose at most one governance mutation. Never silently rewrite the note.
+9. Reconcile partial, provisional, stale, unknown, or contradicted knowledge against current source, tests, and the strongest linked verification feature. Do not reject the whole repository or discard the whole note.
+10. Classify the material claim as supported, narrowed, contradicted, superseded, or uncertain. Continue the active task from current source and fresh evidence. If durable knowledge should change, hand at most one mutation to `reflect` and wait for approval. Never silently rewrite the note.
 11. Name the disposition and note path in the answer or handoff when a note materially affects the task.
 
-Typed notes follow the [note contract](note-contract.md). Legacy notes remain usable with reduced confidence. Prefer [structural enforcement](../structural-enforcement.md) when a test or type would encode the claim more reliably.
+Typed notes follow the [note contract](note-contract.md). Legacy notes remain usable with reduced confidence. Prefer [structural enforcement](../structural-enforcement.md) when a test or type would encode the claim more reliably. Section detail: [maintenance](maintenance.md).

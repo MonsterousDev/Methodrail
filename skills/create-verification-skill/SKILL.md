@@ -48,7 +48,9 @@ Also record start/doctor/drive/inspect/capture/reset/stop in `.methodrail/contro
 
 ## 3. Seed the feature map
 
-Create `features/README.md` plus one file per user-facing feature you can identify (aim for the top 3–5). Follow [`references/feature-map-example/`](references/feature-map-example/). Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it, and what observable end state proves it works. H2s: `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, `Gotchas`.
+Create `features/README.md` plus one file per user-facing feature you can identify (aim for the top 3–5). Follow [`references/feature-map-example/`](references/feature-map-example/). Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it, and what observable end state proves it works. Required H2s: `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, `Gotchas`. Optional `Related project knowledge` may sit immediately after `Sub-features`.
+
+Read canonical docs and eligible knowledge as discovery inputs. Confirm every user path from current source and live behavior. Docs alone do not prove a feature exists. Link only knowledge that materially constrains or explains a feature. Do not copy claims into the map.
 
 ## 4. Prove the generated skill before handing it over
 

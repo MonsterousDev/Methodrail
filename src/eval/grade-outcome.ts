@@ -1,7 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
-import { materializeFixture, readIfExists, removeWorktree } from "./worktree.js";
+import { join, relative, sep } from "node:path";
+import { materializeFixture, readIfExists, removeWorktree, OVERLAY_MANIFEST } from "./worktree.js";
+import { walkFiles } from "../fs-walk.js";
 import type { CommandLogEntry, EvalContext, EvalRun, OutcomeCheck, OutcomeGrade } from "./types.js";
 
 function check(id: string, passed: boolean, detail: string): OutcomeCheck {
@@ -293,9 +294,221 @@ function gradePartialKnowledge(run: EvalRun, ctx: EvalContext): OutcomeGrade {
   ]);
 }
 
-function filesUnchanged(root: string, relative: string, original: string): boolean {
-  const current = readIfExists(join(root, relative)) ?? "";
+function filesUnchanged(root: string, relativePath: string, original: string): boolean {
+  const current = readIfExists(join(root, relativePath)) ?? "";
   return current === original;
+}
+
+function overlayTouched(overlay: string | undefined): string[] {
+  if (!overlay || !existsSync(overlay)) return [];
+  return walkFiles(overlay, () => true)
+    .map((path) => relative(overlay, path).split(sep).join("/"))
+    .filter((path) => path !== OVERLAY_MANIFEST && !path.endsWith(".DS_Store"));
+}
+
+function overlayDeletions(overlay: string | undefined): string[] {
+  if (!overlay) return [];
+  const manifestPath = join(overlay, OVERLAY_MANIFEST);
+  if (!existsSync(manifestPath)) return [];
+  try {
+    const parsed: unknown = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const deletions =
+      parsed !== null && typeof parsed === "object" && Array.isArray((parsed as { deletions?: unknown }).deletions)
+        ? (parsed as { deletions: unknown[] }).deletions
+        : [];
+    return deletions.filter((item): item is string => typeof item === "string" && item.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+function isSourceTreePath(path: string): boolean {
+  const normalized = path.split(sep).join("/");
+  if (/^(?:src|lib|app|packages|services|repo\/src)(?:\/|$)/.test(normalized)) return true;
+  if (normalized.startsWith("docs/") || normalized.startsWith(".methodrail/") || normalized.startsWith(".agents/")) {
+    return false;
+  }
+  if (/(?:^|\/)src\//.test(normalized)) return true;
+  return /\.(?:js|cjs|mjs|ts|tsx|jsx)$/i.test(normalized);
+}
+
+function overlayEditsSource(overlay: string | undefined): boolean {
+  return overlayTouched(overlay).some(isSourceTreePath) || overlayDeletions(overlay).some(isSourceTreePath);
+}
+
+function recordsAdrApproval(answer: string): boolean {
+  if (
+    /\b(?:not|never|without)\s+(?:been\s+)?approv/i.test(answer) ||
+    /\bunapproved\b/i.test(answer) ||
+    /\bno approval\b/i.test(answer) ||
+    /\bdid not wait\b/i.test(answer)
+  ) {
+    return false;
+  }
+  return (
+    /\bapproved the\b/i.test(answer) ||
+    /\bafter (?:the )?(?:three-part )?approval\b/i.test(answer) ||
+    /\bwait(?:ed)? for approval\b/i.test(answer) ||
+    /\bexplicit approval\b/i.test(answer) ||
+    /\b(?:got|gave|received|obtained)\s+(?:explicit\s+)?approval\b/i.test(answer) ||
+    /\buser(?:'s)? approval\b/i.test(answer)
+  );
+}
+
+const ARTIFACT_CURATED = [
+  "AGENTS.md",
+  "CONTEXT.md",
+  "docs/glossary.md",
+  "docs/adr/0001-sqlite.md",
+  "decisions.tsv",
+  "docs/superpowers/specs/checkout.md",
+  "docs/superpowers/plans/checkout.md",
+  ".agents/skills/verify-shop/SKILL.md",
+  ".agents/skills/verify-shop/features/pay.md",
+  "src/fees.js",
+  ".methodrail/knowledge/fees.md",
+  ".methodrail/knowledge/stale.md",
+];
+
+function gradeArtifactInteroperability(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("artifact-interoperability requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  const fixture = fixtureDir(ctx, "artifact-interoperability");
+  const touched = overlayTouched(overlay);
+  const previewClaim = /preview only|zero writes|do not write/i.test(answer);
+  const caveat = /freshness means declared relevant paths did not change/i.test(answer);
+  const conflict = /conflict/i.test(answer) && /CONTEXT\.md/i.test(answer) && /glossary\.md/i.test(answer);
+  return withWorktree(fixture, overlay, (root) => {
+    const curatedOk = ARTIFACT_CURATED.every((rel) =>
+      filesUnchanged(root, rel, readFileSync(join(fixture, rel), "utf8")),
+    );
+    const extraWrites = touched.filter((path) => path !== ".methodrail/PROJECT.md");
+    const project = readIfExists(join(root, ".methodrail/PROJECT.md")) ?? "";
+    const copied =
+      /This paragraph is curated human prose/i.test(project) ||
+      /\*\*Fee\*\* is computed in billing, never in the cart UI/.test(project);
+    const guessed = /canonical glossary is CONTEXT/i.test(project) && !/unresolved|conflict/i.test(project);
+    const pointers = /decisions\.tsv/.test(project) && /docs\/adr/.test(project) && /verify-shop/.test(project);
+    if (previewClaim) {
+      return gradeFrom([
+        check(
+          "preview-readonly",
+          touched.length === 0,
+          touched.length === 0 ? "preview left the overlay empty" : `claimed preview but overlay wrote ${touched.join(", ")}`,
+        ),
+        check("conflict", conflict, conflict ? "reported the glossary conflict" : "did not report CONTEXT.md vs docs/glossary.md"),
+        check("caveat", caveat, caveat ? "stated the freshness caveat" : "missing freshness-is-not-truth sentence"),
+        check("curated", curatedOk, curatedOk ? "curated artifacts unchanged" : "curated artifacts were modified"),
+      ]);
+    }
+    return gradeFrom([
+      check(
+        "bounded-overlay",
+        extraWrites.length === 0,
+        extraWrites.length === 0 ? "only PROJECT.md overlay" : `unexpected overlay files: ${extraWrites.join(", ")}`,
+      ),
+      check("curated", curatedOk && !copied, curatedOk && !copied ? "curated artifacts preserved" : "copied or edited curated artifacts"),
+      check(
+        "conflict",
+        conflict && !guessed && /unresolved|conflict/i.test(project),
+        conflict && !guessed ? "glossary conflict left unresolved" : "guessed a glossary winner",
+      ),
+      check("pointers", pointers, pointers ? "adopted ADR, TSV, and verify-shop by pointer" : "missing adopted pointers"),
+      check("caveat", caveat, caveat ? "stated the freshness caveat" : "missing freshness-is-not-truth sentence"),
+    ]);
+  });
+}
+
+function gradeDecisionLadder(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("decision-ladder requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  if (!overlay) return incompleteGrade("decision-ladder requires an overlay artifact");
+  const fixture = fixtureDir(ctx, "decision-ladder");
+  const originalAdr = readFileSync(join(fixture, "docs/adr/0001-billing-owner.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const tsv = readIfExists(join(root, "decisions.tsv")) ?? "";
+    const header = tsv.split(/\r?\n/, 1)[0]?.trim() === "ts\tphase\tdecision\twhy\tevidence\tresult";
+    const adr = readIfExists(join(root, "docs/adr/0002-file-store.md")) ?? "";
+    const approved = recordsAdrApproval(answer);
+    const standalone = adr.length > 0 && !/see the tsv/i.test(adr) && /file/i.test(adr) && /sqlite/i.test(adr);
+    const smallTsv = /log writes as JSON/i.test(tsv) || /JSON lines/i.test(tsv);
+    const smallAdr = /log format|JSON lines/.test(adr) && !/file-backed|sqlite/i.test(adr);
+    const tsvOverride = /tsv overrides the adr/i.test(tsv) || /switched back to SQLite in the log/i.test(adr);
+    return gradeFrom([
+      check("tsv-schema", header, header ? "six-column TSV preserved" : "TSV header changed"),
+      check("small-choice", smallTsv && !smallAdr, smallTsv && !smallAdr ? "log format stayed TSV-only" : "small choice missing or ADR-spammed"),
+      check("adr-approval", approved && standalone, approved && standalone ? "approved standalone store ADR" : "ADR missing, unapproved, or TSV-dependent"),
+      check("adr-0001", filesUnchanged(root, "docs/adr/0001-billing-owner.md", originalAdr), "existing ADR preserved"),
+      check("no-tsv-override", !tsvOverride, tsvOverride ? "later TSV overrode the ADR" : "ADR still governs"),
+    ]);
+  });
+}
+
+function gradeKnowledgeReconciliationV09(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("knowledge-reconciliation-v0.9 requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  const fixture = fixtureDir(ctx, "knowledge-reconciliation-v0.9");
+  const originalNote = readFileSync(join(fixture, ".methodrail/knowledge/mail.md"), "utf8");
+  return withWorktree(fixture, overlay, (root) => {
+    const driver = `
+      const mailer = require("./repo/src/mailer.js");
+      const event = { id: "evt_closed_grade", type: "ticket.closed", data: { to: "user@x.test" } };
+      mailer.handle(event);
+      mailer.handle(event);
+      if (mailer.countFor("ticket.closed") !== 1) {
+        console.error("event-id keying failed", mailer.countFor("ticket.closed"));
+        process.exit(1);
+      }
+      if (typeof mailer.backoffMs !== "function" || mailer.backoffMs() < 1000) {
+        console.error("retry is immediate rather than backoff");
+        process.exit(1);
+      }
+    `;
+    const result = runNode(["--input-type=commonjs", "-e", driver], root);
+    const noteOk = filesUnchanged(root, ".methodrail/knowledge/mail.md", originalNote);
+    const reconcile = /reconcile-required/i.test(answer);
+    const kept = /event-id/i.test(answer);
+    const stale = /immediate retry|retried immediately/i.test(answer);
+    const boundary = /Retry-After|does not prove/i.test(answer);
+    return gradeFrom([
+      check(
+        "current-behavior",
+        result.ok,
+        result.ok ? "event-id keying and backoff held" : `driver failed: ${result.output.slice(0, 400)}`,
+      ),
+      check("note-untouched", noteOk, noteOk ? "note was not rewritten" : "silently rewrote the note"),
+      check("reconcile", reconcile && kept && stale, reconcile && kept && stale ? "named valid and stale slices" : "trusted or discarded the whole note"),
+      check("evidence-boundary", boundary, boundary ? "explained the evidence boundary" : "missing evidence boundary"),
+    ]);
+  });
+}
+
+function gradeArchitectureDeepening(run: EvalRun, ctx: EvalContext): OutcomeGrade {
+  const answer = loadAnswer(run, ctx.repoRoot);
+  if (!answer.trim()) return incompleteGrade("architecture-deepening requires an answer artifact");
+  const overlay = overlayDir(run, ctx.repoRoot);
+  const fixture = fixtureDir(ctx, "architecture-deepening");
+  const noSourceEdit = !overlayEditsSource(overlay);
+  return withWorktree(fixture, overlay, () => {
+    const passThrough = /userService/i.test(answer) && /pass-through|delete/i.test(answer);
+    const deepen = /orderIntake/i.test(answer) && /deepen/i.test(answer);
+    const preserve = /ledger/i.test(answer) && /preserve|already deep/i.test(answer);
+    const reject = /format/i.test(answer) && /reject|speculative/i.test(answer);
+    const top = /top recommendation[\s\S]{0,200}orderIntake/i.test(answer);
+    const notLedger = !/top recommendation[\s\S]{0,200}ledger/i.test(answer);
+    const brief = /\/refactor/i.test(answer) && /characterization|verification/i.test(answer);
+    const noCdn = !/cdn\.tailwindcss\.com|cdn\.jsdelivr\.net/i.test(answer);
+    return gradeFrom([
+      check("no-source-edit", noSourceEdit, noSourceEdit ? "survey did not edit source" : "source changed during survey"),
+      check("classes", passThrough && deepen && preserve && reject, passThrough && deepen && preserve && reject ? "classified all four modules" : "missed delete/deepen/preserve/reject"),
+      check("top", top && notLedger, top && notLedger ? "recommended the shallow intake module" : "recommended the already-deep module or missed intake"),
+      check("brief", brief, brief ? "verification-ready /refactor brief" : "missing characterization or /refactor route"),
+      check("portable-report", noCdn, noCdn ? "report usable without remote assets" : "report depends on a CDN"),
+    ]);
+  });
 }
 
 function gradeHumanDecision(run: EvalRun, ctx: EvalContext): OutcomeGrade {
@@ -575,6 +788,10 @@ const GRADERS: Record<string, (run: EvalRun, ctx: EvalContext) => OutcomeGrade> 
   "knowledge-applicability": gradeKnowledgeApplicability,
   "knowledge-dispute": gradeKnowledgeDispute,
   "knowledge-retired": gradeKnowledgeRetired,
+  "artifact-interoperability": gradeArtifactInteroperability,
+  "decision-ladder": gradeDecisionLadder,
+  "knowledge-reconciliation-v0.9": gradeKnowledgeReconciliationV09,
+  "architecture-deepening": gradeArchitectureDeepening,
 };
 
 export function gradeOutcome(run: EvalRun, ctx: EvalContext): OutcomeGrade {

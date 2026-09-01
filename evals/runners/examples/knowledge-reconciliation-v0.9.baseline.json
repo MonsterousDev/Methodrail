@@ -1,0 +1,21 @@
+{
+  "fixture_id": "knowledge-reconciliation-v0.9",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": [],
+  "references_loaded": [".methodrail/knowledge/mail.md"],
+  "tools_used": ["write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [],
+  "outcome": "Trusted immediate retry and rewrote the note.",
+  "failure_modes": ["trusted-stale", "silent-rewrite"],
+  "behaviors_observed": [],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/knowledge-reconciliation-v0.9/baseline/overlay",
+    "command_log": "evals/runners/artifacts/knowledge-reconciliation-v0.9/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/knowledge-reconciliation-v0.9/baseline/answer.md"
+  }
+}

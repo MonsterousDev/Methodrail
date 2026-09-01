@@ -18,21 +18,21 @@ Pick one, and say which:
 
 ## Edit scope
 
-Only edit the verification skill's own directory (SKILL.md, features/, harness scripts it owns) and, when it exists, `.methodrail/control/CONTROL.md` if the drift is control documentation. Never edit product code: a behavior the map describes that the app no longer does is either doc drift (fix the map) or a product regression (report it, don't paper over it).
+Only edit the verification skill's own directory (SKILL.md, features/, harness scripts it owns) and, when it exists, `.methodrail/control/CONTROL.md` if the drift is control documentation. Never edit product code, glossaries, specs, ADRs, or typed notes. A knowledge contradiction is a reconciliation finding: report it and you may suggest `reflect`. Do not rewrite the note.
 
 ## Pass
 
-0. **Locate the target.** Find the project-local skill with launch/drive sections and a feature map (`.agents/skills/verify-*`, `.cursor/skills/verify-*`, or the path `PROJECT.md` points at). Several candidates → ask; none → stop and point at `create-verification-skill`.
+0. **Locate the target.** Find the project-local skill with launch/drive sections and a feature map (`.agents/skills/verify-*`, `.cursor/skills/verify-*`, `.claude/skills/verify-*`, or the path `PROJECT.md` points at). Several candidates → ask; none → stop and point at `create-verification-skill`.
 
 1. **Index hygiene.** Read the feature map README and glob sibling files. Fix missing, extra, duplicate, or dead entries.
 
-2. **Source wave.** One read-only pass per feature file (parallel subagents when available). Each explains how the user-facing feature works from source, flags likely doc drift with citations, and returns one live-verification recipe. Children never drive the app and never edit files.
+2. **Source wave.** One read-only pass per feature file (parallel subagents when available). Each explains how the user-facing feature works from source, reads related project knowledge when the feature links it, flags likely doc drift with citations, and returns one live-verification recipe. Children never drive the app and never edit files. A stale, disputed, or retired typed-note link is reported; it is not treated as current.
 
-3. **Reconcile.** Every feature file has a returned summary. Merge overlapping recipes. Sweep recent churn for user-facing surfaces missing from the map — require a concrete source path before calling one missing.
+3. **Reconcile.** Every feature file has a returned summary. Merge overlapping recipes. Sweep recent churn for user-facing surfaces missing from the map — require a concrete source path before calling one missing. Docs that describe a feature absent from current source are not proof the feature exists.
 
 4. **Live pass.** Required even when source looks clean. Follow the verification skill's own launch model. Exercise every feature at least once. Hold three invariants: (1) never drive an instance you haven't health-checked since it last did something surprising; (2) evidence captured so far survives every cleanup; (3) nothing a drive started outlives that drive's usefulness. A feature that can't be reached is `verified-unreachable` only with the concrete prerequisite and the route attempted.
 
-5. **Triage.** Wrong user-POV description → doc drift, fix it. Working behavior the harness can't drive → harness gap, fix it. App behavior that's actually broken → product gap; record it, keep it out of the verification change.
+5. **Triage.** Wrong user-POV description → feature-map drift, fix it. Working behavior the harness can't drive → harness gap, fix it. App behavior that's actually broken → product regression; record it, keep it out of the verification change. Contradiction with glossary, spec, ADR, or typed note → project-knowledge contradiction; report it, suggest `reflect`, do not edit those artifacts. Unreachable behavior with a named prerequisite stays `verified-unreachable`.
 
 6. **Ship or stop.** For changed: re-read every changed file first. For clean or blocked: no verification-code change, report the outcome honestly.
 

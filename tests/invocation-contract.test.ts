@@ -140,5 +140,5 @@ test("knowledge reuse refuses retired notes and does not pick a dispute winner",
   assert.match(reuse, /without selecting a winner/);
   assert.match(reuse, /Apply an eligible scoped note only inside its applicable paths/);
   assert.match(reflect, /A reciprocal dispute may update both notes/);
-  assert.match(init, /disputed, retired, malformed, and unbounded/);
+  assert.match(init, /disputed, retired, unbounded, and broken-pointer notes/);
 });

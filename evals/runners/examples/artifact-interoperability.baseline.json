@@ -1,0 +1,21 @@
+{
+  "fixture_id": "artifact-interoperability",
+  "condition": "baseline",
+  "provenance": "constructed",
+  "capture": "operator_summary",
+  "skills_invoked": [],
+  "references_loaded": ["AGENTS.md", "CONTEXT.md"],
+  "tools_used": ["read", "write"],
+  "subagents_used": 0,
+  "verification_steps": [],
+  "evidence": [],
+  "outcome": "Copied CONTEXT.md into PROJECT.md and rewrote AGENTS.md.",
+  "failure_modes": ["copied-curated", "guessed-glossary"],
+  "behaviors_observed": [],
+  "notes": "constructed",
+  "artifacts": {
+    "overlay": "evals/runners/artifacts/artifact-interoperability/baseline/overlay",
+    "command_log": "evals/runners/artifacts/artifact-interoperability/baseline/command.log.json",
+    "answer": "evals/runners/artifacts/artifact-interoperability/baseline/answer.md"
+  }
+}

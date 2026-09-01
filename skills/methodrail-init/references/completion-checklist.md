@@ -8,7 +8,9 @@
 - PROJECT.md is pointer-oriented: links, small durable facts, and paths to verification/control/runtime docs.
 - PROJECT.md is not a cloned README and not a generated repository summary.
 - Optional knowledge, control, and project-local skills have a stated recurring use.
-- Typed and legacy knowledge notes were recognized; typed notes are indexed; stale, disputed, retired, malformed, and unbounded notes were reported, not rewritten or migrated. No typed note was created during init.
+- Typed and legacy knowledge notes were recognized; typed notes are indexed; dependency-fresh, `review-required`, `unknown`, disputed, retired, malformed, unbounded, and broken-pointer notes were reported, not rewritten or migrated. The report said freshness is not semantic truth. No typed note was created during init.
+- Existing glossary, ADR, spec, plan, TSV, and host-instruction artifacts were adopted by pointer or left unchanged. Conflicts were reported, not guessed.
+- The preview used create/update/adopt/unchanged/conflict/unavailable. Non-empty writes waited for confirmation. An inspect-only request did not write. An unchanged second run produced no diff.
 - Control/verification questions were investigated when the project has a runnable surface.
 - `create-verification-skill` ran when the surface is meaningful; static verification was documented when it is not.
 - Global Methodrail skills were not copied into the project.

@@ -1,0 +1,18 @@
+[
+  {
+    "command": "git -C /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail rev-parse HEAD 2>&1; echo \"---\"; git -C /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail status --short 2>&1; echo \"---\"; git -C /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail log --oneline -5 2>&1; echo \"---\"; ls -la /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail; echo \"---\"; ls -la /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail/repo; echo \"---\"; ls -la /tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail/repo/src",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e '\nconst m = require(\"/tmp/methodrail-pilot-20260901-v09/knowledge-reconciliation-v0.9/cursor-r2-methodrail/repo/src/mailer.js\");\nconsole.log(\"exports\", Object.keys(m));\nconsole.log(\"backoffMs\", m.backoffMs());\nconst ev = { id: \"evt-1\", type: \"ticket.closed\" };\nconst row = m.handle(ev);\nconsole.log(\"handle\", JSON.stringify(row));\nconsole.log(\"countFor ticket.closed\", m.countFor(\"ticket.closed\"));\nm.failSend(\"evt-1\");\nconsole.log(\"after fail\", JSON.stringify(m.outbox));\nconst again = m.handle(ev);\nconsole.log(\"handle again same id\", JSON.stringify(again));\nconsole.log(\"outbox length\", m.outbox.length);\n'",
+    "exit_status": 0
+  },
+  {
+    "command": "node repo/src/mailer.js; echo \"launch_exit:$?\"",
+    "exit_status": 0
+  },
+  {
+    "command": "node -e '\nconst m = require(\"./repo/src/mailer.js\");\nconst ev = { id: \"evt-closed-1\", type: \"ticket.closed\" };\nconst row = m.handle(ev);\nif (!row) throw new Error(\"ticket.closed should enqueue\");\nif (row.eventId !== ev.id) throw new Error(\"must key on event.id\");\nif (row.type !== \"ticket.closed\") throw new Error(\"type mismatch\");\nconst dup = m.handle(ev);\nif (dup !== row) throw new Error(\"same event.id must reuse existing row\");\nif (m.countFor(\"ticket.closed\") !== 1) throw new Error(\"dedupe failed\");\nif (m.handle({ id: \"x\", type: \"ticket.opened\" }) !== null) throw new Error(\"only ticket.closed\");\nm.failSend(\"evt-closed-1\");\nif (!m.outbox[0].failed) throw new Error(\"failSend should mark failed\");\nif (m.outbox.length !== 1) throw new Error(\"failed mail must stay in outbox\");\nconst early = m.retry(\"evt-closed-1\");\nif (!early || early.status !== \"wait\") throw new Error(\"retry-backoff must wait, got \" + JSON.stringify(early));\nif (m.outbox[0].failed !== true) throw new Error(\"waited retry must not send\");\nm.outbox[0].retryAt = Date.now() - 1;\nconst late = m.retry(\"evt-closed-1\");\nif (!late || late.status !== \"sent\") throw new Error(\"elapsed backoff should send, got \" + JSON.stringify(late));\nif (m.outbox[0].failed !== false) throw new Error(\"successful retry should clear failed\");\nconsole.log(\"verify-mail retry-closed: pass\");\nconsole.log(JSON.stringify({ count: m.countFor(\"ticket.closed\"), backoffMs: m.backoffMs(), outbox: m.outbox }));\n'",
+    "exit_status": 0
+  }
+]

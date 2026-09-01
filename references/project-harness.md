@@ -26,7 +26,7 @@ The harness is always addressed at the git root as `.methodrail/`. It may be a n
 
 ## PROJECT.md is an index
 
-Keep it short. Point to canonical source, docs, ADRs, knowledge notes, and control procedures. It is not the entire knowledge base.
+Keep it short. Point to canonical source, glossary/domain docs, specs/plans, ADRs, operational decision logs, knowledge notes, verification skills, and control procedures. It is not the entire knowledge base. Do not copy those artifacts into the index.
 
 ```text
 small index

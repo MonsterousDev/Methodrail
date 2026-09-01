@@ -1,0 +1,9 @@
+id: fixture.architecture-deepening
+required_skills: [improve-codebase-architecture]
+forbidden_skills: [arena, swarm]
+expected_behaviors:
+  - classify pass-through, shallow, already-deep, and speculative modules
+  - recommend the shallow order intake module
+  - leave source unchanged
+  - route behavior-preserving work to /refactor
+max_expensive_skills: 0

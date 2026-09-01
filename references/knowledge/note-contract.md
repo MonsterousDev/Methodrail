@@ -35,6 +35,8 @@ A `hypothesis` must be `provisional`. A `verified` note must contain meaningful 
 
 Required body sections: Claim, Evidence, Reuse guidance, Refresh triggers.
 
+`## Evidence` should identify a repeatable revalidation route or an honest manual boundary, and say what it proves. `## Refresh triggers` should include relevant non-path assumptions in prose. Richer prose is not retroactively repository-invalid. See [maintenance](maintenance.md).
+
 Keep the note at or below 80 lines and 4000 characters. Index it from `.methodrail/PROJECT.md` with a concise pointer. Do not copy the note into the project file.
 
 ## Legacy notes

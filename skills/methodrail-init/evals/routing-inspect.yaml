@@ -1,0 +1,9 @@
+id: skill.methodrail-init.routing-inspect
+kind: routing
+skill: methodrail-init
+description: "An explicit request to inspect Methodrail setup still activates methodrail-init."
+input:
+  prompt: "Inspect the Methodrail setup in this repository. Do not change any files."
+expected:
+  skills:
+    required: [methodrail-init]

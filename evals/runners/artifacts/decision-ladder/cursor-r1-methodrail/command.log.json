@@ -1,0 +1,26 @@
+[
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv persist \"log each write as JSON not text\" \"reversible parseable trail; not hard to reverse\" \"file:src/store.js\" \"open\"",
+    "exit_status": 0
+  },
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv persist \"store orders in a JSON file not SQLite\" \"no db dependency, single-process persist API, proportional for current risk\" \"file:src/store.js\" \"open\"",
+    "exit_status": 0
+  },
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv persist \"promoted JSON file store choice to ADR-0002\" \"hard to reverse, surprising without context, real trade-off; operator approved after classification\" \"file:docs/adr/0002-file-store.md\" \"accepted\"",
+    "exit_status": 0
+  },
+  {
+    "command": "node --input-type=module -e '\nimport { persist, logWrite } from \"./src/store.js\";\nimport { readFileSync } from \"node:fs\";\n\nconst r1 = persist({ id: \"ord-1\", total: 12 });\nif (!r1.ok || r1.id !== \"ord-1\") throw new Error(\"persist return mismatch\");\nconst r2 = persist({ id: \"ord-2\", total: 30 });\nconst logged = logWrite({ ts: \"2026-09-01T00:00:00.000Z\", action: \"manual\", id: \"probe\" });\nif (logged !== JSON.stringify({ ts: \"2026-09-01T00:00:00.000Z\", action: \"manual\", id: \"probe\" })) {\n  throw new Error(\"logWrite did not return JSON\");\n}\ntry {\n  persist({});\n  throw new Error(\"missing id should throw\");\n} catch (err) {\n  if (err.message !== \"order.id required\") throw err;\n}\nconst orders = JSON.parse(readFileSync(\"data/orders.json\", \"utf8\"));\nif (!orders[\"ord-1\"] || orders[\"ord-1\"].total !== 12) throw new Error(\"ord-1 missing\");\nif (!orders[\"ord-2\"] || orders[\"ord-2\"].total !== 30) throw new Error(\"ord-2 missing\");\nconst lines = readFileSync(\"data/writes.jsonl\", \"utf8\").trim().split(\"\\n\");\nif (lines.length < 3) throw new Error(\"expected at least 3 log lines\");\nfor (const line of lines) JSON.parse(line);\nconsole.log(JSON.stringify({ persist: r1, orders, writeLines: lines.length }, null, 2));\n'",
+    "exit_status": 0
+  },
+  {
+    "command": "bash skills/show-me-your-work/scripts/log.sh decisions.tsv persist \"verified JSON file persist and JSON write log\" \"node persist round-trip wrote data/orders.json and data/writes.jsonl\" \"file:data/orders.json\" \"tests green\"",
+    "exit_status": 0
+  },
+  {
+    "command": "test -f ANSWER.md && test -f COMMANDS.json && python3 -c 'import json; json.load(open(\"COMMANDS.json\")); print(\"ANSWER.md and COMMANDS.json exist; COMMANDS.json is valid JSON\")'",
+    "exit_status": 0
+  }
+]

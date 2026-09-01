@@ -1,0 +1,5 @@
+ts	phase	decision	why	evidence	result
+2026-08-01T00:00:00Z	setup	keep an operational trail	reviewability	file:decisions.tsv	open
+2026-09-01T13:24:05Z	write-log	log each persist as one JSON line	reversible format pick; JSON matches the order payload	file:src/store.js	open
+2026-09-01T13:24:05Z	store-choice	use a JSON file store not SQLite	hard to reverse, surprising without context, real trade-off; no db dependency or query surface yet	file:docs/adr/0002-file-store.md	promoted
+2026-09-01T13:24:28Z	verify	persist writes data/orders.json and JSON write log	node import persist plus JSON.parse of both files	file:data/orders.json	tests green

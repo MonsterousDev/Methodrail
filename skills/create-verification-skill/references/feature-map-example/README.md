@@ -32,16 +32,17 @@ This directory is the maintained source for verifying the user-facing behavior o
 
 ## Feature entry contract
 
-Each feature file starts with an H1 title and one paragraph describing the user-visible behavior. It then uses exactly four H2 sections in this order.
+Each feature file starts with an H1 title and one paragraph describing the user-visible behavior. It then uses four required H2 sections in this order. An optional `Related project knowledge` section may sit immediately after `Sub-features`.
 
 1. `Sub-features` lists short IDs with one line for each behavior.
-2. `How to get to it (user POV)` lists every user entry point.
-3. `Driving it with <harness>` starts with `Preconditions:` and uses labeled bullets that pair each user action with an exact command and observable result.
-4. `Gotchas` lists traps that can waste or invalidate a verification run.
+2. `Related project knowledge` (optional) lists repository-relative links to a glossary, spec, ADR, or typed note, each with the artifact role and one sentence on the relationship. Omit the section when no relationship adds value. Do not copy claims, implementation inventories, freshness, or verification results here.
+3. `How to get to it (user POV)` lists every user entry point.
+4. `Driving it with <harness>` starts with `Preconditions:` and uses labeled bullets that pair each user action with an exact command and observable result.
+5. `Gotchas` lists traps that can waste or invalidate a verification run.
 
 Keep implementation details out of the map. Name only user paths, stable handles, required state, commands, and observable proof.
 
 ## Features
 
-- [Create a note](./create-note.md) covers browser and CLI creation, cancellation, persistence, and cleanup.
-- [Search notes](./search.md) covers toolbar, keyboard, and CLI search with matching, empty, and clear states.
+- [Create a note](./create-note.md) covers browser and CLI creation, cancellation, persistence, and cleanup. It links related glossary knowledge.
+- [Search notes](./search.md) covers toolbar, keyboard, and CLI search with matching, empty, and clear states. It has no related-knowledge section.

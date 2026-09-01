@@ -16,7 +16,7 @@ skill candidate
 structural-enforcement candidate
 ```
 
-See [knowledge lifecycle](../../references/knowledge/lifecycle.md), [note contract](../../references/knowledge/note-contract.md), and [structural enforcement](../../references/structural-enforcement.md).
+See [knowledge lifecycle](../../references/knowledge/lifecycle.md), [note contract](../../references/knowledge/note-contract.md), [reuse](../../references/knowledge/reuse.md), and [structural enforcement](../../references/structural-enforcement.md).
 
 ## Process
 
@@ -40,7 +40,7 @@ Use [synthesizer.md](references/synthesizer.md). Produce Accepted / Rejected / B
 
 Move anything a mechanical check would enforce more reliably than a skill onto the structural-enforcement list.
 
-A knowledge candidate is earned only from this work's evidence. Ordinary implementation detail is not a note. Propose at most one governance mutation per approval: create, narrow scope, dispute, resolve, or retire. Include:
+A knowledge candidate is earned only from this work's evidence. Ordinary implementation detail is not a note. Propose at most one governance mutation per approval: create, narrow scope, dispute, resolve, retire, or a bounded reconciliation of evidence/`validated_at`. Include:
 
 - proposed `kind`, `status`, and `lifecycle`
 - concise claim
@@ -80,7 +80,7 @@ Show the full Accepted / Rejected / Backlog list. Wait for explicit approval bef
 3. Confirm that structural enforcement is not the better destination.
 4. Apply the approved mutation using [templates/project/knowledge/note.md](../../templates/project/knowledge/note.md). Default is exactly one typed note. A reciprocal dispute may update both notes and the PROJECT.md pointer set as one transaction.
 5. Add or update the concise PROJECT.md pointer(s).
-6. Validate kind, status, lifecycle, evidence, index, size, and dispute/retirement sections. Report freshness and scope.
+6. Validate kind, status, lifecycle, evidence, index, size, and dispute/retirement sections. Report freshness and scope. An approved reconciliation updates evidence and `validated_at` in the same write.
 7. Verify that an unchanged rerun produces no diff.
 
 If the transaction is only partly applied, show the incomplete diff. Do not guess the missing half. Ask whether to complete or revert it.
