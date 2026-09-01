@@ -414,3 +414,169 @@ Keep fees in billing.
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("nested eval and overlay decoys are not project artifacts", () => {
+  const dir = mixedRepo({ harness: true });
+  try {
+    write(dir, "evals/fixtures/shop/decisions.tsv", `${TSV_HEADER}\n2026-09-01T00:00:00Z\tsetup\tdecoy\tx\tfile:x\topen\n`);
+    write(
+      dir,
+      "evals/fixtures/shop/.agents/skills/verify-decoy/SKILL.md",
+      "---\nname: verify-decoy\n---\n\n# Decoy\n\n## Launch\n\n`true`\n",
+    );
+    write(
+      dir,
+      "evals/runners/artifacts/shop/overlay/decisions.tsv",
+      `${TSV_HEADER}\n2026-09-01T00:00:00Z\tsetup\tdecoy overlay\tx\tfile:x\topen\n`,
+    );
+    write(dir, "evals/fixtures/shop/docs/glossary.md", "# Glossary\n\n**Decoy** is not the shop glossary.\n");
+    const report = discoverProjectArtifacts(dir);
+    assert.equal(
+      report.artifacts.some((item) => item.path.startsWith("evals/")),
+      false,
+    );
+    assert.equal(report.conflicts.some((item) => item.role === "glossary"), false);
+    assert.equal(
+      previewWrites(report).some((item) => item.path.startsWith("evals/")),
+      false,
+    );
+    assert.ok(report.artifacts.some((item) => item.path === "decisions.tsv"));
+    assert.ok(report.artifacts.some((item) => item.path === "CONTEXT.md"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("discovery on Methodrail itself does not adopt eval fixture artifacts", () => {
+  const report = discoverProjectArtifacts(root);
+  const leaked = [...report.artifacts, ...previewWrites(report)].filter(
+    (item) => item.path.startsWith("evals/fixtures/") || item.path.startsWith("evals/runners/artifacts/"),
+  );
+  assert.deepEqual(leaked, []);
+});
+
+test("PROJECT.md pointers match resolved hrefs, not substrings", () => {
+  const dir = tempDir("methodrail-pointers-");
+  try {
+    write(dir, "docs/adr/0001.md", "# ADR\n\nSQLite.\n");
+    write(dir, "decisions.tsv", `${TSV_HEADER}\n`);
+    write(
+      dir,
+      ".agents/skills/verify-shop/SKILL.md",
+      "---\nname: verify-shop\n---\n\n# Verify\n\n## Launch\n\n`true`\n",
+    );
+    write(
+      dir,
+      ".agents/skills/verify-shop/features/pay.md",
+      "# Pay\n\n## Sub-features\n\n- pay\n",
+    );
+    write(
+      dir,
+      ".methodrail/PROJECT.md",
+      `# Project
+
+- [fees](knowledge/fees.md#formula)
+- [control](control/CONTROL.md)
+- [adr](../docs/adr/0001.md)
+- [verify](../.agents/skills/verify-shop/SKILL.md)
+- [pay](../.agents/skills/verify-shop/features/pay.md)
+- [encoded](knowledge/fee%73.md)
+`,
+    );
+    write(dir, ".methodrail/knowledge/fees.md", "# Fees\n");
+    write(dir, ".methodrail/knowledge/fees-extra.md", "# Extra\n");
+    write(dir, ".methodrail/control/CONTROL.md", "# Control\n");
+    const report = discoverProjectArtifacts(dir);
+    const byPath = new Map(report.preview.map((item) => [item.path, item.op]));
+    assert.equal(byPath.get(".methodrail/knowledge/fees.md"), "unchanged");
+    assert.equal(byPath.get(".methodrail/control/CONTROL.md"), "unchanged");
+    assert.equal(byPath.get("docs/adr/0001.md"), "unchanged");
+    assert.equal(byPath.get(".agents/skills/verify-shop/SKILL.md"), "unchanged");
+    assert.equal(byPath.get(".agents/skills/verify-shop/features/pay.md"), "unchanged");
+    assert.equal(byPath.get(".methodrail/knowledge/fees-extra.md"), "adopt");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("an approved pointer apply is a no-op on the next discovery", () => {
+  const dir = mixedRepo({ harness: true, linkedPointers: true });
+  try {
+    const first = discoverProjectArtifacts(dir);
+    const projectMdPath = join(dir, ".methodrail/PROJECT.md");
+    let body = readFileSync(projectMdPath, "utf8");
+    for (const item of previewWrites(first)) {
+      body += `\n- [${item.path}](${item.path.startsWith(".methodrail/") ? item.path.slice(".methodrail/".length) : `../${item.path}`})\n`;
+    }
+    writeFileSync(projectMdPath, body);
+    const second = discoverProjectArtifacts(dir);
+    assert.equal(previewWrites(second).length, 0);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a broken linked harness with recognizable artifacts still proposes zero writes", () => {
+  const dir = tempDir("methodrail-broken-bind-");
+  try {
+    write(dir, "decisions.tsv", `${TSV_HEADER}\n`);
+    write(
+      dir,
+      ".agents/skills/verify-shop/SKILL.md",
+      "---\nname: verify-shop\n---\n\n# Verify\n\n## Launch\n\n`true`\n",
+    );
+    write(dir, "CONTEXT.md", "# Context\n\n## Glossary\n\n**Order** is paid.\n");
+    symlinkSync(join(dir, "missing-harness"), join(dir, ".methodrail"));
+    const report = discoverProjectArtifacts(dir);
+    assert.ok(report.artifacts.some((item) => item.path === "decisions.tsv"));
+    assert.ok(report.preview.some((item) => item.path === ".methodrail" && item.op === "unavailable"));
+    assert.equal(previewWrites(report).length, 0);
+    assert.ok(!report.preview.some((item) => item.op === "create" || item.op === "adopt" || item.op === "update"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("in-repository PROJECT.md create is git visible; linked-external writes are not", () => {
+  const empty = tempDir("methodrail-gitvis-empty-");
+  try {
+    const report = discoverProjectArtifacts(empty);
+    const create = report.preview.find((item) => item.path === ".methodrail/PROJECT.md" && item.op === "create");
+    assert.equal(create?.gitVisible, true);
+  } finally {
+    rmSync(empty, { recursive: true, force: true });
+  }
+
+  const base = tempDir("methodrail-gitvis-linked-");
+  const repository = join(base, "my-app");
+  const storage = join(base, "my-app-methodrail");
+  try {
+    write(repository, "src/app.js", "module.exports = { version: 1 };\n");
+    write(repository, "decisions.tsv", `${TSV_HEADER}\n`);
+    execFileSync("git", ["init"], { cwd: repository, encoding: "utf8" });
+    execFileSync("git", ["config", "user.email", "eval@example.com"], { cwd: repository, encoding: "utf8" });
+    execFileSync("git", ["config", "user.name", "Methodrail Eval"], { cwd: repository, encoding: "utf8" });
+    execFileSync("git", ["add", "."], { cwd: repository, encoding: "utf8" });
+    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "base"], { cwd: repository, encoding: "utf8" });
+    execFileSync(
+      "node",
+      [join(root, "skills/methodrail-init/scripts/linked-harness.mjs"), "create", "--repo", repository, "--storage", storage],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+    write(
+      repository,
+      ".methodrail/PROJECT.md",
+      "# Project\n\nSee [app](../src/app.js).\n",
+    );
+    const report = discoverProjectArtifacts(repository);
+    assert.ok(previewWrites(report).every((item) => item.gitVisible === false));
+    write(repository, ".methodrail/PROJECT.md", "# Project\n\nSee [app](../src/app.js).\n\n- [tsv](../decisions.tsv)\n");
+    const refresh = discoverProjectArtifacts(repository);
+    assert.equal(previewWrites(refresh).some((item) => item.path === "decisions.tsv"), false);
+    const status = execFileSync("git", ["status", "--short"], { cwd: repository, encoding: "utf8" }).trim();
+    assert.equal(status, "");
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+

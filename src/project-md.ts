@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
-import { dirname, resolve, sep } from "node:path";
+import { dirname, relative, resolve, sep } from "node:path";
 import { pathInside } from "./fs-walk.js";
 
 export interface ProjectMdQuality {
@@ -34,6 +34,10 @@ export function evaluateProjectMd(source: string): ProjectMdQuality {
   return { ok: issues.length === 0, issues };
 }
 
+function posixRel(from: string, to: string): string {
+  return relative(from, to).split(sep).join("/");
+}
+
 function markdownLinks(source: string): { title: string; href: string }[] {
   const entries: { title: string; href: string }[] = [];
   for (const match of source.matchAll(/(?<!!)\[[^\]]*]\(([^)]+)\)/g)) {
@@ -43,6 +47,30 @@ function markdownLinks(source: string): { title: string; href: string }[] {
     entries.push({ title, href });
   }
   return entries;
+}
+
+/**
+ * Repo-relative paths PROJECT.md already points at, after resolving hrefs
+ * relative to the index file. Anchors and external URLs are ignored.
+ * Broken or escaping links are omitted rather than substring-matched.
+ */
+export function projectMdPointerPaths(source: string, projectMdPath: string, projectRoot: string): Set<string> {
+  const out = new Set<string>();
+  for (const entry of markdownLinks(source)) {
+    const href = entry.href;
+    if (!href || href.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(href)) continue;
+    let local: string;
+    try {
+      local = decodeURIComponent(href.split("#", 1)[0] ?? "");
+    } catch {
+      continue;
+    }
+    if (!local) continue;
+    const resolved = resolve(dirname(projectMdPath), local);
+    if (!pathInside(projectRoot, resolved) || !existsSync(resolved)) continue;
+    out.add(posixRel(projectRoot, resolved));
+  }
+  return out;
 }
 
 /**

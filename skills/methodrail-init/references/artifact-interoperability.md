@@ -14,7 +14,7 @@ Inspection is read-only. Invocation authorizes discovery and preview, not writes
 
 ## Discover
 
-Interview the repository first. Then, for each role below, collect candidates from layout **and** a content check.
+Interview the repository first. Then, for each role below, collect candidates from **repository-root** layout **and** a content check. Nested copies (evals fixtures, overlays, vendor trees) are not project artifacts even when the basename matches.
 
 | Role | Layout hints | Content that confirms the role |
 | --- | --- | --- |
@@ -44,6 +44,10 @@ Every proposed target is one of:
 
 When two glossary roots or two ADR homes both look canonical, classify `conflict` and stop that role before writing pointers. Leave both files untouched.
 
+A pointer is already indexed when a PROJECT.md markdown href, resolved relative to the index file, is the same repository-relative path as the artifact. `knowledge/fees.md` indexes `.methodrail/knowledge/fees.md`. Anchors and URL encoding are stripped or decoded; substring matches are not enough.
+
+When harness binding fails, report `.methodrail` as `unavailable`. Do not propose create, update, or adopt until the binding is valid.
+
 ## Preview
 
 Group the plan under those six labels. For every non-`unchanged` item name:
@@ -52,7 +56,7 @@ Group the plan under those six labels. For every non-`unchanged` item name:
 - proposed operation
 - why it is justified
 - Methodrail-owned vs adopted
-- whether confirmation would expose content in Git/PR review
+- whether confirmation would expose content in Git/PR review (`gitVisible`: would the write appear in the project repository's `git status`? Linked-external `.methodrail` pointer and control writes do not.)
 - whether the harness is in-repository or linked-external
 - whether a project-local verification skill is present, justified, missing, or blocked
 - any capability that remains unavailable

@@ -1,7 +1,8 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
-import { basename, dirname, join, relative, sep } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 import { walkFiles } from "./fs-walk.js";
 import { inspectHarnessBinding, type HarnessBindingResult } from "./harness.js";
+import { projectMdPointerPaths } from "./project-md.js";
 
 export const ARTIFACT_ROLES = [
   "glossary",
@@ -72,17 +73,22 @@ function hasHeading(source: string, heading: RegExp): boolean {
 }
 
 function classifyFile(rel: string, absolute: string): DiscoveredArtifact | null {
-  const base = basename(absolute);
   const source = readHead(absolute);
 
   if (rel === ".methodrail/PROJECT.md") {
     return { path: rel, role: "methodrail-project", evidence: "canonical Methodrail index" };
   }
 
-  if (/\/verify-[^/]+\/SKILL\.md$/i.test(rel) && /##\s+Launch/i.test(source)) {
+  if (
+    /^\.(?:agents|cursor|claude)\/skills\/verify-[^/]+\/SKILL\.md$/i.test(rel) &&
+    /##\s+Launch/i.test(source)
+  ) {
     return { path: rel, role: "verification-skill", evidence: "project-local verify skill with Launch" };
   }
-  if (/\/features\/.+\.md$/i.test(rel) && hasHeading(source, /^##\s+Sub-features\s*$/m)) {
+  if (
+    /^\.(?:agents|cursor|claude)\/skills\/verify-[^/]+\/features\/.+\.md$/i.test(rel) &&
+    hasHeading(source, /^##\s+Sub-features\s*$/m)
+  ) {
     return { path: rel, role: "verification-map", evidence: "feature map with Sub-features heading" };
   }
 
@@ -102,14 +108,18 @@ function classifyFile(rel: string, absolute: string): DiscoveredArtifact | null 
     return { path: rel, role: "adr", evidence: "ADR location with a markdown decision file" };
   }
 
-  if (base === "decisions.tsv" || /^\.audit\/.+\.tsv$/i.test(rel)) {
+  if (rel === "decisions.tsv" || /^\.audit\/.+\.tsv$/i.test(rel)) {
     const first = source.split(/\r?\n/, 1)[0]?.trim() ?? "";
     if (first === TSV_HEADER) {
       return { path: rel, role: "decision-log", evidence: "six-column pstack-compatible TSV header" };
     }
   }
 
-  const glossaryName = base === "CONTEXT.md" || base === "CONTEXT-MAP.md" || /^glossary\.md$/i.test(base);
+  const glossaryName =
+    rel === "CONTEXT.md" ||
+    rel === "CONTEXT-MAP.md" ||
+    /^glossary\.md$/i.test(rel) ||
+    /^docs\/glossary\.md$/i.test(rel);
   const glossaryContent =
     hasHeading(source, /^#+\s+(glossary|ubiquitous language|domain vocabulary|context)\b/im) ||
     /\b(ubiquitous language|bounded context)\b/i.test(source);
@@ -155,9 +165,13 @@ function glossaryHome(path: string): string {
   return dir === "." ? path : dir;
 }
 
-function projectMdPointsAt(projectMd: string | null, artifactPath: string): boolean {
-  if (!projectMd) return false;
-  return projectMd.includes(artifactPath);
+function projectMdPointsAt(pointers: Set<string>, artifactPath: string): boolean {
+  return pointers.has(artifactPath);
+}
+
+function writeWouldBeGitVisible(harness: HarnessBindingResult, op: PreviewOp): boolean {
+  if (op !== "create" && op !== "update" && op !== "adopt") return false;
+  return harness.binding?.placement !== "linked-external";
 }
 
 function discoverableFiles(projectRoot: string, harness: HarnessBindingResult): { absolute: string; rel: string }[] {
@@ -234,6 +248,7 @@ export function discoverProjectArtifacts(projectRoot: string): DiscoveryReport {
 
   const projectMdPath = join(projectRoot, ".methodrail", "PROJECT.md");
   const projectMd = existsSync(projectMdPath) ? readFileSync(projectMdPath, "utf8") : null;
+  const pointers = projectMd ? projectMdPointerPaths(projectMd, projectMdPath, projectRoot) : new Set<string>();
   const harnessExists = projectMd !== null;
   const preview: PreviewItem[] = [];
   const conflictPaths = new Set(conflicts.flatMap((item) => item.paths));
@@ -255,61 +270,66 @@ export function discoverProjectArtifacts(projectRoot: string): DiscoveryReport {
       role: "methodrail-project",
       why: "no Methodrail index exists yet",
       methodrailOwned: true,
-      gitVisible: true,
+      gitVisible: writeWouldBeGitVisible(harness, "create"),
     });
   }
 
-  for (const artifact of artifacts) {
-    if (artifact.role === "methodrail-project") {
+  if (!bindFailed) {
+    for (const artifact of artifacts) {
+      if (artifact.role === "methodrail-project") {
+        preview.push({
+          path: artifact.path,
+          op: "unchanged",
+          role: artifact.role,
+          why: "existing Methodrail index; refresh may still adopt missing pointers",
+          methodrailOwned: true,
+          gitVisible: false,
+        });
+        continue;
+      }
+      const inConflict =
+        conflictPaths.has(artifact.path) || conflicts.some((item) => item.paths.includes(adrHome(artifact.path)));
+      if (inConflict) {
+        preview.push({
+          path: artifact.path,
+          op: "conflict",
+          role: artifact.role,
+          why: conflicts.find((item) => item.role === artifact.role)?.reason ?? "ambiguous canonical owner",
+          methodrailOwned: false,
+          gitVisible: false,
+        });
+        continue;
+      }
+      if (artifact.role === "host-instruction" || artifact.role === "typed-knowledge" || artifact.role === "control") {
+        const pointed = projectMdPointsAt(pointers, artifact.path);
+        const op: PreviewOp =
+          pointed || artifact.role === "host-instruction" ? "unchanged" : harnessExists ? "adopt" : "unchanged";
+        preview.push({
+          path: artifact.path,
+          op,
+          role: artifact.role,
+          why:
+            artifact.role === "host-instruction"
+              ? "preserve curated host instructions"
+              : pointed
+                ? "already indexed from PROJECT.md"
+                : "index existing Methodrail knowledge or control by pointer",
+          methodrailOwned: artifact.role !== "host-instruction",
+          gitVisible: writeWouldBeGitVisible(harness, op),
+        });
+        continue;
+      }
+      const pointed = projectMdPointsAt(pointers, artifact.path);
+      const op: PreviewOp = pointed ? "unchanged" : "adopt";
       preview.push({
         path: artifact.path,
-        op: "unchanged",
+        op,
         role: artifact.role,
-        why: "existing Methodrail index; refresh may still adopt missing pointers",
-        methodrailOwned: true,
-        gitVisible: true,
-      });
-      continue;
-    }
-    const inConflict =
-      conflictPaths.has(artifact.path) || conflicts.some((item) => item.paths.includes(adrHome(artifact.path)));
-    if (inConflict) {
-      preview.push({
-        path: artifact.path,
-        op: "conflict",
-        role: artifact.role,
-        why: conflicts.find((item) => item.role === artifact.role)?.reason ?? "ambiguous canonical owner",
+        why: pointed ? "already indexed from PROJECT.md" : "index the existing canonical artifact by pointer",
         methodrailOwned: false,
-        gitVisible: true,
+        gitVisible: writeWouldBeGitVisible(harness, op),
       });
-      continue;
     }
-    if (artifact.role === "host-instruction" || artifact.role === "typed-knowledge" || artifact.role === "control") {
-      const pointed = projectMdPointsAt(projectMd, artifact.path);
-      preview.push({
-        path: artifact.path,
-        op: pointed || artifact.role === "host-instruction" ? "unchanged" : harnessExists ? "adopt" : "unchanged",
-        role: artifact.role,
-        why:
-          artifact.role === "host-instruction"
-            ? "preserve curated host instructions"
-            : pointed
-              ? "already indexed from PROJECT.md"
-              : "index existing Methodrail knowledge or control by pointer",
-        methodrailOwned: artifact.role !== "host-instruction",
-        gitVisible: true,
-      });
-      continue;
-    }
-    const pointed = projectMdPointsAt(projectMd, artifact.path);
-    preview.push({
-      path: artifact.path,
-      op: pointed ? "unchanged" : "adopt",
-      role: artifact.role,
-      why: pointed ? "already indexed from PROJECT.md" : "index the existing canonical artifact by pointer",
-      methodrailOwned: false,
-      gitVisible: true,
-    });
   }
 
   const hasVerify = (byRole.get("verification-skill") ?? []).length > 0;
