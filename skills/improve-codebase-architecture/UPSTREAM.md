@@ -8,4 +8,4 @@ Methodrail changes:
 - bias toward current work / high-churn / real friction (already upstream; reinforced)
 - glossary is project-native
 - grilling uses grill-with-docs
-- /refactor remains the workflow entrypoint
+- this skill owns codebase-wide discovery and selection; /refactor is the downstream executor for one selected change

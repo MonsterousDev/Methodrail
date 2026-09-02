@@ -1,0 +1,9 @@
+id: skill.refactor.routing-negative-mechanical
+kind: routing
+skill: refactor
+description: "Mechanical rename is not a refactor workflow."
+input:
+  prompt: "Rename getUserById to findUserById. Formatting only. No behavior change."
+expected:
+  skills:
+    forbidden: [refactor]

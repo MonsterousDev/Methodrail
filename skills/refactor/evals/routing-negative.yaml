@@ -1,9 +1,10 @@
 id: skill.refactor.routing-negative
 kind: routing
 skill: refactor
-description: "Mechanical rename is not a refactor workflow."
+description: "A codebase-wide architecture survey is not the focused refactor execution workflow."
 input:
-  prompt: "Rename getUserById to findUserById. Formatting only. No behavior change."
+  prompt: "Scan the whole codebase, rank the architectural hot spots, and tell me what we should improve first."
 expected:
   skills:
     forbidden: [refactor]
+    required: [improve-codebase-architecture]

@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: "Scan for architectural friction in active, high-churn code, classify delete vs deepen vs preserve vs reject, present candidates, then grill through the one you pick. Use when the user asks to improve architecture or when /refactor needs a structured hunt for real friction. Do not use for speculative cleanup of quiet code."
+description: "Orchestrate a codebase-wide architecture improvement survey: scan active, high-churn code, classify delete vs deepen vs preserve vs reject, help select a candidate, and produce a refactor brief. Use when the user asks to find, rank, or choose architecture improvements across a codebase. Do not use to implement an already-selected refactor or for speculative cleanup of quiet code."
 disable-model-invocation: true
 ---
 
@@ -13,7 +13,7 @@ Surface architectural friction. Ask two questions, in order:
 
 Call `codebase-design` for the vocabulary (**module**, **interface**, **depth**, **seam**, **adapter**, **leverage**, **locality**). Do not copy that glossary here. Use the project's canonical glossary for domain names.
 
-`/refactor` owns behavior-preserving implementation. This skill is the survey/decision operator it may invoke.
+This skill owns portfolio-level discovery and selection across the codebase. `/refactor` is a downstream executor for one selected behavior-preserving change; it does not invoke or own this survey.
 
 ## Process
 

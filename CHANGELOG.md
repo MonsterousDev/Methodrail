@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.1 — 2026-09-02
+
+Split codebase-wide architecture survey from selected-target refactor execution.
+
+- `improve-codebase-architecture` owns discovery, ranking, and candidate selection
+- `/refactor` executes one named behavior-preserving change from a friction, target, or brief
+- Survey-shaped `/refactor` requests route to `improve-codebase-architecture` without starting implementation
+- Align README, capability map, and routing evals with that ownership
+
 ## 0.9.0 — 2026-09-01
 
 Project Artifact Interoperability: one initialization workflow, separate canonical artifacts, explicit governed bridges. Constructed mixed-artifact, decision-ladder, knowledge-reconciliation, and architecture-deepening specs pass. A 9-pair live battery (2026-09-01) was 1 helped, 8 incomplete, 0 harmed. No live `harmed`. No general empirical-improvement claim.

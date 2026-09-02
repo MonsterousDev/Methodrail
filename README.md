@@ -79,18 +79,20 @@ Workflow entry skills are explicit:
 - `/investigate` — answer existing-system questions with labeled evidence
 - `/develop` — understand, decide, implement, and verify proportionally
 - `/debug` — reproduce and find root cause before fixing
-- `/refactor` — improve structure while preserving relevant behavior
+- `/refactor` — execute one selected structural change while preserving relevant behavior
 - `/review` — review intent, diff, evidence, and blast radius
 
 Curated operators load when relevant. Expensive skills stay explicit. The key distinctions:
 
 ```text
-how          = what current source does
-observe      = what actually happens
-why          = evidence for historical motivation
-research     = external/reference sources
-prototype    = executable experiment
-blast-radius = what else may be affected
+how                           = what current source does
+observe                       = what actually happens
+why                           = evidence for historical motivation
+research                      = external/reference sources
+prototype                     = executable experiment
+blast-radius                  = what else may be affected
+improve-codebase-architecture = find, rank, and choose architecture opportunities
+refactor                      = execute one selected behavior-preserving change
 ```
 
 See [capability map](references/capability-map.md) for canonical ownership.
@@ -137,4 +139,4 @@ See `references/` for the methodology and `adapters/` for thin host-specific ins
 
 ## Status
 
-v0.9.0 is Project Artifact Interoperability on top of Knowledge Governance. `methodrail-init` discovers repository-root artifacts, previews pointer adoption without copying canonical files, and fails closed on a broken linked harness. Constructed mixed-artifact, decision-ladder, knowledge-reconciliation, and architecture-deepening specs pass. A 9-pair live battery (2026-09-01) was 1 helped, 8 incomplete, 0 harmed; that is a low-n inconclusive-but-no-harm pilot, not a general empirical-improvement claim. Mixed-repository dogfood is qualitative. v0.8 constructed applicability, dispute, and retirement specs still pass; its 9-pair live C7 battery was empirical-neutral on applicability and retirement, helped on Cursor dispute, and incomplete on Codex dispute. v0.7 constructed reuse/refresh specs still pass; its 6-pair live pilot was outcome-neutral on reuse and helped on refresh when Methodrail proposed a note update. Simple work is still required to stay cheap. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
+v0.9.1 splits codebase-wide architecture survey (`improve-codebase-architecture`) from selected-target `/refactor`. v0.9.0 is Project Artifact Interoperability on top of Knowledge Governance. `methodrail-init` discovers repository-root artifacts, previews pointer adoption without copying canonical files, and fails closed on a broken linked harness. Constructed mixed-artifact, decision-ladder, knowledge-reconciliation, and architecture-deepening specs pass. A 9-pair live battery (2026-09-01) was 1 helped, 8 incomplete, 0 harmed; that is a low-n inconclusive-but-no-harm pilot, not a general empirical-improvement claim. Mixed-repository dogfood is qualitative. v0.8 constructed applicability, dispute, and retirement specs still pass; its 9-pair live C7 battery was empirical-neutral on applicability and retirement, helped on Cursor dispute, and incomplete on Codex dispute. v0.7 constructed reuse/refresh specs still pass; its 6-pair live pilot was outcome-neutral on reuse and helped on refresh when Methodrail proposed a note update. Simple work is still required to stay cheap. Cursor is first-class; reusable skills remain compatible with Agent Skills-oriented Claude Code and Codex setups.
